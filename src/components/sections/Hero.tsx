@@ -41,7 +41,7 @@ export default function Hero() {
   const ideabinTextRef = useRef<HTMLDivElement>(null);
   const blackCircleRef = useRef<HTMLDivElement>(null);
   const ideabinWordmarkRef = useRef<HTMLSpanElement>(null);
-  const focalMaskRef = useRef<HTMLDivElement>(null);
+  const agencyLabelRef = useRef<HTMLDivElement>(null);
   const scrollCueRef = useRef<HTMLDivElement>(null);
 
   const autoPlayRef = useRef<{
@@ -305,7 +305,7 @@ export default function Hero() {
 
       // Hide canvas fully behind the completely expanded black circle
       if (canvasRef.current) {
-        canvasRef.current.style.opacity = P >= 0.81 ? "0" : "1";
+        canvasRef.current.style.opacity = P >= 0.97 ? "0" : "1";
       }
 
       // ---------------------------------------------------------------------
@@ -365,45 +365,98 @@ export default function Hero() {
         }
       }
 
-      // 4. Phase 05: Black Dot Expansion + "ideabin" Typography Evolution (P = 0.52 -> 0.81)
+      // 4. SCENE 03: IDEABIN CINEMATIC REVEAL (P = 0.52 -> 1.00)
       if (ideabinContainerRef.current) {
-        const inRange = P >= 0.51 && P <= 0.82;
+        // Show container slightly before and hide slightly after the range to prevent clipping
+        const inRange = P >= 0.51 && P <= 1.0;
         ideabinContainerRef.current.style.display = inRange ? "flex" : "none";
 
         if (inRange) {
-          const pIdea = Math.min(1, Math.max(0, (P - 0.52) / (0.81 - 0.52)));
+          // Normalize P to the 0.52 -> 1.0 range
+          const pReveal = Math.min(1, Math.max(0, (P - 0.52) / (1.0 - 0.52)));
 
-          // Circle expansion: 10px base width -> scales to cover viewport
-          if (blackCircleRef.current) {
+          let circleRadius = 0;
+          let fontSize = 6;
+          let textOpacity = 0;
+          let labelOpacity = 0;
+          let labelTranslateY = 8;
+          let letterSpacing = -0.02;
+
+          // PHASE A: 0.52 -> 0.60 (Mapped to 0.0 -> 0.166 of pReveal)
+          // PHASE B: 0.60 -> 0.70 (Mapped to 0.166 -> 0.375 of pReveal)
+          // PHASE C: 0.70 -> 0.80 (Mapped to 0.375 -> 0.583 of pReveal)
+          // PHASE D: 0.80 -> 0.90 (Mapped to 0.583 -> 0.791 of pReveal)
+          // PHASE E: 0.90 -> 0.97 (Mapped to 0.791 -> 0.937 of pReveal)
+          // PHASE F: 0.97 -> 1.00 (Mapped to 0.937 -> 1.0 of pReveal)
+
+          if (pReveal <= 0.166) {
+            // PHASE A: The Seed
+            const pPhase = pReveal / 0.166;
+            circleRadius = 6 + (20 - 6) * pPhase;
+            textOpacity = 0.25 * pPhase;
+            fontSize = 6;
+          } else if (pReveal <= 0.375) {
+            // PHASE B: Recognition
+            const pPhase = (pReveal - 0.166) / (0.375 - 0.166);
+            circleRadius = 20 + (80 - 20) * pPhase;
+            textOpacity = 0.25 + 0.25 * pPhase;
+            fontSize = 6 + (10 - 6) * pPhase;
+            letterSpacing = -0.02 - 0.01 * pPhase; // -0.02 to -0.03
+          } else if (pReveal <= 0.583) {
+            // PHASE C: Importance
+            const pPhase = (pReveal - 0.375) / (0.583 - 0.375);
+            circleRadius = 80 + (250 - 80) * pPhase;
+            textOpacity = 0.5 + 0.25 * pPhase;
+            fontSize = 10 + (16 - 10) * pPhase;
+            letterSpacing = -0.03 - 0.01 * pPhase; // -0.03 to -0.04
+          } else if (pReveal <= 0.791) {
+            // PHASE D: Focal Point
+            const pPhase = (pReveal - 0.583) / (0.791 - 0.583);
+            circleRadius = 250 + (700 - 250) * pPhase;
+            textOpacity = 0.75 + 0.25 * pPhase;
+            fontSize = 16 + (22 - 16) * pPhase;
+            letterSpacing = -0.04 - 0.005 * pPhase; // -0.04 to -0.045
+          } else if (pReveal <= 0.937) {
+            // PHASE E: Full Coverage
+            const pPhase = (pReveal - 0.791) / (0.937 - 0.791);
+            // Dynamic max radius to ensure full coverage on any screen
             const maxDim = Math.max(window.innerWidth, window.innerHeight);
-            const finalScale = (maxDim / 10) * 1.5; 
-            // Exponential scale to match the requested feel
-            const circleScale = 0.02 + finalScale * Math.pow(pIdea, 3.5);
-            blackCircleRef.current.style.transform = `scale(${circleScale})`;
+            const maxRadius = Math.ceil(maxDim * 0.8); // Enough to cover corners
+            circleRadius = 700 + (maxRadius - 700) * pPhase;
+            textOpacity = 1.0;
+            fontSize = 22 + (28 - 22) * pPhase;
+            letterSpacing = -0.045 - 0.005 * pPhase; // -0.045 to -0.05
+          } else {
+            // PHASE F: Established (Hold + Label Reveal)
+            const pPhase = (pReveal - 0.937) / (1.0 - 0.937);
+            const maxDim = Math.max(window.innerWidth, window.innerHeight);
+            circleRadius = Math.ceil(maxDim * 0.8);
+            textOpacity = 1.0;
+            fontSize = 28;
+            letterSpacing = -0.05;
+            
+            labelOpacity = pPhase;
+            labelTranslateY = 8 * (1 - pPhase);
           }
 
-          // Wordmark evolution: 6px -> 28px
+          // Apply Circle Expansion
+          if (blackCircleRef.current) {
+            // If radius is effectively 0, clip to 0, otherwise clip to radius
+            blackCircleRef.current.style.clipPath = `circle(${circleRadius}px at 50% 50%)`;
+          }
+
+          // Apply Wordmark Evolution
           if (ideabinWordmarkRef.current) {
-            const fontSize = 6 + (28 - 6) * pIdea;
+            ideabinWordmarkRef.current.style.opacity = String(textOpacity);
             ideabinWordmarkRef.current.style.fontSize = `${fontSize}px`;
+            ideabinWordmarkRef.current.style.letterSpacing = `${letterSpacing}em`;
           }
-        }
-      }
 
-      // 5. Focal Mask Iris Expansion (P = 0.74 -> 0.82)
-      // Motivates the page transition organically from the spark light source
-      if (focalMaskRef.current) {
-        const inMaskRange = P >= 0.73 && P <= 0.83;
-        focalMaskRef.current.style.display = inMaskRange ? "block" : "none";
-
-        if (inMaskRange) {
-          const pMask = Math.min(1, Math.max(0, (P - 0.74) / (0.82 - 0.74)));
-          // Iris expansion radius from robot focal point (76% X, 60% Y)
-          const irisRadius = pMask * 160; // percentage
-          const maskOpacity = pMask < 0.8 ? pMask / 0.8 : (1 - pMask) / 0.2;
-
-          focalMaskRef.current.style.opacity = String(maskOpacity * 0.4);
-          focalMaskRef.current.style.background = `radial-gradient(circle at 76% 60%, rgba(255,140,40,0.3) 0%, rgba(255,180,60,0.15) ${irisRadius * 0.5}%, transparent ${irisRadius}%)`;
+          // Apply Agency Label Reveal
+          if (agencyLabelRef.current) {
+            agencyLabelRef.current.style.opacity = String(labelOpacity);
+            agencyLabelRef.current.style.transform = `translateY(${labelTranslateY}px)`;
+          }
         }
       }
     };
@@ -524,12 +577,7 @@ export default function Hero() {
           aria-hidden="true"
         />
 
-        {/* Organic Focal Spark Mask / Iris Glow */}
-        <div
-          ref={focalMaskRef}
-          className="absolute inset-0 pointer-events-none z-15 hidden"
-          aria-hidden="true"
-        />
+
 
         {/* ----------------------------------------------------------------- */}
         {/* 1. HERO EDITORIAL TYPOGRAPHY                                      */}
@@ -682,38 +730,40 @@ export default function Hero() {
         </div>
 
         {/* ----------------------------------------------------------------- */}
-        {/* 3. PHASE 05: BLACK DOT EXPANSION + "ideabin" TYPOGRAPHY EVOLUTION */}
+        {/* 3. SCENE 03: IDEABIN CINEMATIC REVEAL (P = 0.52 -> 1.00)           */}
         {/* ----------------------------------------------------------------- */}
         <div
           ref={ideabinContainerRef}
           className="absolute inset-0 z-25 hidden items-center justify-center pointer-events-none"
         >
-          {/* Expanding Black Circle Portal */}
+          {/* Expanding Black Circle Portal (using clip-path) */}
           <div
             ref={blackCircleRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#050505] will-change-transform"
+            className="absolute inset-0 bg-black will-change-transform"
             style={{
-              width: "10px",
-              height: "10px",
-              transform: "scale(0)",
+              clipPath: "circle(0px at 50% 50%)",
             }}
             aria-hidden="true"
           />
-          {/* Evolving Wordmark */}
+          {/* Evolving Wordmark and Agency Label */}
           <div
             ref={ideabinTextRef}
             className="text-center will-change-transform relative z-10 flex flex-col items-center justify-center"
-            style={{
-              transformOrigin: "center center",
-            }}
           >
             <span
               ref={ideabinWordmarkRef}
-              className="block font-bold tracking-[0.2em] text-white uppercase drop-shadow-[0_2px_12px_rgba(0,0,0,1)]"
+              className="block font-medium tracking-[-0.02em] text-white uppercase drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]"
               style={{ fontSize: "6px" }}
             >
               ideabin
             </span>
+            <div
+              ref={agencyLabelRef}
+              className="absolute top-full mt-4 text-[9px] md:text-[11px] uppercase tracking-[0.3em] text-zinc-400 font-medium whitespace-nowrap"
+              style={{ opacity: 0, transform: "translateY(8px)" }}
+            >
+              Creative Digital Agency
+            </div>
           </div>
         </div>
 
