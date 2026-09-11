@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePrefersReducedMotion } from "@/lib/performance";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 const CAPABILITIES = [
   {
@@ -31,6 +32,9 @@ const CAPABILITIES = [
 ] as const;
 
 export default function CapabilitiesSection() {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   const sectionRef = useRef<HTMLElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const reducedMotion = usePrefersReducedMotion();
@@ -70,15 +74,15 @@ export default function CapabilitiesSection() {
     <section
       ref={sectionRef}
       id="capabilities"
-      className="relative w-full section-py"
-      style={{ background: "#0a0a0f" }}
+      className="relative w-full section-py transition-colors duration-500"
+      style={{ background: isDark ? "#000000" : "#ffffff" }}
     >
       <div className="section-container">
         {/* Section header */}
         <div className="mb-16 md:mb-24 max-w-xl">
-          <p className="eyebrow text-zinc-600 mb-5">Scene 03 · Capabilities</p>
+          <p className={`eyebrow mb-5 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>Scene 03 · Capabilities</p>
           <h2
-            className="h2 text-white"
+            className={`h2 ${isDark ? "text-white" : "text-neutral-900"}`}
             style={{
               opacity: reducedMotion ? 1 : 0,
               transform: reducedMotion ? "translateY(0)" : "translateY(20px)",
@@ -106,7 +110,9 @@ export default function CapabilitiesSection() {
         </div>
 
         {/* Capabilities grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-white/[0.06]">
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-0 border-t ${
+          isDark ? "border-white/[0.08]" : "border-black/[0.08]"
+        }`}>
           {CAPABILITIES.map((cap, i) => (
             <div
               key={cap.number}
@@ -114,7 +120,9 @@ export default function CapabilitiesSection() {
                 itemRefs.current[i] = el;
               }}
               data-delay={String(i * 80)}
-              className="group relative border-b border-r-0 md:even:border-r-0 md:odd:border-r border-white/[0.06] py-10 md:py-12 pr-0 md:pr-12 cursor-default"
+              className={`group relative border-b border-r-0 md:even:border-r-0 md:odd:border-r py-10 md:py-12 pr-0 md:pr-12 cursor-default ${
+                isDark ? "border-white/[0.08]" : "border-black/[0.08]"
+              }`}
               style={{
                 opacity: reducedMotion ? 1 : 0,
                 transform: reducedMotion ? "translateY(0)" : "translateY(28px)",
@@ -123,17 +131,23 @@ export default function CapabilitiesSection() {
               }}
             >
               {/* Number */}
-              <span className="mono text-[11px] text-zinc-700 tracking-[0.2em] font-medium group-hover:text-orange-500/70 transition-colors duration-300">
+              <span className={`mono text-[11px] tracking-[0.2em] font-medium transition-colors duration-300 ${
+                isDark ? "text-zinc-600 group-hover:text-orange-400" : "text-zinc-400 group-hover:text-orange-600"
+              }`}>
                 {cap.number}
               </span>
 
               {/* Title */}
-              <h3 className="h3 text-white mt-3 mb-4 group-hover:text-zinc-100 transition-colors duration-300">
+              <h3 className={`h3 mt-3 mb-4 transition-colors duration-300 ${
+                isDark ? "text-white group-hover:text-zinc-100" : "text-neutral-900 group-hover:text-black"
+              }`}>
                 {cap.title}
               </h3>
 
               {/* Description */}
-              <p className="body-sm text-zinc-500 max-w-[38ch] leading-relaxed group-hover:text-zinc-400 transition-colors duration-300">
+              <p className={`body-sm max-w-[38ch] leading-relaxed transition-colors duration-300 ${
+                isDark ? "text-zinc-400 group-hover:text-zinc-300" : "text-zinc-600 group-hover:text-zinc-800"
+              }`}>
                 {cap.description}
               </p>
 

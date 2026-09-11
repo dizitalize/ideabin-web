@@ -1,45 +1,108 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useCenterTransition } from "@/components/animation/CenterTransition";
+import { useTheme } from "@/components/providers/ThemeProvider";
 
 const NAV_LINKS = [
-  { label: "Work", href: "#capabilities" },
-  { label: "About", href: "#story" },
-  { label: "Services", href: "#philosophy" },
+  { label: "Services", href: "#services" },
+  { label: "FAQ", href: "#faq" },
 ] as const;
 
-// Monogram wordmark
-function Wordmark() {
+// Monogram wordmark matching the IdeaBin brand identity
+function Wordmark({ isDark }: { isDark: boolean }) {
   return (
-    <a
+    <Link
       href="/"
       id="nav-wordmark"
       className="group flex items-center gap-2.5 select-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 rounded"
-      aria-label="Home"
+      aria-label="IdeaBin Home"
     >
-      {/* Mark */}
       <span
-        className="inline-flex h-7 w-7 items-center justify-center rounded-sm bg-white text-black text-[11px] font-bold tracking-[0.05em] group-hover:bg-zinc-200 transition-colors duration-300"
+        className={`inline-flex h-7 w-7 items-center justify-center rounded-lg p-1 transition-all duration-300 ${isDark
+            ? "bg-white text-black group-hover:bg-zinc-200"
+            : "bg-black text-white group-hover:bg-zinc-800"
+          }`}
         aria-hidden
       >
-        S
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-full h-full"
+        >
+          <path d="M4 19L12 4L20 19" />
+          <path d="M7 14h10" />
+        </svg>
       </span>
-      <span className="hidden sm:inline text-[13px] font-medium tracking-tight text-zinc-300 group-hover:text-white transition-colors duration-300">
-        Studio
+      <span
+        className={`text-[15px] font-bold tracking-tight transition-colors duration-300 ${isDark ? "text-white group-hover:text-zinc-200" : "text-neutral-900 group-hover:text-black"
+          }`}
+      >
+        IdeaBin
       </span>
-    </a>
+    </Link>
   );
 }
 
 export default function Navbar() {
   const { trigger } = useCenterTransition();
+  const { theme, toggle } = useTheme();
   const [scrolled, setScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const lastScrollYRef = useRef(0);
+  const isVisibleRef = useRef(true);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 48);
+    lastScrollYRef.current = typeof window !== "undefined" ? window.scrollY : 0;
+
+    const SCROLL_DELTA_THRESHOLD = 8; // Ignore small scroll movements/micro-jitter
+    const TOP_THRESHOLD = 50; // Always visible at the top of the page
+
+    let ticking = false;
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const diff = currentScrollY - lastScrollYRef.current;
+
+          // 1. At the top of the page: stay fully visible and sticky
+          if (currentScrollY <= TOP_THRESHOLD) {
+            if (!isVisibleRef.current) {
+              isVisibleRef.current = true;
+              setIsVisible(true);
+            }
+          } else if (Math.abs(diff) >= SCROLL_DELTA_THRESHOLD) {
+            // 2. User scrolls DOWN: smoothly slide upward and hide
+            if (diff > 0) {
+              if (isVisibleRef.current) {
+                isVisibleRef.current = false;
+                setIsVisible(false);
+              }
+            } else {
+              // 3. User scrolls UP: immediately slide back down and show
+              if (!isVisibleRef.current) {
+                isVisibleRef.current = true;
+                setIsVisible(true);
+              }
+            }
+            lastScrollYRef.current = currentScrollY;
+          }
+
+          setScrolled(currentScrollY > 48);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -82,13 +145,16 @@ export default function Navbar() {
       {/* Primary Navbar */}
       <header
         id="site-navbar"
-        className="fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-out"
+        className="fixed inset-x-0 top-0 z-50 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform"
         style={{
+          transform: isVisible || mobileOpen ? "translate3d(0, 0, 0)" : "translate3d(0, -105%, 0)",
+          opacity: isVisible || mobileOpen ? 1 : 0,
+          pointerEvents: isVisible || mobileOpen ? "auto" : "none",
           borderBottom: scrolled
-            ? "1px solid rgba(255,255,255,0.05)"
+            ? (theme === "dark" ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(0,0,0,0.08)")
             : "1px solid transparent",
           background: scrolled
-            ? "rgba(5,5,8,0.72)"
+            ? (theme === "dark" ? "rgba(5,5,8,0.78)" : "rgba(255,255,255,0.85)")
             : "transparent",
           backdropFilter: scrolled ? "blur(16px) saturate(150%)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(16px) saturate(150%)" : "none",
@@ -96,7 +162,7 @@ export default function Navbar() {
       >
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-10 md:py-5">
           {/* Left: Wordmark */}
-          <Wordmark />
+          <Wordmark isDark={theme === "dark"} />
 
           {/* Center: Navigation Links (desktop) */}
           <nav
@@ -107,24 +173,49 @@ export default function Navbar() {
               <a
                 key={label}
                 href={href}
-                className="relative text-[13px] font-medium text-zinc-300 hover:text-white transition-colors duration-200 ease-out group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 rounded drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]"
+                className={`relative text-[13px] font-medium transition-colors duration-200 ease-out group focus-visible:outline-none focus-visible:ring-1 rounded ${theme === "dark"
+                    ? "text-zinc-300 hover:text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] focus-visible:ring-white/40"
+                    : "text-zinc-700 hover:text-black focus-visible:ring-black/40"
+                  }`}
               >
                 {label}
                 {/* Underline micro-animation */}
                 <span
-                  className="absolute -bottom-0.5 left-0 h-px w-0 bg-white/80 group-hover:w-full transition-all duration-300 ease-out"
+                  className={`absolute -bottom-0.5 left-0 h-px w-0 transition-all duration-300 ease-out group-hover:w-full ${theme === "dark" ? "bg-white/80" : "bg-black/80"
+                    }`}
                   aria-hidden
                 />
               </a>
             ))}
           </nav>
 
-          {/* Right: Contact + Spatial portal */}
+          {/* Right: Theme Toggle + Contact + Spatial portal */}
           <div className="flex items-center gap-3">
+            {/* Theme Toggle (Dark / White) */}
+            <button
+              type="button"
+              id="nav-theme-toggle"
+              onClick={toggle}
+              aria-label={`Switch to ${theme === "dark" ? "white" : "dark"} theme`}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-mono tracking-wider transition-all duration-300 ease-out cursor-pointer ${theme === "dark"
+                  ? "border-white/15 text-zinc-300 hover:border-white/40 hover:text-white hover:bg-white/5"
+                  : "border-black/15 text-zinc-700 hover:border-black/40 hover:text-black hover:bg-black/5 shadow-sm"
+                }`}
+            >
+              <span
+                className={`w-2 h-2 rounded-full transition-colors duration-300 ${theme === "dark" ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" : "bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.8)]"
+                  }`}
+              />
+              <span className="uppercase">{theme === "dark" ? "Dark" : "White"}</span>
+            </button>
+
             <a
-              href="#philosophy"
+              href="#faq"
               id="nav-contact"
-              className="hidden sm:inline-flex items-center text-[13px] font-medium text-zinc-200 hover:text-white transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40 rounded px-1 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]"
+              className={`hidden sm:inline-flex items-center text-[13px] font-medium transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-1 rounded px-1 ${theme === "dark"
+                  ? "text-zinc-200 hover:text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)] focus-visible:ring-white/40"
+                  : "text-zinc-700 hover:text-black focus-visible:ring-black/40"
+                }`}
             >
               Contact
             </a>
@@ -133,10 +224,13 @@ export default function Navbar() {
             <button
               id="nav-spatial-trigger"
               onClick={handlePortalClick}
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-1.5 text-[12px] font-medium text-zinc-300 hover:border-white/40 hover:text-white hover:bg-white/5 transition-all duration-300 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/40"
+              className={`hidden sm:inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-[12px] font-medium transition-all duration-300 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-1 ${theme === "dark"
+                  ? "border-white/15 text-zinc-300 hover:border-white/40 hover:text-white hover:bg-white/5 focus-visible:ring-white/40"
+                  : "border-black/15 text-zinc-700 hover:border-black/40 hover:text-black hover:bg-black/5 focus-visible:ring-black/40 shadow-sm"
+                }`}
             >
               Spatial
-              <span className="text-zinc-600 group-hover:text-zinc-400 transition-colors" aria-hidden>↗</span>
+              <span className={theme === "dark" ? "text-zinc-500 group-hover:text-zinc-300" : "text-zinc-400 group-hover:text-zinc-700"} aria-hidden>↗</span>
             </button>
 
             {/* Mobile hamburger */}
@@ -206,16 +300,30 @@ export default function Navbar() {
               </a>
             ))}
             <a
-              href="#philosophy"
+              href="#faq"
               onClick={() => setMobileOpen(false)}
               className="text-3xl font-medium tracking-tight text-zinc-400 hover:text-white transition-colors duration-200"
             >
               Contact
             </a>
+            <div className="flex items-center gap-4 mt-2">
+              <button
+                type="button"
+                onClick={toggle}
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2 text-sm font-mono uppercase tracking-wider text-zinc-300 hover:text-white hover:border-white/50 transition-all cursor-pointer"
+              >
+                <span
+                  className={`w-2.5 h-2.5 rounded-full ${theme === "dark" ? "bg-emerald-400" : "bg-amber-400"
+                    }`}
+                />
+                <span>Theme: {theme === "dark" ? "Dark" : "White"}</span>
+              </button>
+            </div>
+
             <button
               id="mobile-spatial-trigger"
               onClick={handlePortalClick}
-              className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white hover:border-white/50 transition-all duration-300 cursor-pointer"
+              className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-medium text-white hover:border-white/50 transition-all duration-300 cursor-pointer"
             >
               Enter Spatial World ↗
             </button>

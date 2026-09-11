@@ -1,8 +1,8 @@
 export const site = {
-  name: "Prism Media Co.",
-  tagline: "IT Solutions · Interactive Websites · Data Security",
+  name: "IdeaBin",
+  tagline: "Spatial 3D Experiences · Architectural Web Engineering · Digital Systems",
   description:
-    "Prism Media Co. delivers enterprise IT solutions, interactive website development, data security, cloud architecture, and custom software engineering.",
+    "IdeaBin crafts spatial 3D web experiences, bespoke e-commerce platforms, high-performance web systems, and creative digital engineering.",
   url: "https://prismmedia.co",
   email: "hello@prismmedia.co",
   locale: "en_US",
@@ -116,7 +116,7 @@ export const showcaseImages = {
 
 export const faqs = [
   {
-    q: "What IT services does Prism Media Co. provide?",
+    q: "What IT services does Ideabin Copmany. provide?",
     a: "We specialize in interactive website development, enterprise data security & cybersecurity, cloud infrastructure setup, and custom software engineering.",
   },
   {

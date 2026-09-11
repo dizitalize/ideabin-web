@@ -2,15 +2,17 @@
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
-type Theme = "dark" | "light";
+export type Theme = "dark" | "light";
 
-interface ThemeContextValue {
+export interface ThemeContextValue {
   theme: Theme;
+  setTheme: (theme: Theme) => void;
   toggle: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: "light",
+  theme: "dark",
+  setTheme: () => {},
   toggle: () => {},
 });
 
@@ -19,10 +21,10 @@ export function useTheme() {
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
-  const [mounted, setMounted] = useState(false);
+  const [theme, setThemeState] = useState<Theme>("dark");
 
   const applyTheme = useCallback((t: Theme) => {
+    if (typeof document === "undefined") return;
     const root = document.documentElement;
     if (t === "light") {
       root.classList.add("light");
@@ -35,27 +37,41 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
   }, []);
 
   useEffect(() => {
-    const saved = localStorage.getItem("theme") as Theme | null;
-    const initial: Theme = saved === "dark" ? "dark" : "light";
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTheme(initial);
-    applyTheme(initial);
-    setMounted(true);
+    try {
+      const saved = localStorage.getItem("theme") as Theme | null;
+      const initial: Theme = saved === "light" ? "light" : "dark";
+      setThemeState(initial);
+      applyTheme(initial);
+    } catch {
+      applyTheme("dark");
+    }
+  }, [applyTheme]);
+
+  const setTheme = useCallback((next: Theme) => {
+    setThemeState(next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      // Safe ignore
+    }
+    applyTheme(next);
   }, [applyTheme]);
 
   const toggle = useCallback(() => {
-    setTheme((prev) => {
+    setThemeState((prev) => {
       const next: Theme = prev === "dark" ? "light" : "dark";
-      localStorage.setItem("theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch {
+        // Safe ignore
+      }
       applyTheme(next);
       return next;
     });
   }, [applyTheme]);
 
-  if (!mounted) return null;
-
   return (
-    <ThemeContext.Provider value={{ theme, toggle }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggle }}>
       {children}
     </ThemeContext.Provider>
   );

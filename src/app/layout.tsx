@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ThemeProvider from "@/components/providers/ThemeProvider";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { CenterTransitionProvider } from "@/components/animation/CenterTransition";
 import Navbar from "@/components/ui/Navbar";
@@ -44,14 +45,15 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ background: "#050505", color: "#f5f5f5" }}
       >
-        <SmoothScrollProvider>
-          <CenterTransitionProvider>
-            <Navbar />
-            {children}
-          </CenterTransitionProvider>
-        </SmoothScrollProvider>
+        <ThemeProvider>
+          <SmoothScrollProvider>
+            <CenterTransitionProvider>
+              <Navbar />
+              {children}
+            </CenterTransitionProvider>
+          </SmoothScrollProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
