@@ -124,7 +124,7 @@ export default function AIBotAssistant() {
       >
         {open ? <X size={18} weight="bold" /> : <ChatCircleDots size={20} weight="bold" />}
         {!open && (
-          <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-orange-500 ring-2 ring-white dark:ring-black" />
+          <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-[#417B5A] ring-2 ring-white dark:ring-black" />
         )}
       </button>
 
@@ -152,7 +152,7 @@ export default function AIBotAssistant() {
               <div className="flex items-center gap-2">
                 <span
                   className={`flex h-7 w-7 items-center justify-center rounded-full ${
-                    isDark ? "bg-zinc-800 text-orange-400" : "bg-zinc-100 text-orange-500"
+                    isDark ? "bg-[#417B5A]/20 text-[#417B5A]" : "bg-[#417B5A]/15 text-[#417B5A]"
                   }`}
                 >
                   <Robot size={14} />
@@ -176,8 +176,8 @@ export default function AIBotAssistant() {
                     data-cursor="hover"
                     className={`flex items-center gap-1 rounded-full border px-2 py-1 text-[9px] font-medium transition-colors ${
                       isDark
-                        ? "border-white/10 text-zinc-500 hover:text-orange-400"
-                        : "border-zinc-200 text-zinc-400 hover:text-orange-500"
+                        ? "border-white/10 text-zinc-500 hover:text-[#417B5A]"
+                        : "border-zinc-200 text-zinc-400 hover:text-[#417B5A]"
                     }`}
                   >
                     <ArrowCounterClockwise size={10} />
@@ -212,10 +212,10 @@ export default function AIBotAssistant() {
                   <div
                     className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] ${
                       msg.sender === "user"
-                        ? "bg-orange-500 text-black"
+                        ? "bg-[#417B5A] text-white"
                         : isDark
-                        ? "bg-zinc-800 text-orange-400"
-                        : "bg-zinc-100 text-orange-500"
+                        ? "bg-zinc-800 text-[#417B5A]"
+                        : "bg-zinc-100 text-[#417B5A]"
                     }`}
                   >
                     {msg.sender === "user" ? "U" : "AI"}
@@ -223,7 +223,7 @@ export default function AIBotAssistant() {
                   <div
                     className={`max-w-[80%] rounded-2xl px-3 py-2 text-[12px] leading-relaxed ${
                       msg.sender === "user"
-                        ? "bg-orange-500/15 border border-orange-400/30 text-zinc-900 dark:text-white rounded-br-sm"
+                        ? "bg-[#417B5A]/20 border border-[#417B5A]/40 text-zinc-900 dark:text-white rounded-br-sm"
                         : isDark
                         ? "bg-zinc-900 border border-white/10 text-zinc-200 rounded-bl-sm"
                         : "bg-zinc-50 border border-zinc-200 text-zinc-700 rounded-bl-sm"
@@ -238,7 +238,7 @@ export default function AIBotAssistant() {
                 <div className="flex items-end gap-2">
                   <div
                     className={`flex h-6 w-6 items-center justify-center rounded-full ${
-                      isDark ? "bg-zinc-800 text-orange-400" : "bg-zinc-100 text-orange-500"
+                      isDark ? "bg-zinc-800 text-[#417B5A]" : "bg-zinc-100 text-[#417B5A]"
                     }`}
                   >
                     <Robot size={12} />
@@ -252,7 +252,7 @@ export default function AIBotAssistant() {
                       {[0, 1, 2].map((dot) => (
                         <motion.span
                           key={dot}
-                          className="h-1.5 w-1.5 rounded-full bg-orange-400"
+                          className="h-1.5 w-1.5 rounded-full bg-[#417B5A]"
                           animate={{ opacity: [0.3, 1, 0.3] }}
                           transition={{ duration: 0.8, repeat: Infinity, delay: dot * 0.18 }}
                         />
@@ -285,8 +285,8 @@ export default function AIBotAssistant() {
                           ? "border-white/5 text-zinc-600 line-through opacity-50"
                           : "border-zinc-100 text-zinc-300 line-through opacity-50"
                         : isDark
-                        ? "border-white/15 text-zinc-300 hover:border-orange-400/60 hover:text-white"
-                        : "border-zinc-200 text-zinc-600 hover:border-orange-400/60 hover:text-zinc-900"
+                        ? "border-white/15 text-zinc-300 hover:border-[#417B5A]/60 hover:text-white"
+                        : "border-zinc-200 text-zinc-600 hover:border-[#417B5A]/60 hover:text-zinc-900"
                     }`}
                   >
                     {q}
@@ -312,15 +312,15 @@ export default function AIBotAssistant() {
                 aria-label="Ask the assistant"
                 className={`flex-1 rounded-full border px-3 py-1.5 text-[12px] outline-none transition-colors ${
                   isDark
-                    ? "border-white/12 bg-zinc-900 text-white placeholder:text-zinc-500 focus:border-orange-400/60"
-                    : "border-zinc-200 bg-zinc-50 text-zinc-900 placeholder:text-zinc-400 focus:border-orange-400/60"
+                    ? "border-white/12 bg-zinc-900 text-white placeholder:text-zinc-500 focus:border-[#417B5A]/60"
+                    : "border-zinc-200 bg-zinc-50 text-zinc-900 placeholder:text-zinc-400 focus:border-[#417B5A]/60"
                 }`}
               />
               <button
                 type="submit"
                 disabled={!inputVal.trim() || isTyping}
                 data-cursor="hover"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-orange-500 text-white transition-all hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#417B5A] text-white transition-all hover:bg-[#325f46] disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
                 aria-label="Send"
               >
                 <PaperPlaneRight size={13} weight="bold" />

@@ -126,7 +126,7 @@ export const MediaLightbox: React.FC<MediaLightboxProps> = ({
 
           <div className="pt-6 border-t border-zinc-900 text-xs text-zinc-400 flex items-center justify-between font-mono">
             <span>KEYBOARD: ← → ESC</span>
-            <span className="text-orange-400 font-medium">3D CYLINDER</span>
+            <span className="text-[#417B5A] font-medium">3D CYLINDER</span>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useTheme } from "@/components/providers/ThemeProvider";
 
 interface FAQItem {
@@ -72,87 +72,121 @@ function PlusIcon({ className = "" }: { className?: string }) {
   );
 }
 
-// Minimal Close / X SVG icon
-function CloseIcon({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden="true"
-    >
-      <line x1="18" y1="6" x2="6" y2="18" />
-      <line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-  );
-}
-
 export default function FAQSection() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
-  // Item 1 open by default
-  const [openId, setOpenId] = useState<string | null>("faq-services");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, amount: 0.15 });
+
+  // Open state: starts null while items load one-by-one, then opens item 1 after all loads
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [hasAutoOpened, setHasAutoOpened] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
+
+  // When section enters view, items stagger in. After all 5 items load, open the first item automatically.
+  useEffect(() => {
+    if (isInView && !hasAutoOpened) {
+      const totalItems = FAQ_DATA[0].items.length;
+      // Stagger time: (totalItems - 1) * 120ms + 400ms entrance duration + 100ms settle
+      const totalLoadTime = (totalItems - 1) * 120 + 500;
+
+      const timer = setTimeout(() => {
+        setHasAutoOpened(true);
+        if (!userInteracted) {
+          setOpenId("faq-services");
+        }
+      }, totalLoadTime);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isInView, hasAutoOpened, userInteracted]);
 
   const toggleItem = (id: string) => {
+    setUserInteracted(true);
     setOpenId((prev) => (prev === id ? null : id));
   };
 
   return (
     <section
       id="faq"
-      className={`relative z-20 w-full py-20 sm:py-28 px-4 sm:px-8 lg:px-12 transition-colors duration-500 border-t ${isDark ? "bg-black/85 backdrop-blur-xl text-white border-white/10" : "bg-white/85 backdrop-blur-xl text-neutral-900 border-black/10"
-        }`}
+      className={`relative z-20 w-full py-20 sm:py-28 px-4 sm:px-8 lg:px-12 transition-colors duration-500 border-t ${
+        isDark
+          ? "bg-black/90 backdrop-blur-xl text-white border-white/10"
+          : "bg-white/90 backdrop-blur-xl text-[#222222] border-black/10"
+      }`}
       aria-label="Frequently Asked Questions"
     >
-      <div className="mx-auto w-full max-w-4xl overflow-hidden">
+      <div ref={containerRef} className="mx-auto w-full max-w-4xl overflow-hidden">
         {/* Header Title & Subtitle */}
-        <div className="text-center mb-16 sm:mb-20">
-          <h2 className="mx-auto max-w-5xl text-center tracking-tight font-medium text-3xl md:text-5xl md:leading-tight text-neutral-900 dark:text-white">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-16 sm:mb-20"
+        >
+          <h2
+            className={`mx-auto max-w-5xl text-center tracking-tight font-medium text-3xl md:text-5xl md:leading-tight transition-colors duration-300 ${
+              isDark ? "text-white" : "text-[#111111]"
+            }`}
+          >
             <span style={{ display: "inline-block", verticalAlign: "top", textWrap: "balance" }}>
               Frequently Asked Questions
             </span>
           </h2>
-          <p className="my-4 text-sm md:text-base text-center font-normal text-neutral-600 dark:text-zinc-400 mx-auto mt-4 max-w-2xl">
+          <p
+            className={`my-4 text-sm md:text-base text-center font-normal mx-auto mt-4 max-w-2xl transition-colors duration-300 ${
+              isDark ? "text-zinc-400" : "text-neutral-600"
+            }`}
+          >
             <span style={{ display: "inline-block", verticalAlign: "top", textWrap: "balance" }}>
               Everything you need to know about our engineering standards, 3D pipelines, and studio engagements.
             </span>
           </p>
-        </div>
+        </motion.div>
 
         {/* Categories List */}
         <div className="relative flex w-full flex-col gap-16">
           {FAQ_DATA.map((category) => (
             <div key={category.title} className="relative w-full">
-              {/* Category Header Row with overshooting top dotted line */}
-              <div className="relative w-full px-4 sm:px-6 mb-2">
-                {/* Horizontal dotted line overshooting past vertical guidelines */}
-                {/* <div
-                  className={`absolute top-0 left-0 right-0 h-0 border-t border-dotted pointer-events-none transition-colors duration-300 ${isDark ? "border-white/15" : "border-black/15"
-                    }`}
-                /> */}
-
+              {/* Category Header Row */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="relative w-full px-4 sm:px-6 mb-2"
+              >
                 <h3
-                  className={`pt-5 pb-3 text-lg sm:text-xl font-medium tracking-tight px-3 sm:px-4 ${isDark ? "text-white" : "text-neutral-900"
-                    }`}
+                  className={`pt-5 pb-3 text-lg sm:text-xl font-medium tracking-tight px-3 sm:px-4 transition-colors duration-300 ${
+                    isDark ? "text-white" : "text-[#111111]"
+                  }`}
                 >
                   {category.title}
                 </h3>
-              </div>
+              </motion.div>
 
-              {/* Accordion Grid Matrix */}
+              {/* Accordion Grid Matrix with scroll-based staggered reveal */}
               <div className="relative w-full">
-                {/* Items List */}
                 <div className="flex flex-col">
-                  {category.items.map((item) => {
+                  {category.items.map((item, index) => {
                     const isOpen = openId === item.id;
 
                     return (
-                      <div key={item.id} className="relative w-full">
+                      <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={
+                          isInView
+                            ? { opacity: 1, y: 0 }
+                            : { opacity: 0, y: 24 }
+                        }
+                        transition={{
+                          duration: 0.5,
+                          delay: 0.15 + index * 0.12,
+                          ease: [0.16, 1, 0.3, 1],
+                        }}
+                        className="relative w-full"
+                      >
                         {/* Dotted border guidelines scoped strictly to the opened item with smooth fade & overshoot */}
                         <AnimatePresence>
                           {isOpen && (
@@ -163,8 +197,9 @@ export default function FAQSection() {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.25, ease: "easeInOut" }}
-                                className={`absolute top-0 left-0 right-0 h-0 border-t border-dotted pointer-events-none transition-colors duration-300 ${isDark ? "border-white/15" : "border-black/15"
-                                  }`}
+                                className={`absolute top-0 left-0 right-0 h-0 border-t border-dotted pointer-events-none transition-colors duration-300 ${
+                                  isDark ? "border-white/15" : "border-black/15"
+                                }`}
                               />
 
                               {/* Left vertical dotted border for opened item */}
@@ -173,8 +208,9 @@ export default function FAQSection() {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.25, ease: "easeInOut" }}
-                                className={`absolute left-4 sm:left-6 -top-2 -bottom-2 w-0 border-l border-dotted pointer-events-none transition-colors duration-300 ${isDark ? "border-white/15" : "border-black/15"
-                                  }`}
+                                className={`absolute left-4 sm:left-6 -top-2 -bottom-2 w-0 border-l border-dotted pointer-events-none transition-colors duration-300 ${
+                                  isDark ? "border-white/15" : "border-black/15"
+                                }`}
                               />
 
                               {/* Right vertical dotted border for opened item */}
@@ -183,8 +219,9 @@ export default function FAQSection() {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.25, ease: "easeInOut" }}
-                                className={`absolute right-4 sm:right-6 -top-2 -bottom-2 w-0 border-r border-dotted pointer-events-none transition-colors duration-300 ${isDark ? "border-white/15" : "border-black/15"
-                                  }`}
+                                className={`absolute right-4 sm:right-6 -top-2 -bottom-2 w-0 border-r border-dotted pointer-events-none transition-colors duration-300 ${
+                                  isDark ? "border-white/15" : "border-black/15"
+                                }`}
                               />
 
                               {/* Horizontal dotted line BELOW opened FAQ with crosshair overshoot */}
@@ -193,8 +230,9 @@ export default function FAQSection() {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.25, ease: "easeInOut" }}
-                                className={`absolute bottom-0 left-0 right-0 h-0 border-b border-dotted pointer-events-none transition-colors duration-300 ${isDark ? "border-white/15" : "border-black/15"
-                                  }`}
+                                className={`absolute bottom-0 left-0 right-0 h-0 border-b border-dotted pointer-events-none transition-colors duration-300 ${
+                                  isDark ? "border-white/15" : "border-black/15"
+                                }`}
                               />
                             </>
                           )}
@@ -210,14 +248,15 @@ export default function FAQSection() {
                               aria-expanded={isOpen}
                             >
                               <span
-                                className={`text-sm sm:text-base leading-snug transition-colors duration-200 ${isOpen
-                                  ? isDark
-                                    ? "font-medium text-white"
-                                    : "font-medium text-neutral-900"
-                                  : isDark
-                                    ? "font-normal text-white group-hover:text-zinc-200"
-                                    : "font-normal text-neutral-800 group-hover:text-neutral-950"
-                                  }`}
+                                className={`text-sm sm:text-base leading-snug transition-colors duration-200 ${
+                                  isOpen
+                                    ? isDark
+                                      ? "font-medium text-white"
+                                      : "font-medium text-[#111111]"
+                                    : isDark
+                                    ? "font-normal text-white/90 group-hover:text-white"
+                                    : "font-normal text-[#222222] group-hover:text-black"
+                                }`}
                               >
                                 {item.question}
                               </span>
@@ -225,10 +264,11 @@ export default function FAQSection() {
                               <motion.span
                                 animate={{ rotate: isOpen ? 45 : 0 }}
                                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                                className={`shrink-0 p-0.5 transition-colors ${isDark
-                                  ? "text-zinc-400 group-hover:text-white"
-                                  : "text-neutral-500 group-hover:text-neutral-900"
-                                  }`}
+                                className={`shrink-0 p-0.5 transition-colors ${
+                                  isDark
+                                    ? "text-zinc-400 group-hover:text-white"
+                                    : "text-neutral-500 group-hover:text-[#417B5A]"
+                                }`}
                                 aria-label={isOpen ? "Close question" : "Open question"}
                               >
                                 <PlusIcon className="w-4 h-4" />
@@ -260,8 +300,9 @@ export default function FAQSection() {
                                   className="overflow-hidden"
                                 >
                                   <p
-                                    className={`pt-3.5 text-sm sm:text-[14.5px] leading-relaxed max-w-3xl ${isDark ? "text-zinc-400" : "text-neutral-600"
-                                      }`}
+                                    className={`pt-3.5 text-sm sm:text-[14.5px] leading-relaxed max-w-3xl transition-colors duration-300 ${
+                                      isDark ? "text-zinc-400" : "text-neutral-600"
+                                    }`}
                                   >
                                     {item.answer}
                                   </p>
@@ -270,7 +311,7 @@ export default function FAQSection() {
                             </AnimatePresence>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
@@ -282,4 +323,3 @@ export default function FAQSection() {
     </section>
   );
 }
-

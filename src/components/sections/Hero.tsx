@@ -602,7 +602,7 @@ export default function Hero() {
                         storyLineRefs.current[i] = el;
                       }}
                       className={`inline-block select-none transition-none ${isUnderstand
-                        ? "text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] bg-gradient-to-r from-[#ff7a18] via-white to-[#38bdf8] bg-clip-text text-transparent drop-shadow-[0_4px_30px_rgba(255,122,24,0.35)] pb-1"
+                        ? "text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-[-0.04em] text-white drop-shadow-[0_4px_30px_rgba(255,255,255,0.3)] pb-1"
                         : isLarge
                           ? "text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-[-0.04em] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,1)]"
                           : isSmall

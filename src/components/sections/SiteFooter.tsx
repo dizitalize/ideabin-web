@@ -1,8 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import { usePrefersReducedMotion } from "@/lib/performance";
 
 interface FooterLink {
   label: string;
@@ -52,13 +54,14 @@ const FOOTER_COLUMNS: FooterColumn[] = [
   },
 ];
 
-// Logo mark matching the attached screenshot
+// Logo mark matching design system
 function IdeaBinLogo({ isDark }: { isDark: boolean }) {
   return (
     <div className="flex items-center gap-3">
       <div
-        className={`w-8 h-8 rounded-lg flex items-center justify-center p-1.5 transition-colors duration-300 ${isDark ? "bg-white text-black" : "bg-black text-white"
-          }`}
+        className={`w-8 h-8 rounded-lg flex items-center justify-center p-1.5 transition-colors duration-300 ${
+          isDark ? "bg-white text-black" : "bg-[#222222] text-white"
+        }`}
       >
         <svg
           viewBox="0 0 24 24"
@@ -74,8 +77,9 @@ function IdeaBinLogo({ isDark }: { isDark: boolean }) {
         </svg>
       </div>
       <span
-        className={`text-lg font-bold tracking-tight transition-colors duration-300 ${isDark ? "text-white" : "text-neutral-900"
-          }`}
+        className={`text-lg font-bold tracking-tight transition-colors duration-300 ${
+          isDark ? "text-white" : "text-[#111111]"
+        }`}
       >
         IdeaBin
       </span>
@@ -86,14 +90,27 @@ function IdeaBinLogo({ isDark }: { isDark: boolean }) {
 export default function SiteFooter() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const reducedMotion = usePrefersReducedMotion();
+
+  const footerRef = useRef<HTMLElement>(null);
+
+  // Smooth scroll parallax for the footer entrance
+  const { scrollYProgress } = useScroll({
+    target: footerRef,
+    offset: ["start end", "end end"],
+  });
+
+  const textParallaxY = useTransform(scrollYProgress, [0, 1], reducedMotion ? [0, 0] : [24, 0]);
 
   return (
     <footer
+      ref={footerRef}
       id="footer"
-      className={`relative z-20 w-full overflow-hidden transition-colors duration-500 border-t ${isDark
-        ? "bg-black/90 text-white border-white/10"
-        : "bg-white/90 text-neutral-900 border-black/10"
-        }`}
+      className={`relative z-20 w-full overflow-hidden transition-colors duration-500 border-t ${
+        isDark
+          ? "bg-black/95 text-white border-white/10"
+          : "bg-white/95 text-[#222222] border-black/10"
+      }`}
       aria-label="Site Footer"
     >
       {/* Top Content Grid */}
@@ -103,8 +120,9 @@ export default function SiteFooter() {
           <div className="lg:col-span-4 flex flex-col justify-start">
             <IdeaBinLogo isDark={isDark} />
             <p
-              className={`mt-4 text-xs sm:text-[13px] leading-relaxed max-w-xs transition-colors duration-300 ${isDark ? "text-zinc-500" : "text-neutral-500"
-                }`}
+              className={`mt-4 text-xs sm:text-[13px] leading-relaxed max-w-xs transition-colors duration-300 ${
+                isDark ? "text-zinc-500" : "text-neutral-500"
+              }`}
             >
               © copyright IdeaBin 2026. All rights reserved.
             </p>
@@ -115,8 +133,9 @@ export default function SiteFooter() {
             {FOOTER_COLUMNS.map((column) => (
               <div key={column.title} className="flex flex-col">
                 <h3
-                  className={`text-sm font-semibold tracking-normal mb-4 transition-colors duration-300 ${isDark ? "text-white" : "text-neutral-900"
-                    }`}
+                  className={`text-sm font-medium tracking-normal mb-4 transition-colors duration-300 ${
+                    isDark ? "text-white" : "text-[#111111]"
+                  }`}
                 >
                   {column.title}
                 </h3>
@@ -125,10 +144,11 @@ export default function SiteFooter() {
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className={`text-[13.5px] sm:text-[14px] transition-colors duration-200 block ${isDark
-                          ? "text-zinc-400 hover:text-white"
-                          : "text-neutral-600 hover:text-neutral-950"
-                          }`}
+                        className={`text-[13.5px] sm:text-[14px] transition-colors duration-200 block ${
+                          isDark
+                            ? "text-zinc-400 hover:text-white"
+                            : "text-[#222222]/60 hover:text-[#111111]"
+                        }`}
                       >
                         {link.label}
                       </Link>
@@ -141,20 +161,30 @@ export default function SiteFooter() {
         </div>
       </div>
 
-      {/* Massive Cropped Watermark Typography matching the screenshot */}
+      {/* Massive Cropped Watermark Typography — boldly visible and smoothly animated on scroll */}
       <div
-        className="w-full select-none pointer-events-none overflow-hidden relative leading-none flex items-end justify-start -mb-4 sm:-mb-8 md:-mb-12 px-4 sm:px-8"
+        className="w-full select-none pointer-events-none overflow-hidden relative leading-none flex items-end justify-start pt-6 pb-2 px-4 sm:px-8"
         aria-hidden="true"
       >
-        <span
-          className={`text-[18vw] sm:text-[19vw] lg:text-[20vw] font-bold tracking-tight leading-[0.82] transition-colors duration-500 ${isDark
-            ? "text-zinc-900/60 drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]"
-            : "text-neutral-200/80 drop-shadow-[0_2px_12px_rgba(0,0,0,0.03)]"
-            }`}
-          style={{ letterSpacing: "-0.04em" }}
+        <motion.div
+          initial={{ opacity: 0.75, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+          style={{ y: textParallaxY }}
+          className="inline-flex whitespace-nowrap will-change-transform"
         >
-          IdeaBin
-        </span>
+          <span
+            className={`text-[17vw] sm:text-[18vw] lg:text-[19vw] font-bold tracking-tight leading-[0.85] select-none transition-colors duration-500 ${
+              isDark
+                ? "text-zinc-700/80 hover:text-zinc-600 drop-shadow-[0_2px_30px_rgba(0,0,0,0.8)]"
+                : "text-neutral-300/85 hover:text-neutral-400 drop-shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
+            }`}
+            style={{ letterSpacing: "-0.04em" }}
+          >
+            IdeaBin
+          </span>
+        </motion.div>
       </div>
     </footer>
   );

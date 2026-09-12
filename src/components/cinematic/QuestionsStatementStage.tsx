@@ -183,14 +183,14 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
               isDark ? "border-white/40" : "border-neutral-400"
             }`}
           >
-            <div className="w-1 h-2 rounded-full bg-orange-500 animate-bounce" />
+            <div className="w-1 h-2 rounded-full bg-[#417B5A] animate-bounce" />
           </div>
 
           <span className="font-mono text-xs uppercase tracking-[0.22em] font-semibold">
             Scroll to see more
           </span>
 
-          <span className="text-sm font-bold text-orange-500 transition-transform duration-300 group-hover:translate-y-1">
+          <span className="text-sm font-bold text-[#417B5A] transition-transform duration-300 group-hover:translate-y-1">
             ↓
           </span>
         </button>

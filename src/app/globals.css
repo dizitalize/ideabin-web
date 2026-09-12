@@ -13,10 +13,10 @@ html.dark {
   --foreground-subtle: #71717a;
   --border: rgba(255, 255, 255, 0.10);
   --border-strong: rgba(255, 255, 255, 0.18);
-  --border-accent: rgba(249, 115, 22, 0.45);
-  --accent: #f97316;
-  --accent-soft: rgba(249, 115, 22, 0.12);
-  --accent-glow: rgba(249, 115, 22, 0.25);
+  --border-accent: rgba(65, 123, 90, 0.45);
+  --accent: #417B5A;
+  --accent-soft: rgba(65, 123, 90, 0.15);
+  --accent-glow: rgba(65, 123, 90, 0.30);
   --card-bg: #111111;
   --card-shadow:
     0px 1px 2px rgba(0, 0, 0, 0.40),
@@ -30,15 +30,15 @@ html.light {
   --surface-alt: #fafafa;
   --surface-2: #f5f5f6;
   --surface-card: rgba(255, 255, 255, 0.92);
-  --foreground: #0a0a0a;
-  --foreground-muted: #4b4b51;
-  --foreground-subtle: #8a8a90;
-  --border: rgba(10, 10, 10, 0.08);
-  --border-strong: rgba(10, 10, 10, 0.14);
-  --border-accent: rgba(234, 88, 12, 0.50);
-  --accent: #ea580c;
-  --accent-soft: rgba(234, 88, 12, 0.10);
-  --accent-glow: rgba(249, 115, 22, 0.16);
+  --foreground: #222222;
+  --foreground-muted: #555555;
+  --foreground-subtle: #888888;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.14);
+  --border-accent: rgba(65, 123, 90, 0.50);
+  --accent: #417B5A;
+  --accent-soft: rgba(65, 123, 90, 0.12);
+  --accent-glow: rgba(65, 123, 90, 0.20);
   --card-bg: #ffffff;
   --card-shadow:
     0px 0.7px 0.7px -0.67px rgba(0, 0, 0, 0.06),
@@ -52,6 +52,7 @@ html.light {
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-geist-sans);
 }
 
 html {
@@ -70,8 +71,8 @@ body {
 }
 
 ::selection {
-  background: rgba(249, 115, 22, 0.30);
-  color: #fff;
+  background: rgba(65, 123, 90, 0.30);
+  color: inherit;
 }
 
 /* ─── Typographic system (Phase A.1) ───────────────────────── */
