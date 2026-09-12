@@ -113,9 +113,45 @@ export const ThreeCarousel: React.FC<ThreeCarouselProps> = ({
 
     let materials: THREE.MeshBasicMaterial[] = [];
     let meshes: THREE.Mesh[] = [];
-    let videoElements: HTMLVideoElement[] = [];
     let curvedGeometry: THREE.BufferGeometry | null = null;
     const textureLoader = new THREE.TextureLoader();
+
+    // Cache shared video elements & textures so multiple carousel items sharing a video file
+    // only decode once in hardware, preventing GPU thread hang on initialization.
+    const videoTexturesCache = new Map<string, { video: HTMLVideoElement; texture: THREE.VideoTexture }>();
+
+    const getVideoTexture = (videoUrl: string) => {
+      let cached = videoTexturesCache.get(videoUrl);
+      if (!cached) {
+        const video = document.createElement('video');
+        video.src = videoUrl;
+        video.crossOrigin = 'anonymous';
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+        video.autoplay = true;
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        video.preload = 'auto';
+
+        const texture = new THREE.VideoTexture(video);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.minFilter = THREE.LinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.generateMipmaps = false;
+
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Handled gracefully on user interaction
+          });
+        }
+
+        cached = { video, texture };
+        videoTexturesCache.set(videoUrl, cached);
+      }
+      return cached.texture;
+    };
 
     carouselGroup.rotation.y = physicsRef.current.currentRotation;
 
@@ -125,18 +161,14 @@ export const ThreeCarousel: React.FC<ThreeCarouselProps> = ({
 
       if (curvedGeometry) curvedGeometry.dispose();
       materials.forEach((mat) => {
-        if (mat.map) mat.map.dispose();
+        // Video textures are managed and disposed in videoTexturesCache
+        if (mat.map && !(mat.map instanceof THREE.VideoTexture)) {
+          mat.map.dispose();
+        }
         mat.dispose();
       });
       materials = [];
       meshes = [];
-
-      videoElements.forEach((v) => {
-        v.pause();
-        v.removeAttribute('src');
-        v.load();
-      });
-      videoElements = [];
 
       const effectiveBg = '#000000';
       scene.background = cfg.style.transparentBg ? null : new THREE.Color(0x000000);
@@ -205,7 +237,10 @@ export const ThreeCarousel: React.FC<ThreeCarouselProps> = ({
           return tex;
         };
 
-        if (item.image) {
+        if (item.video) {
+          material.map = getVideoTexture(item.video);
+          material.needsUpdate = true;
+        } else if (item.image) {
           textureLoader.load(
             item.image,
             (tex) => {
@@ -255,8 +290,8 @@ export const ThreeCarousel: React.FC<ThreeCarouselProps> = ({
       canvas.style.cursor = 'grabbing';
       canvas.setPointerCapture(e.pointerId);
 
-      videoElements.forEach((v) => {
-        if (v.paused) v.play().catch(() => {});
+      videoTexturesCache.forEach(({ video }) => {
+        if (video.paused) video.play().catch(() => {});
       });
     };
 
@@ -424,14 +459,19 @@ export const ThreeCarousel: React.FC<ThreeCarouselProps> = ({
       scene.clear();
       if (curvedGeometry) curvedGeometry.dispose();
       materials.forEach((m) => {
-        if (m.map) m.map.dispose();
+        if (m.map && !(m.map instanceof THREE.VideoTexture)) {
+          m.map.dispose();
+        }
         m.dispose();
       });
-      videoElements.forEach((v) => {
-        v.pause();
-        v.removeAttribute('src');
-        v.load();
+
+      videoTexturesCache.forEach(({ video, texture }) => {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+        texture.dispose();
       });
+      videoTexturesCache.clear();
 
       renderer.dispose();
       if (container.contains(canvas)) {

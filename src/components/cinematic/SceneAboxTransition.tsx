@@ -1,6 +1,7 @@
 import React from 'react';
 import { cubicEase, easeCinematic, lerp, clamp, getProgress } from './utils/interpolation';
 import { ThreeDMarquee } from './ThreeDMarquee';
+import { CAROUSEL_VIDEOS } from './data/mediaData';
 
 interface SceneAboxTransitionProps {
   time: number;
@@ -198,14 +199,15 @@ export const SceneAboxTransition: React.FC<SceneAboxTransitionProps> = ({
             >
               <ThreeDMarquee
                 height="100%"
-                columns={7}
-                gap={20}
-                scale={1.08}
+                images={CAROUSEL_VIDEOS}
+                columns={4}
+                gap={28}
+                scale={1.15}
                 showGridLines={true}
                 interactive={true}
                 hoverLift={14}
                 animation={{
-                  duration: 26,
+                  duration: 28,
                   reverse: false,
                 }}
                 transitionProgress={activeTransitionProgress}

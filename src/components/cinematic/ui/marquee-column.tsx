@@ -30,7 +30,7 @@ export const MarqueeColumn: React.FC<MarqueeColumnProps> = ({
   return (
     <div
       className={cn(
-        'relative flex-1 min-w-[210px] md:min-w-[240px] max-w-[340px] h-full overflow-visible preserve-3d',
+        'relative flex-1 min-w-[320px] sm:min-w-[380px] md:min-w-[460px] lg:min-w-[540px] xl:min-w-[620px] max-w-[760px] h-full overflow-visible preserve-3d',
         className
       )}
     >

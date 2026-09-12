@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { MarqueeColumn } from './marquee-column';
 import { MarqueeGridLines } from './marquee-grid-line';
 import { X } from './icons';
+import { CAROUSEL_VIDEOS } from '../data/mediaData';
 
 export interface ThreeDMarqueeProps {
   images?: string[];
@@ -33,53 +34,20 @@ export interface ThreeDMarqueeProps {
   isDark?: boolean;
 }
 
-export const DEFAULT_MARQUEE_IMAGES: string[] = [
-  'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1633167606207-d840b5070fc2?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1511497584788-87676104235f?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1518005020951-eccb494ad742?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?q=80&w=800&auto=format&fit=crop',
-];
+export const DEFAULT_MARQUEE_VIDEOS: string[] = CAROUSEL_VIDEOS;
 
 export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
-  images = DEFAULT_MARQUEE_IMAGES,
-  columns = 7,
+  images = DEFAULT_MARQUEE_VIDEOS,
+  columns = 4,
   className = '',
   cardClassName = '',
   height = '100%',
-  gap = 20,
+  gap = 28,
   perspective = 1200,
   rotation = { x: 55, y: 0, z: -45 },
-  scale = 1.05,
+  scale = 1.15,
   animation = {
-    duration: 26,
+    duration: 28,
     reverse: false,
   },
   hoverLift = 14,
@@ -111,32 +79,31 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
   }, [scale]);
 
   const columnData = useMemo(() => {
-    const list = images.length > 0 ? images : DEFAULT_MARQUEE_IMAGES;
+    const list = images.length > 0 ? images : DEFAULT_MARQUEE_VIDEOS;
     const colCount = Math.max(1, columns);
     const cols: string[][] = Array.from({ length: colCount }, () => []);
 
-    // Ensure each column has at least 8 tiles before duplication (16 tiles total per column)
-    // so columns cover the extended vertical canvas completely without any voids
-    const minCardsPerColumn = 8;
+    // 5 cards per column (10 total when duplicated in marquee-column)
+    // covers 3200px+ height effortlessly while avoiding browser video thread congestion
+    const minCardsPerColumn = 5;
     const totalSlots = Math.max(list.length, colCount * minCardsPerColumn);
 
     for (let i = 0; i < totalSlots; i++) {
       const colIdx = i % colCount;
-      // Stagger index so adjacent columns don't display the identical row sequences
-      const imgIdx = (i * 3 + colIdx * 5) % list.length;
+      const imgIdx = (i * 2 + colIdx * 3) % list.length;
       cols[colIdx].push(list[imgIdx]);
     }
 
     // Guarantee minimum length per column
     cols.forEach((col, cIdx) => {
       while (col.length < minCardsPerColumn) {
-        const offset = (cIdx * 7 + col.length) % list.length;
+        const offset = (cIdx * 3 + col.length) % list.length;
         col.push(list[offset]);
       }
     });
 
-    const baseDur = animation.duration ?? 26;
-    const variations = [0, 5, -3, 6, 2, -4, 4, -2];
+    const baseDur = animation.duration ?? 28;
+    const variations = [0, 4, -3, 5, 2, -4, 3, -2];
 
     return cols.map((colImages, idx) => {
       const isEven = idx % 2 === 0;
@@ -240,7 +207,7 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
 
       <div
         id="three-d-marquee-world"
-        className="relative w-[2400px] h-[2400px] xl:w-[2800px] xl:h-[2800px] flex shrink-0 items-center justify-center will-change-transform preserve-3d"
+        className="relative w-[3000px] h-[3000px] xl:w-[3600px] xl:h-[3600px] 2xl:w-[4000px] 2xl:h-[4000px] flex shrink-0 items-center justify-center will-change-transform preserve-3d"
         style={{
           transform: `rotateX(${activeRotX}deg) rotateY(${activeRotY}deg) rotateZ(${activeRotZ}deg) translateZ(${activeTranslateZ}px) scale(${activeScale})`,
           transformOrigin: 'center center',
@@ -283,7 +250,7 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
           onClick={() => setActiveModalImage(null)}
         >
           <div
-            className="relative max-w-4xl w-full max-h-[85vh] bg-white rounded-2xl overflow-hidden shadow-2xl border border-white/20 p-2"
+            className="relative max-w-4xl w-full max-h-[85vh] bg-zinc-950 rounded-2xl overflow-hidden shadow-2xl border border-white/20 p-2"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="absolute top-4 right-4 z-10">
@@ -295,11 +262,22 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <img
-              src={activeModalImage}
-              alt="Inspected visual"
-              className="w-full h-auto max-h-[75vh] object-contain rounded-xl bg-neutral-900"
-            />
+            {activeModalImage.endsWith('.mp4') || activeModalImage.includes('/carouselvideos/') ? (
+              <video
+                src={activeModalImage}
+                autoPlay
+                loop
+                controls
+                playsInline
+                className="w-full h-auto max-h-[75vh] object-contain rounded-xl bg-black"
+              />
+            ) : (
+              <img
+                src={activeModalImage}
+                alt="Inspected visual"
+                className="w-full h-auto max-h-[75vh] object-contain rounded-xl bg-neutral-900"
+              />
+            )}
           </div>
         </div>
       )}
