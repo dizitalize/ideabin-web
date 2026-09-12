@@ -112,11 +112,6 @@ export default function FAQSection() {
       <div className="mx-auto w-full max-w-4xl overflow-hidden">
         {/* Header Title & Subtitle */}
         <div className="text-center mb-16 sm:mb-20">
-          <p className={`font-mono text-xs uppercase tracking-[0.25em] font-medium mb-4 flex items-center justify-center gap-2 ${isDark ? "text-orange-400" : "text-orange-600"
-            }`}>
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-            05 · Knowledge Base & FAQ
-          </p>
           <h2 className="mx-auto max-w-5xl text-center tracking-tight font-medium text-3xl md:text-5xl md:leading-tight text-neutral-900 dark:text-white">
             <span style={{ display: "inline-block", verticalAlign: "top", textWrap: "balance" }}>
               Frequently Asked Questions

@@ -85,7 +85,7 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
         }}
       >
         <div
-          className="w-full flex items-baseline gap-x-4 sm:gap-x-8 md:gap-x-12 leading-[0.84] pl-2 sm:pl-4 md:pl-6 will-change-transform overflow-visible"
+          className="w-full flex items-baseline gap-x-3 sm:gap-x-5 md:gap-x-7 leading-[0.85] pl-2 sm:pl-4 md:pl-6 will-change-transform overflow-visible"
           style={{
             transform: `translate3d(${line1CollapseX}px, 0, 0)`,
           }}
@@ -99,7 +99,7 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
             opacity={w1Opacity}
             overflowVisible={true}
             className="py-1 overflow-visible"
-            textClassName="text-[9vw] sm:text-[9.5vw] md:text-[9vw] lg:text-[8.5vw] font-black font-display tracking-[-0.05em] text-white pr-2"
+            textClassName="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-white pr-2"
           />
 
           <MaskedWord
@@ -111,12 +111,12 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
             opacity={w2Opacity}
             overflowVisible={true}
             className="py-1 overflow-visible"
-            textClassName="text-[9vw] sm:text-[9.5vw] md:text-[9vw] lg:text-[8.5vw] font-black font-display tracking-[-0.05em] text-neutral-300 pr-2"
+            textClassName="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-neutral-300 pr-2"
           />
         </div>
 
         <div
-          className="w-full flex items-baseline justify-end gap-x-4 sm:gap-x-8 md:gap-x-12 leading-[0.84] -mt-2 sm:-mt-4 md:-mt-6 pr-2 sm:pr-4 md:pr-6 will-change-transform overflow-visible"
+          className="w-full flex items-baseline justify-end gap-x-3 sm:gap-x-5 md:gap-x-7 leading-[0.85] -mt-1 sm:-mt-2 md:-mt-3 pr-2 sm:pr-4 md:pr-6 will-change-transform overflow-visible"
           style={{
             transform: `translate3d(${line2CollapseX}px, 0, 0)`,
           }}
@@ -130,7 +130,7 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
             opacity={w3Opacity}
             overflowVisible={true}
             className="py-1 overflow-visible"
-            textClassName="text-[9vw] sm:text-[9.5vw] md:text-[9vw] lg:text-[8.5vw] font-black font-display tracking-[-0.05em] text-neutral-300 pr-2"
+            textClassName="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-neutral-300 pr-2"
           />
 
           <MaskedWord
@@ -142,7 +142,7 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
             opacity={w4Opacity}
             overflowVisible={true}
             className="py-1 overflow-visible"
-            textClassName="text-[9vw] sm:text-[9.5vw] md:text-[9vw] lg:text-[8.5vw] font-black font-display tracking-[-0.06em] text-white pr-2"
+            textClassName="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.05em] text-white pr-2"
           />
         </div>
       </div>

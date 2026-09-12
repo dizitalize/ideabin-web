@@ -84,18 +84,18 @@ export const SceneIntro: React.FC<SceneIntroProps> = ({
               yPercent={w1Y}
               scale={w1Scale}
               className="py-1"
-              textClassName="text-[12vw] sm:text-[13vw] md:text-[12vw] lg:text-[11.5vw] font-black leading-[0.82] tracking-[-0.05em] text-white"
+              textClassName="text-[6.5vw] sm:text-[7vw] md:text-[6.5vw] lg:text-[6vw] font-black leading-[0.85] tracking-[-0.04em] text-white"
             />
           </div>
 
-          <div className="w-full flex flex-wrap items-baseline justify-between gap-4 -mt-2 sm:-mt-4 md:-mt-6 lg:-mt-8">
+          <div className="w-full flex flex-wrap items-baseline justify-between gap-4 -mt-1 sm:-mt-2 md:-mt-3">
             <MaskedWord
               id="word-that"
               word={words[1] || 'THAT'}
               xPercent={w2X}
               scale={w2Scale}
               className="py-1"
-              textClassName="text-[10.5vw] sm:text-[11.5vw] md:text-[10.5vw] lg:text-[10vw] font-black leading-[0.82] tracking-[-0.04em] text-neutral-200"
+              textClassName="text-[5.5vw] sm:text-[6vw] md:text-[5.5vw] lg:text-[5vw] font-black leading-[0.85] tracking-[-0.035em] text-neutral-200"
             />
 
             <MaskedWord
@@ -104,18 +104,18 @@ export const SceneIntro: React.FC<SceneIntroProps> = ({
               yPercent={w3Y}
               scale={w3Scale}
               className="py-1"
-              textClassName="text-[11.5vw] sm:text-[12.5vw] md:text-[11.5vw] lg:text-[11vw] font-black leading-[0.82] tracking-[-0.05em] text-white"
+              textClassName="text-[6vw] sm:text-[6.5vw] md:text-[6vw] lg:text-[5.5vw] font-black leading-[0.85] tracking-[-0.04em] text-white"
             />
           </div>
 
-          <div className="w-full flex justify-end items-baseline -mt-2 sm:-mt-4 md:-mt-6 lg:-mt-8">
+          <div className="w-full flex justify-end items-baseline -mt-1 sm:-mt-2 md:-mt-3">
             <MaskedWord
               id="word-attention"
               word={words[3] || 'ATTENTION'}
               xPercent={w4X}
               scale={w4Scale}
               className="py-1 overflow-visible"
-              textClassName="text-[13vw] sm:text-[14.5vw] md:text-[14vw] lg:text-[13.5vw] font-black leading-[0.82] tracking-[-0.06em] text-white pr-2"
+              textClassName="text-[7vw] sm:text-[7.5vw] md:text-[7vw] lg:text-[6.5vw] font-black leading-[0.85] tracking-[-0.05em] text-white pr-2"
             />
           </div>
         </div>

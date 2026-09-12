@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { PhoneMockup } from './PhoneMockup';
 import { HeroShowreel } from './HeroShowreel';
+import { QuestionsStatementStage } from './QuestionsStatementStage';
 
 interface RadialPhoneData {
   id: string;
@@ -57,6 +58,7 @@ export const RadialPhoneExperience: React.FC<RadialPhoneExperienceProps> = ({
   const [orbitAngle, setOrbitAngle] = useState<number>(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isMobileScreen, setIsMobileScreen] = useState(false);
+  const [showQuestionsStage, setShowQuestionsStage] = useState<boolean>(false);
   const touchStartYRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -69,7 +71,25 @@ export const RadialPhoneExperience: React.FC<RadialPhoneExperienceProps> = ({
   const activeProgress = manualProgress !== null ? manualProgress : liveProgress;
   const allPhonesDeparted = activeProgress >= 0.94;
 
+  const handleScrollToSeeMore = () => {
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollBy({ top: window.innerHeight * 1.5, behavior: 'smooth' });
+    }
+    if (onComplete) {
+      onComplete();
+    }
+  };
+
   const handleWheel = (e: React.WheelEvent) => {
+    if (showQuestionsStage) {
+      if (e.deltaY > 15) {
+        handleScrollToSeeMore();
+      }
+      return;
+    }
     if (allPhonesDeparted && e.deltaY > 0) return;
     setIsPlayingSequence(false);
     const delta = e.deltaY * 0.0006;
@@ -86,14 +106,21 @@ export const RadialPhoneExperience: React.FC<RadialPhoneExperienceProps> = ({
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (touchStartYRef.current === null) return;
+    const currentY = e.touches[0].clientY;
+    const deltaY = touchStartYRef.current - currentY;
+    if (showQuestionsStage) {
+      if (deltaY > 25) {
+        handleScrollToSeeMore();
+      }
+      return;
+    }
     if (allPhonesDeparted) return;
     setIsPlayingSequence(false);
-    const currentY = e.touches[0].clientY;
-    const deltaY = (touchStartYRef.current - currentY) * 0.002;
+    const scrollDelta = deltaY * 0.002;
     touchStartYRef.current = currentY;
     setManualProgress((prev) => {
       const curr = prev !== null ? prev : 0;
-      const next = Math.min(1, Math.max(0, curr + deltaY));
+      const next = Math.min(1, Math.max(0, curr + scrollDelta));
       return next;
     });
   };
@@ -111,16 +138,23 @@ export const RadialPhoneExperience: React.FC<RadialPhoneExperienceProps> = ({
         if (!allPhonesDeparted) {
           setIsPlayingSequence(false);
           setManualProgress(1);
-        } else if (onComplete) {
-          onComplete();
+        } else if (!showQuestionsStage) {
+          setShowQuestionsStage(true);
+        } else {
+          handleScrollToSeeMore();
         }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onComplete, allPhonesDeparted]);
+  }, [allPhonesDeparted, showQuestionsStage]);
+
+  const handleShowreelComplete = useCallback(() => {
+    setShowQuestionsStage(true);
+  }, []);
 
   useEffect(() => {
+    if (allPhonesDeparted) return;
     let animId: number;
     let lastTime = performance.now();
 
@@ -133,7 +167,7 @@ export const RadialPhoneExperience: React.FC<RadialPhoneExperienceProps> = ({
 
     animId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animId);
-  }, []);
+  }, [allPhonesDeparted]);
 
   useEffect(() => {
     if (!isPlayingSequence) return;
@@ -432,19 +466,36 @@ export const RadialPhoneExperience: React.FC<RadialPhoneExperienceProps> = ({
         </motion.div>
       </div>
 
-      {/* Design & Dev Typography Showreel: Follows the exact same UI after mobile phone slices hide */}
-      {allPhonesDeparted && (
+      {/* Design & Dev Typography Showreel: Follows after mobile phone slices hide */}
+      {allPhonesDeparted && !showQuestionsStage && (
         <motion.div
           key="design-dev-text-stage"
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.02 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0 z-30 flex items-center justify-center pointer-events-auto"
         >
           <HeroShowreel
             transparentBg={true}
             isDark={isDark}
-            onComplete={onComplete}
+            onComplete={handleShowreelComplete}
+          />
+        </motion.div>
+      )}
+
+      {/* Stage 3: The Questions Statement Stage ("WE DON'T START WITH ANSWERS...") with Scroll to see more button */}
+      {showQuestionsStage && (
+        <motion.div
+          key="questions-statement-stage"
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute inset-0 z-30 flex items-center justify-center pointer-events-auto"
+        >
+          <QuestionsStatementStage
+            isDark={isDark}
+            onScrollToSeeMore={handleScrollToSeeMore}
           />
         </motion.div>
       )}

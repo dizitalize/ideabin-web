@@ -508,26 +508,11 @@ export default function Hero() {
           ref={heroTextRef}
           className="absolute inset-0 z-20 flex flex-col justify-between p-6 md:p-12 lg:p-16 pointer-events-none"
         >
-          {/* Top metadata */}
-          <div className="pt-20 md:pt-24 flex items-center justify-between text-[11px] uppercase tracking-[0.25em] font-medium">
-            <span
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/70 backdrop-blur-md border border-white/15 text-zinc-200 shadow-[0_4px_16px_rgba(0,0,0,0.8)] transition-all duration-700 ease-out"
-              style={{
-                opacity: heroInitialAnim || reducedMotion ? 0.95 : 0,
-                transform: heroInitialAnim || reducedMotion ? "translateY(0)" : "translateY(8px)",
-              }}
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.9)]" />
-              Scene 01 · Spatial Architecture
-            </span>
-          </div>
+          {/* Top spacer */}
+          <div className="pt-20 md:pt-24" />
 
           {/* Main Headline (positioned compactly on left so robot face remains visible & clear) */}
           <div className="my-auto max-w-xl lg:max-w-2xl relative z-20">
-            <p className="font-mono text-xs uppercase tracking-[0.25em] font-medium mb-4 flex items-center gap-2 text-orange-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-              01 · Spatial Web Engineering
-            </p>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-[-0.035em] text-white leading-[0.98] text-balance drop-shadow-[0_4px_24px_rgba(0,0,0,1)] drop-shadow-[0_1px_3px_rgba(0,0,0,1)]">
               <span className="block overflow-hidden pb-1">
                 <span
@@ -603,12 +588,7 @@ export default function Hero() {
           ref={storyContainerRef}
           className="absolute inset-0 z-20 hidden items-center justify-start p-6 md:p-16 lg:p-24 pointer-events-none"
         >
-          <div className="max-w-2xl text-left p-6 sm:p-10 rounded-3xl bg-black/60 backdrop-blur-md shadow-[0_24px_64px_rgba(0,0,0,0.9)]">
-            <p className="font-mono text-xs uppercase tracking-[0.25em] font-medium mb-6 flex items-center gap-2 text-orange-400 drop-shadow-[0_2px_8px_rgba(0,0,0,1)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-              02 · Core Philosophy
-            </p>
-
+          <div className="max-w-2xl text-left">
             <div className="space-y-1 sm:space-y-2 md:space-y-3">
               {STORY_LINES.map((line, i) => {
                 const isLarge = line.emphasis === "large";

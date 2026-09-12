@@ -55,20 +55,20 @@ export const SceneGlitchTransition: React.FC<SceneGlitchTransitionProps> = ({
                 className="absolute inset-0 flex flex-col justify-center px-4 sm:px-8 md:px-14 lg:px-20"
                 style={{ opacity: outOpacity }}
               >
-                <div className="w-full max-w-[1700px] mx-auto flex flex-col items-start leading-[0.82]">
-                  <span className="text-[12vw] sm:text-[13vw] md:text-[12vw] lg:text-[11.5vw] font-black font-display tracking-[-0.05em] text-white">
+                <div className="w-full max-w-[1700px] mx-auto flex flex-col items-start leading-[0.85]">
+                  <span className="text-[6.5vw] sm:text-[7vw] md:text-[6.5vw] lg:text-[6vw] font-black font-display tracking-[-0.04em] text-white">
                     {statement1[0]}
                   </span>
-                  <div className="w-full flex justify-between gap-4 -mt-2 sm:-mt-4 md:-mt-6 lg:-mt-8">
-                    <span className="text-[10.5vw] sm:text-[11.5vw] md:text-[10.5vw] lg:text-[10vw] font-black font-display tracking-[-0.04em] text-neutral-300">
+                  <div className="w-full flex justify-between gap-4 -mt-1 sm:-mt-2 md:-mt-3">
+                    <span className="text-[5.5vw] sm:text-[6vw] md:text-[5.5vw] lg:text-[5vw] font-black font-display tracking-[-0.035em] text-neutral-300">
                       {statement1[1]}
                     </span>
-                    <span className="text-[11.5vw] sm:text-[12.5vw] md:text-[11.5vw] lg:text-[11vw] font-black font-display tracking-[-0.05em] text-white">
+                    <span className="text-[6vw] sm:text-[6.5vw] md:text-[6vw] lg:text-[5.5vw] font-black font-display tracking-[-0.04em] text-white">
                       {statement1[2]}
                     </span>
                   </div>
-                  <div className="w-full flex justify-end -mt-2 sm:-mt-4 md:-mt-6 lg:-mt-8">
-                    <span className="text-[13vw] sm:text-[14.5vw] md:text-[14vw] lg:text-[13.5vw] font-black font-display tracking-[-0.06em] text-white">
+                  <div className="w-full flex justify-end -mt-1 sm:-mt-2 md:-mt-3">
+                    <span className="text-[7vw] sm:text-[7.5vw] md:text-[7vw] lg:text-[6.5vw] font-black font-display tracking-[-0.05em] text-white">
                       {statement1[3]}
                     </span>
                   </div>
@@ -82,19 +82,19 @@ export const SceneGlitchTransition: React.FC<SceneGlitchTransitionProps> = ({
                 style={{ opacity: inOpacity }}
               >
                 <div className="w-full max-w-[1700px] mx-auto flex flex-col items-start leading-[0.85] overflow-visible">
-                  <div className="w-full flex items-baseline gap-x-4 sm:gap-x-8 md:gap-x-12 overflow-visible">
-                    <span className="text-[9vw] sm:text-[9.5vw] md:text-[9vw] lg:text-[8.5vw] font-black font-display tracking-[-0.05em] text-white">
+                  <div className="w-full flex items-baseline gap-x-3 sm:gap-x-5 md:gap-x-7 overflow-visible">
+                    <span className="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-white">
                       UNCOMMON
                     </span>
-                    <span className="text-[9vw] sm:text-[9.5vw] md:text-[9vw] lg:text-[8.5vw] font-black font-display tracking-[-0.05em] text-neutral-300">
+                    <span className="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-neutral-300">
                       IDEAS.
                     </span>
                   </div>
-                  <div className="w-full flex justify-end items-baseline gap-x-4 sm:gap-x-8 md:gap-x-12 -mt-2 sm:-mt-4 md:-mt-6 overflow-visible">
-                    <span className="text-[9vw] sm:text-[9.5vw] md:text-[9vw] lg:text-[8.5vw] font-black font-display tracking-[-0.05em] text-neutral-300">
+                  <div className="w-full flex justify-end items-baseline gap-x-3 sm:gap-x-5 md:gap-x-7 -mt-1 sm:-mt-2 md:-mt-3 overflow-visible">
+                    <span className="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-neutral-300">
                       UNMATCHED
                     </span>
-                    <span className="text-[9vw] sm:text-[9.5vw] md:text-[9vw] lg:text-[8.5vw] font-black font-display tracking-[-0.06em] text-white">
+                    <span className="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.05em] text-white">
                       RESULTS.
                     </span>
                   </div>

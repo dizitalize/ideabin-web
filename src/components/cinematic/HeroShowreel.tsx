@@ -21,6 +21,8 @@ export const HeroShowreel: React.FC<HeroShowreelProps> = ({
   const [direction, setDirection] = useState<number>(1);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const timerRef = useRef<number | null>(null);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
   const activeTheme = isDark ? THEMES.obsidian : THEMES.alabaster;
 
   const clearTimer = useCallback(() => {
@@ -33,12 +35,13 @@ export const HeroShowreel: React.FC<HeroShowreelProps> = ({
   useEffect(() => {
     if (!isPlaying) return;
 
-    const holdTime = stepIndex === SEQUENCE_DATA.length - 1 ? 2200 : 620;
+    // Automatic transition hold time: 880ms for regular words, 1800ms for the final word before auto-transitioning
+    const holdTime = stepIndex === SEQUENCE_DATA.length - 1 ? 1800 : 880;
 
     timerRef.current = window.setTimeout(() => {
       if (stepIndex >= SEQUENCE_DATA.length - 1) {
-        if (onComplete) {
-          onComplete();
+        if (onCompleteRef.current) {
+          onCompleteRef.current();
         } else {
           setDirection(1);
           setStepIndex(0);
@@ -50,7 +53,7 @@ export const HeroShowreel: React.FC<HeroShowreelProps> = ({
     }, holdTime);
 
     return () => clearTimer();
-  }, [isPlaying, stepIndex, clearTimer, onComplete]);
+  }, [isPlaying, stepIndex, clearTimer]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -60,8 +63,8 @@ export const HeroShowreel: React.FC<HeroShowreelProps> = ({
       } else if (e.code === 'ArrowRight') {
         e.preventDefault();
         if (stepIndex >= SEQUENCE_DATA.length - 1) {
-          if (onComplete) {
-            onComplete();
+          if (onCompleteRef.current) {
+            onCompleteRef.current();
             return;
           }
         }
@@ -83,8 +86,8 @@ export const HeroShowreel: React.FC<HeroShowreelProps> = ({
       id="hero-showreel-stage"
       onClick={() => {
         if (stepIndex >= SEQUENCE_DATA.length - 1) {
-          if (onComplete) {
-            onComplete();
+          if (onCompleteRef.current) {
+            onCompleteRef.current();
             return;
           }
         }

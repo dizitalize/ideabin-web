@@ -9,6 +9,7 @@ import { SceneAboxTransition } from './SceneAboxTransition';
 import { CurvedCarouselSection } from './CurvedCarouselSection';
 import { HeroShowreel } from './HeroShowreel';
 import { RadialPhoneExperience } from './RadialPhoneExperience';
+import { QuestionsStatementStage } from './QuestionsStatementStage';
 import { clamp } from './utils/interpolation';
 import { useTheme } from '@/components/providers/ThemeProvider';
 
@@ -41,6 +42,7 @@ export default function CinematicPage({
   const [sequenceCycle, setSequenceCycle] = useState<number>(0);
   const [showRadialPhones, setShowRadialPhones] = useState<boolean>(false);
   const [showDesignDevText, setShowDesignDevText] = useState<boolean>(false);
+  const [showQuestionsStage, setShowQuestionsStage] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [transitionType] = useState<'zoom-in' | 'zoom-out'>('zoom-in');
 
@@ -69,6 +71,7 @@ export default function CinematicPage({
     window.setTimeout(() => {
       setShowRadialPhones(false);
       setShowDesignDevText(false);
+      setShowQuestionsStage(false);
       hasTransitionedToRadialRef.current = false;
       setTime(0.0);
       timeRef.current = 0.0;
@@ -92,12 +95,8 @@ export default function CinematicPage({
 
   // When Design & Development Showreel completes
   const handleShowreelComplete = useCallback(() => {
-    if (onComplete) onComplete();
-    else {
-      // Loop or restart sequence
-      handleRestartSequence();
-    }
-  }, [onComplete, handleRestartSequence]);
+    setShowQuestionsStage(true);
+  }, []);
 
   useEffect(() => {
     timeRef.current = time;
@@ -300,6 +299,19 @@ export default function CinematicPage({
           onComplete={handleRadialComplete}
           onRestartAll={handleRestartSequence}
           isDark={isDark}
+        />
+      ) : showQuestionsStage ? (
+        <QuestionsStatementStage
+          isDark={isDark}
+          onScrollToSeeMore={() => {
+            const servicesSection = document.getElementById('services');
+            if (servicesSection) {
+              servicesSection.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              window.scrollBy({ top: window.innerHeight * 1.5, behavior: 'smooth' });
+            }
+            if (onComplete) onComplete();
+          }}
         />
       ) : showDesignDevText ? (
         <div
