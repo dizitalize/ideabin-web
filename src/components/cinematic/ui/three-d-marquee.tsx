@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { MarqueeColumn } from './marquee-column';
 import { MarqueeGridLines } from './marquee-grid-line';
 import { X } from './icons';
-import { CAROUSEL_VIDEOS } from '../data/mediaData';
+import { CAROUSEL_VIDEOS, FRAMER_MEDIA } from '../data/mediaData';
 
 export interface ThreeDMarqueeProps {
   images?: string[];
@@ -34,18 +34,32 @@ export interface ThreeDMarqueeProps {
   isDark?: boolean;
 }
 
-export const DEFAULT_MARQUEE_VIDEOS: string[] = CAROUSEL_VIDEOS;
+export const DEFAULT_MARQUEE_MEDIA: string[] = [
+  ...CAROUSEL_VIDEOS,
+  'https://framerusercontent.com/images/FoyA9guBxpmhcqDLHhVuq1MKg.jpeg?width=1792&height=2400',
+  'https://images.unsplash.com/photo-1608248597359-25f0a8d46158?q=80&w=1792&auto=format&fit=crop',
+  'https://framerusercontent.com/images/jFKA626JR3qumtUOVF1bcDhoKtU.jpeg?width=1792&height=2400',
+  'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1792&auto=format&fit=crop',
+  'https://framerusercontent.com/images/D6nJ6lPFbF30aB3djXQhFXXA.jpeg?width=1792&height=2400',
+  'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1792&auto=format&fit=crop',
+  'https://framerusercontent.com/images/zpSB8VO8tkc3tcRFU9zLGP3pNs.jpeg?width=1792&height=2400',
+  'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1792&auto=format&fit=crop',
+  'https://framerusercontent.com/images/qRdKj75WgpZO8ehkpmFb3y9R7XQ.jpeg?width=1792&height=2400',
+  'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1792&auto=format&fit=crop',
+];
+
+export const DEFAULT_MARQUEE_VIDEOS: string[] = DEFAULT_MARQUEE_MEDIA;
 
 export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
-  images = DEFAULT_MARQUEE_VIDEOS,
+  images = DEFAULT_MARQUEE_MEDIA,
   columns = 4,
   className = '',
   cardClassName = '',
   height = '100%',
-  gap = 28,
-  perspective = 1200,
-  rotation = { x: 55, y: 0, z: -45 },
-  scale = 1.15,
+  gap = 24,
+  perspective = 1100,
+  rotation = { x: 48, y: 0, z: -28 },
+  scale = 1.02,
   animation = {
     duration: 28,
     reverse: false,
@@ -60,12 +74,12 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [rotX, setRotX] = useState<number>(rotation.x ?? 55);
+  const [rotX, setRotX] = useState<number>(rotation.x ?? 48);
   const [rotY, setRotY] = useState<number>(rotation.y ?? 0);
-  const [rotZ, setRotZ] = useState<number>(rotation.z ?? -45);
+  const [rotZ, setRotZ] = useState<number>(rotation.z ?? -28);
   const [zoomScale, setZoomScale] = useState<number>(scale);
   const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0, startRotX: 55, startRotZ: -45 });
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0, startRotX: 48, startRotZ: -28 });
   const [activeModalImage, setActiveModalImage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -132,8 +146,8 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging || !interactive) return;
-    const deltaX = (e.clientX - dragStart.x) * 0.25;
-    const deltaY = (e.clientY - dragStart.y) * 0.25;
+    const deltaX = (e.clientX - dragStart.x) * 0.35;
+    const deltaY = (e.clientY - dragStart.y) * 0.35;
 
     setRotZ(dragStart.startRotZ + deltaX);
     setRotX(Math.max(20, Math.min(80, dragStart.startRotX - deltaY)));
@@ -230,6 +244,7 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
             <MarqueeColumn
               key={`marquee-col-${cIdx}`}
               columnIndex={cIdx}
+              totalColumns={columnData.length}
               images={col.images}
               direction={col.direction}
               duration={col.duration}

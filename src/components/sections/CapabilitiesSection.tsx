@@ -132,7 +132,7 @@ export default function CapabilitiesSection() {
             >
               {/* Number */}
               <span className={`mono text-[11px] tracking-[0.2em] font-medium transition-colors duration-300 ${
-                isDark ? "text-zinc-600 group-hover:text-[#417B5A]" : "text-zinc-400 group-hover:text-[#417B5A]"
+                isDark ? "text-zinc-600 group-hover:text-orange-500" : "text-zinc-400 group-hover:text-orange-500"
               }`}>
                 {cap.number}
               </span>
@@ -153,7 +153,7 @@ export default function CapabilitiesSection() {
 
               {/* Subtle right-arrow on hover */}
               <span
-                className="absolute right-0 top-10 md:top-12 text-[#417B5A]/0 group-hover:text-[#417B5A]/80 text-xl transition-all duration-300 group-hover:translate-x-1"
+                className="absolute right-0 top-10 md:top-12 text-orange-500/0 group-hover:text-orange-500 text-xl transition-all duration-300 group-hover:translate-x-1"
                 aria-hidden
               >
                 →

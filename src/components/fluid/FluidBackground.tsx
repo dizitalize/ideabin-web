@@ -19,7 +19,7 @@ export default function FluidBackground() {
     ...DEFAULT_CONFIG,
     transparent: true,
     backgroundColor: isDark ? "#000000" : "#ffffff",
-    colorMode: isDark ? "neon" : "emerald",
+    colorMode: "fire",
     densityDissipation: isDark ? 2.2 : 2.8,
     velocityDissipation: 1.8,
     curl: 34,

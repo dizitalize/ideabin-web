@@ -81,6 +81,7 @@ export default function FAQSection() {
 
   // Open state: starts null while items load one-by-one, then opens item 1 after all loads
   const [openId, setOpenId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [hasAutoOpened, setHasAutoOpened] = useState(false);
   const [userInteracted, setUserInteracted] = useState(false);
 
@@ -110,11 +111,10 @@ export default function FAQSection() {
   return (
     <section
       id="faq"
-      className={`relative z-20 w-full py-20 sm:py-28 px-4 sm:px-8 lg:px-12 transition-colors duration-500 border-t ${
-        isDark
-          ? "bg-black/90 backdrop-blur-xl text-white border-white/10"
-          : "bg-white/90 backdrop-blur-xl text-[#222222] border-black/10"
-      }`}
+      className={`relative z-20 w-full py-20 sm:py-28 px-4 sm:px-8 lg:px-12 transition-colors duration-500 rounded-t-[32px] sm:rounded-t-[44px] border-t border-x shadow-[0_-12px_40px_rgba(0,0,0,0.45)] ${isDark
+          ? "bg-[#0d0d12]/90 backdrop-blur-xl text-white border-white/12"
+          : "bg-[#fafafc]/95 backdrop-blur-xl text-[#222222] border-black/8"
+        }`}
       aria-label="Frequently Asked Questions"
     >
       <div ref={containerRef} className="mx-auto w-full max-w-4xl overflow-hidden">
@@ -126,18 +126,16 @@ export default function FAQSection() {
           className="text-center mb-16 sm:mb-20"
         >
           <h2
-            className={`mx-auto max-w-5xl text-center tracking-tight font-medium text-3xl md:text-5xl md:leading-tight transition-colors duration-300 ${
-              isDark ? "text-white" : "text-[#111111]"
-            }`}
+            className={`mx-auto max-w-5xl text-center tracking-tight font-medium text-3xl md:text-5xl md:leading-tight transition-colors duration-300 ${isDark ? "text-white" : "text-[#111111]"
+              }`}
           >
             <span style={{ display: "inline-block", verticalAlign: "top", textWrap: "balance" }}>
               Frequently Asked Questions
             </span>
           </h2>
           <p
-            className={`my-4 text-sm md:text-base text-center font-normal mx-auto mt-4 max-w-2xl transition-colors duration-300 ${
-              isDark ? "text-zinc-400" : "text-neutral-600"
-            }`}
+            className={`my-4 text-sm md:text-base text-center font-normal mx-auto mt-4 max-w-2xl transition-colors duration-300 ${isDark ? "text-zinc-400" : "text-neutral-600"
+              }`}
           >
             <span style={{ display: "inline-block", verticalAlign: "top", textWrap: "balance" }}>
               Everything you need to know about our engineering standards, 3D pipelines, and studio engagements.
@@ -157,9 +155,8 @@ export default function FAQSection() {
                 className="relative w-full px-4 sm:px-6 mb-2"
               >
                 <h3
-                  className={`pt-5 pb-3 text-lg sm:text-xl font-medium tracking-tight px-3 sm:px-4 transition-colors duration-300 ${
-                    isDark ? "text-white" : "text-[#111111]"
-                  }`}
+                  className={`pt-5 pb-3 text-lg sm:text-xl font-medium tracking-tight px-3 sm:px-4 transition-colors duration-300 ${isDark ? "text-white" : "text-[#111111]"
+                    }`}
                 >
                   {category.title}
                 </h3>
@@ -170,6 +167,8 @@ export default function FAQSection() {
                 <div className="flex flex-col">
                   {category.items.map((item, index) => {
                     const isOpen = openId === item.id;
+                    const isHovered = hoveredId === item.id;
+                    const showDotted = isOpen || isHovered;
 
                     return (
                       <motion.div
@@ -185,53 +184,55 @@ export default function FAQSection() {
                           delay: 0.15 + index * 0.12,
                           ease: [0.16, 1, 0.3, 1],
                         }}
+                        onMouseEnter={() => setHoveredId(item.id)}
+                        onMouseLeave={() => setHoveredId(null)}
                         className="relative w-full"
                       >
-                        {/* Dotted border guidelines scoped strictly to the opened item with smooth fade & overshoot */}
+                        {/* Dotted border guidelines scoped to opened or hovered item with slightly increased 1.5px dots */}
                         <AnimatePresence>
-                          {isOpen && (
+                          {showDotted && (
                             <>
-                              {/* Horizontal dotted line ABOVE opened FAQ with crosshair overshoot */}
+                              {/* Horizontal dotted line ABOVE FAQ with crosshair overshoot */}
                               <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.25, ease: "easeInOut" }}
-                                className={`absolute top-0 left-0 right-0 h-0 border-t border-dotted pointer-events-none transition-colors duration-300 ${
-                                  isDark ? "border-white/15" : "border-black/15"
+                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                className={`absolute top-0 left-0 right-0 h-0 border-t-[1.5px] border-dotted pointer-events-none transition-colors duration-200 ${
+                                  isDark ? "border-white/20" : "border-black/20"
                                 }`}
                               />
 
-                              {/* Left vertical dotted border for opened item */}
+                              {/* Left vertical dotted border for item */}
                               <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.25, ease: "easeInOut" }}
-                                className={`absolute left-4 sm:left-6 -top-2 -bottom-2 w-0 border-l border-dotted pointer-events-none transition-colors duration-300 ${
-                                  isDark ? "border-white/15" : "border-black/15"
+                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                className={`absolute left-4 sm:left-6 -top-2 -bottom-2 w-0 border-l-[1.5px] border-dotted pointer-events-none transition-colors duration-200 ${
+                                  isDark ? "border-white/20" : "border-black/20"
                                 }`}
                               />
 
-                              {/* Right vertical dotted border for opened item */}
+                              {/* Right vertical dotted border for item */}
                               <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.25, ease: "easeInOut" }}
-                                className={`absolute right-4 sm:right-6 -top-2 -bottom-2 w-0 border-r border-dotted pointer-events-none transition-colors duration-300 ${
-                                  isDark ? "border-white/15" : "border-black/15"
+                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                className={`absolute right-4 sm:right-6 -top-2 -bottom-2 w-0 border-r-[1.5px] border-dotted pointer-events-none transition-colors duration-200 ${
+                                  isDark ? "border-white/20" : "border-black/20"
                                 }`}
                               />
 
-                              {/* Horizontal dotted line BELOW opened FAQ with crosshair overshoot */}
+                              {/* Horizontal dotted line BELOW FAQ with crosshair overshoot */}
                               <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.25, ease: "easeInOut" }}
-                                className={`absolute bottom-0 left-0 right-0 h-0 border-b border-dotted pointer-events-none transition-colors duration-300 ${
-                                  isDark ? "border-white/15" : "border-black/15"
+                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                className={`absolute bottom-0 left-0 right-0 h-0 border-b-[1.5px] border-dotted pointer-events-none transition-colors duration-200 ${
+                                  isDark ? "border-white/20" : "border-black/20"
                                 }`}
                               />
                             </>
@@ -248,15 +249,14 @@ export default function FAQSection() {
                               aria-expanded={isOpen}
                             >
                               <span
-                                className={`text-sm sm:text-base leading-snug transition-colors duration-200 ${
-                                  isOpen
+                                className={`text-sm sm:text-base leading-snug transition-colors duration-200 ${isOpen
                                     ? isDark
                                       ? "font-medium text-white"
                                       : "font-medium text-[#111111]"
                                     : isDark
-                                    ? "font-normal text-white/90 group-hover:text-white"
-                                    : "font-normal text-[#222222] group-hover:text-black"
-                                }`}
+                                      ? "font-normal text-white/90 group-hover:text-white"
+                                      : "font-normal text-[#222222] group-hover:text-black"
+                                  }`}
                               >
                                 {item.question}
                               </span>
@@ -264,11 +264,10 @@ export default function FAQSection() {
                               <motion.span
                                 animate={{ rotate: isOpen ? 45 : 0 }}
                                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                                className={`shrink-0 p-0.5 transition-colors ${
-                                  isDark
+                                className={`shrink-0 p-0.5 transition-colors ${isDark
                                     ? "text-zinc-400 group-hover:text-white"
-                                    : "text-neutral-500 group-hover:text-[#417B5A]"
-                                }`}
+                                    : "text-neutral-500 group-hover:text-orange-500"
+                                  }`}
                                 aria-label={isOpen ? "Close question" : "Open question"}
                               >
                                 <PlusIcon className="w-4 h-4" />
@@ -300,9 +299,8 @@ export default function FAQSection() {
                                   className="overflow-hidden"
                                 >
                                   <p
-                                    className={`pt-3.5 text-sm sm:text-[14.5px] leading-relaxed max-w-3xl transition-colors duration-300 ${
-                                      isDark ? "text-zinc-400" : "text-neutral-600"
-                                    }`}
+                                    className={`pt-3.5 text-sm sm:text-[14.5px] leading-relaxed max-w-3xl transition-colors duration-300 ${isDark ? "text-zinc-400" : "text-neutral-600"
+                                      }`}
                                   >
                                     {item.answer}
                                   </p>

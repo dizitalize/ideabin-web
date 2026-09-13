@@ -147,7 +147,7 @@ export const DEFAULT_CAROUSEL_CONFIG: CarouselConfig = {
 
 export const DEFAULT_INTERACTION_CONFIG: InteractionConfig = {
   autoPlay: true,
-  speed: 0.1,
+  speed: 0.15,
   damping: 14,
 };
 

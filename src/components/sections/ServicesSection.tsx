@@ -171,7 +171,7 @@ const getDistanceToNext = (idx: number) => {
   return Math.max(next - curr, 1);
 };
 
-// Single service list row matching abox.agency with bottom-up green fill
+// Single service list row matching abox.agency with bottom-up orange fill
 function ServiceListItem({ service, isDark }: { service: ServiceItem; isDark: boolean }) {
   const rowClass = `relative flex items-center gap-4 overflow-clip border-0 border-b border-solid px-0 py-3 outline-none md:gap-6 md:py-4 xl:gap-8 xl:py-6 transition-colors duration-300 ${
     isDark ? "border-white/10" : "border-[#222]/10"
@@ -200,8 +200,8 @@ function ServiceListItem({ service, isDark }: { service: ServiceItem; isDark: bo
       <span
         className={`relative z-10 inline-flex h-6 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full md:size-[15px] md:w-[15px] md:rounded-none ${
           service.clickable
-            ? "bg-[#417B5A] md:bg-transparent md:opacity-0 md:transition-opacity md:duration-500 md:ease-[cubic-bezier(0.16,1,0.3,1)] md:group-hover:opacity-100 md:group-focus-visible:opacity-100 motion-reduce:transition-none"
-            : "invisible pointer-events-none bg-[#417B5A] md:bg-transparent"
+            ? "bg-orange-500 md:bg-transparent md:opacity-0 md:transition-opacity md:duration-500 md:ease-[cubic-bezier(0.16,1,0.3,1)] md:group-hover:opacity-100 md:group-focus-visible:opacity-100 motion-reduce:transition-none"
+            : "invisible pointer-events-none bg-orange-500 md:bg-transparent"
         }`}
         aria-hidden={!service.clickable}
       >
@@ -215,7 +215,7 @@ function ServiceListItem({ service, isDark }: { service: ServiceItem; isDark: bo
       {service.clickable ? (
         <a
           href={service.href ?? "#"}
-          className={`group no-underline transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hover:px-6 md:hover:!text-white md:focus-visible:px-6 md:focus-visible:!text-white xl:hover:px-8 xl:focus-visible:px-8 after:absolute after:inset-x-0 after:bottom-0 after:z-0 after:h-0 after:bg-[#417B5A] after:transition-[height] after:duration-500 after:ease-[cubic-bezier(0.16,1,0.3,1)] md:hover:after:h-full md:focus-visible:after:h-full motion-reduce:transition-none motion-reduce:after:transition-none ${rowClass} ${
+          className={`group no-underline transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hover:px-6 md:hover:!text-white md:focus-visible:px-6 md:focus-visible:!text-white xl:hover:px-8 xl:focus-visible:px-8 after:absolute after:inset-x-0 after:bottom-0 after:z-0 after:h-0 after:bg-orange-500 after:transition-[height] after:duration-500 after:ease-[cubic-bezier(0.16,1,0.3,1)] md:hover:after:h-full md:focus-visible:after:h-full motion-reduce:transition-none motion-reduce:after:transition-none ${rowClass} ${
             isDark ? "!text-white" : "!text-[#222]"
           }`}
           aria-label={service.title}
@@ -308,7 +308,7 @@ export default function ServicesSection() {
             }
           } else {
             // SUPPORT COMPONENT (the final category):
-            // Smoothly reveals the green arrow pill as Support locks into its sticky position.
+            // Smoothly reveals the orange arrow pill as Support locks into its sticky position.
             // Notice: Title does NOT collapse and content does NOT fade out!
             if (pill) {
               setPillBase(pill);
@@ -511,6 +511,15 @@ export default function ServicesSection() {
       <div ref={containerRef} className="relative z-10 flex flex-col w-full">
         {CATEGORIES.map((category, idx) => {
           const cfg = STICKY_OFFSETS[idx] || { mobile: 0, tablet: 0, desktop: 0 };
+          const isSlightLight = idx % 2 === 0;
+          const cardStyleClasses = isDark
+            ? isSlightLight
+              ? "bg-[#0d0d12] border-white/12 text-white shadow-[0_-8px_30px_rgba(0,0,0,0.45)]"
+              : "bg-[#000000] border-white/10 text-white shadow-[0_-12px_36px_rgba(0,0,0,0.6)]"
+            : isSlightLight
+              ? "bg-[#fafafc] border-black/8 text-[#222] shadow-[0_-6px_20px_rgba(0,0,0,0.03)]"
+              : "bg-[#ffffff] border-black/10 text-[#222] shadow-[0_-8px_28px_rgba(0,0,0,0.05)]";
+
           return (
             <article
               key={category.id}
@@ -518,11 +527,7 @@ export default function ServicesSection() {
                 articlesRef.current[idx] = el;
               }}
               id={category.id}
-              className={`sticky flex flex-col border-0 border-t border-solid first:border-t-0 pt-5 pb-[50px] px-6 sm:px-12 lg:px-16 xl:px-24 transition-colors duration-500 ${
-                isDark
-                  ? "bg-black border-white/10 text-white"
-                  : "bg-white border-[#222]/10 text-[#222]"
-              }`}
+              className={`sticky flex flex-col border-0 border-t border-x border-solid rounded-t-[28px] sm:rounded-t-[36px] lg:rounded-t-[40px] pt-6 pb-[50px] px-6 sm:px-12 lg:px-16 xl:px-24 transition-colors duration-500 ${cardStyleClasses}`}
               style={
                 {
                   zIndex: idx + 1,
@@ -577,8 +582,8 @@ export default function ServicesSection() {
                         }}
                         className={`inline-flex h-6 shrink-0 items-center justify-center overflow-hidden rounded-full align-middle text-white transition-colors duration-500 md:h-7 ${
                           isDark
-                            ? "bg-[#3d664e] group-hover:bg-[#222]"
-                            : "bg-[#417B5A] group-hover:bg-[#222]"
+                            ? "bg-orange-600 group-hover:bg-[#222]"
+                            : "bg-orange-500 group-hover:bg-[#222]"
                         }`}
                         style={{
                           width: 0,

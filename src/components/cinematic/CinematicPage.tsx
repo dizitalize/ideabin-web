@@ -234,6 +234,13 @@ export default function CinematicPage({
         // Jump directly to Design & Development text
         setShowRadialPhones(false);
         setShowDesignDevText((prev) => !prev);
+      } else if (e.code === 'KeyM') {
+        // Jump directly to 3D Marquee aperture stage
+        setShowRadialPhones(false);
+        setShowDesignDevText(false);
+        setShowQuestionsStage(false);
+        setTime(9.20);
+        timeRef.current = 9.20;
       } else if (e.code === 'KeyT') {
         // Toggle dark and white theme
         toggleTheme();

@@ -13,28 +13,28 @@ interface RadialPhoneData {
 
 const PHONES_DATA: RadialPhoneData[] = [
   {
-    id: 'kanso',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop',
+    id: 'park-1',
+    image: '/mobile%20frames/park%201.png',
   },
   {
-    id: 'velour',
-    image: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=800&auto=format&fit=crop',
+    id: 'well-1',
+    image: '/mobile%20frames/well%201.png',
   },
   {
-    id: 'aethel',
-    image: 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?q=80&w=800&auto=format&fit=crop',
+    id: 'park-2',
+    image: '/mobile%20frames/park%202.png',
   },
   {
-    id: 'strata',
-    image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800&auto=format&fit=crop',
+    id: 'well-2',
+    image: '/mobile%20frames/well%202.png',
   },
   {
-    id: 'form',
-    image: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop',
+    id: 'park-3',
+    image: '/mobile%20frames/park%203.png',
   },
   {
-    id: 'apex',
-    image: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=800&auto=format&fit=crop',
+    id: 'well-3',
+    image: '/mobile%20frames/well%203.png',
   },
 ];
 
@@ -455,7 +455,7 @@ export const RadialPhoneExperience: React.FC<RadialPhoneExperienceProps> = ({
                           referrerPolicy="no-referrer"
                           className="w-full h-full object-cover select-none pointer-events-none"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/40 pointer-events-none" />
+                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.04] to-white/[0.08] pointer-events-none" />
                       </div>
                     </PhoneMockup>
                   </div>

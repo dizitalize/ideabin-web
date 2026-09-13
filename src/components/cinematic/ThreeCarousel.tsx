@@ -303,7 +303,7 @@ export const ThreeCarousel: React.FC<ThreeCarouselProps> = ({
       p.lastDeltaX = deltaX;
       p.lastX = e.clientX;
       p.velocity = deltaX;
-      p.targetRotation -= deltaX * 0.005;
+      p.targetRotation -= deltaX * 0.008;
     };
 
     const onPointerUp = (e: PointerEvent) => {
@@ -338,10 +338,10 @@ export const ThreeCarousel: React.FC<ThreeCarouselProps> = ({
     };
 
     const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.shiftKey) {
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (Math.abs(delta) > 1) {
         e.preventDefault();
-        const delta = e.shiftKey ? e.deltaY : e.deltaX;
-        physicsRef.current.targetRotation += delta * 0.003;
+        physicsRef.current.targetRotation += delta * 0.0055;
       }
     };
 

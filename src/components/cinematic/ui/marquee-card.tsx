@@ -43,7 +43,7 @@ export const MarqueeCard: React.FC<MarqueeCardProps> = ({
           setIsInView(entry.isIntersecting);
           if (videoRef.current) {
             if (entry.isIntersecting) {
-              videoRef.current.play().catch(() => {});
+              videoRef.current.play().catch(() => { });
             } else {
               videoRef.current.pause();
             }
@@ -94,29 +94,32 @@ export const MarqueeCard: React.FC<MarqueeCardProps> = ({
           <video
             ref={videoRef}
             src={src}
+            autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             disablePictureInPicture
+            onLoadedMetadata={() => setIsLoaded(true)}
             onLoadedData={() => setIsLoaded(true)}
+            onCanPlay={() => setIsLoaded(true)}
             onError={() => setHasError(true)}
             className={cn(
-              'w-full h-full object-cover select-none pointer-events-none transition-opacity duration-500',
-              isLoaded ? 'opacity-100' : 'opacity-0'
+              'w-full h-full object-cover select-none pointer-events-none transition-opacity duration-300',
+              isLoaded ? 'opacity-100' : 'opacity-90'
             )}
           />
         ) : (
           <img
             src={src}
             alt={alt || `Gallery visual ${index + 1}`}
-            loading="lazy"
+            loading="eager"
             decoding="async"
             onLoad={() => setIsLoaded(true)}
             onError={() => setHasError(true)}
             className={cn(
-              'w-full h-full object-cover select-none pointer-events-none transition-opacity duration-500',
-              isLoaded ? 'opacity-100' : 'opacity-0'
+              'w-full h-full object-cover select-none pointer-events-none transition-opacity duration-300',
+              isLoaded ? 'opacity-100' : 'opacity-90'
             )}
           />
         )}

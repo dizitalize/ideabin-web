@@ -106,22 +106,22 @@ export default function SiteFooter() {
     <footer
       ref={footerRef}
       id="footer"
-      className={`relative z-20 w-full overflow-hidden transition-colors duration-500 border-t ${
+      className={`relative z-20 w-full overflow-hidden transition-colors duration-500 rounded-t-[32px] sm:rounded-t-[40px] lg:rounded-t-[48px] border-t border-x shadow-[0_-16px_48px_rgba(0,0,0,0.5)] ${
         isDark
-          ? "bg-black/95 text-white border-white/10"
-          : "bg-white/95 text-[#222222] border-black/10"
+          ? "bg-black/65 backdrop-blur-2xl text-white border-white/10"
+          : "bg-white/80 backdrop-blur-2xl text-[#222222] border-black/10"
       }`}
       aria-label="Site Footer"
     >
       {/* Top Content Grid */}
-      <div className="mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 pt-16 pb-12 sm:pt-20 sm:pb-16 relative z-10">
+      <div className="mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 pt-14 pb-3 sm:pt-16 sm:pb-5 relative z-10">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Brand & Copyright Column */}
           <div className="lg:col-span-4 flex flex-col justify-start">
             <IdeaBinLogo isDark={isDark} />
             <p
               className={`mt-4 text-xs sm:text-[13px] leading-relaxed max-w-xs transition-colors duration-300 ${
-                isDark ? "text-zinc-500" : "text-neutral-500"
+                isDark ? "text-zinc-400" : "text-neutral-500"
               }`}
             >
               © copyright IdeaBin 2026. All rights reserved.
@@ -163,13 +163,13 @@ export default function SiteFooter() {
 
       {/* Massive Cropped Watermark Typography — boldly visible and smoothly animated on scroll */}
       <div
-        className="w-full select-none pointer-events-none overflow-hidden relative leading-none flex items-end justify-start pt-6 pb-2 px-4 sm:px-8"
+        className="w-full select-none pointer-events-none overflow-hidden relative leading-none flex items-end justify-start pt-0 pb-1 sm:pb-2 px-4 sm:px-8"
         aria-hidden="true"
       >
         <motion.div
-          initial={{ opacity: 0.75, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.05 }}
+          initial={{ opacity: 0.6, y: 32, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: false, amount: 0.08 }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
           style={{ y: textParallaxY }}
           className="inline-flex whitespace-nowrap will-change-transform"
@@ -177,7 +177,7 @@ export default function SiteFooter() {
           <span
             className={`text-[17vw] sm:text-[18vw] lg:text-[19vw] font-bold tracking-tight leading-[0.85] select-none transition-colors duration-500 ${
               isDark
-                ? "text-zinc-700/80 hover:text-zinc-600 drop-shadow-[0_2px_30px_rgba(0,0,0,0.8)]"
+                ? "text-zinc-600/80 hover:text-zinc-500 drop-shadow-[0_2px_30px_rgba(0,0,0,0.8)]"
                 : "text-neutral-300/85 hover:text-neutral-400 drop-shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
             }`}
             style={{ letterSpacing: "-0.04em" }}

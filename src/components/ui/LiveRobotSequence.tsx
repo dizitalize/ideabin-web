@@ -193,7 +193,7 @@ export default function LiveRobotSequence({
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden />
       {!loaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/40" aria-hidden>
-          <div className="h-2 w-2 animate-ping rounded-full bg-[#417B5A]" />
+          <div className="h-2 w-2 animate-ping rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,1)]" />
         </div>
       )}
     </div>

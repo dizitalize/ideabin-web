@@ -199,10 +199,10 @@ export const SceneAboxTransition: React.FC<SceneAboxTransitionProps> = ({
             >
               <ThreeDMarquee
                 height="100%"
-                images={CAROUSEL_VIDEOS}
                 columns={4}
-                gap={28}
-                scale={1.15}
+                gap={24}
+                scale={1.02}
+                rotation={{ x: 48, y: 0, z: -28 }}
                 showGridLines={true}
                 interactive={true}
                 hoverLift={14}

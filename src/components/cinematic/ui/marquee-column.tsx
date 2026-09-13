@@ -12,6 +12,7 @@ export interface MarqueeColumnProps {
   className?: string;
   onCardClick?: (index: number, image: string) => void;
   columnIndex?: number;
+  totalColumns?: number;
 }
 
 export const MarqueeColumn: React.FC<MarqueeColumnProps> = ({
@@ -24,13 +25,23 @@ export const MarqueeColumn: React.FC<MarqueeColumnProps> = ({
   className = '',
   onCardClick,
   columnIndex = 0,
+  totalColumns = 4,
 }) => {
   if (!images || images.length === 0) return null;
+
+  // Responsive column sizing calibrated for 4 columns so all columns fit within the 3D viewport
+  const columnWidthClass =
+    totalColumns === 4
+      ? 'w-[200px] sm:w-[240px] md:w-[270px] lg:w-[300px] xl:w-[330px] max-w-[360px] flex-1 shrink-0'
+      : totalColumns <= 2
+        ? 'w-[320px] sm:w-[380px] md:w-[460px] lg:w-[540px] max-w-[620px] flex-1 shrink-0'
+        : 'w-[220px] sm:w-[260px] md:w-[290px] lg:w-[320px] max-w-[350px] flex-1 shrink-0';
 
   return (
     <div
       className={cn(
-        'relative flex-1 min-w-[320px] sm:min-w-[380px] md:min-w-[460px] lg:min-w-[540px] xl:min-w-[620px] max-w-[760px] h-full overflow-visible preserve-3d',
+        'relative h-full overflow-visible preserve-3d',
+        columnWidthClass,
         className
       )}
     >

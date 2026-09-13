@@ -31,7 +31,7 @@ export const CurvedCarouselSection: React.FC<CurvedCarouselSectionProps> = ({
   const [interactionConfig, setInteractionConfig] = useState({
     ...DEFAULT_INTERACTION_CONFIG,
     autoPlay: true,
-    speed: 0.1,
+    speed: 0.15,
   });
   
   const [layoutConfig] = useState(DEFAULT_LAYOUT_CONFIG);

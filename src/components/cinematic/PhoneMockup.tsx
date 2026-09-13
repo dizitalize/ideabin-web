@@ -24,7 +24,7 @@ export const PhoneMockup: React.FC<PhoneMockupProps> = ({
             <div className="w-2.5 h-2.5 rounded-full bg-neutral-900 border border-white/10 flex items-center justify-center">
               <div className="w-1 h-1 rounded-full bg-[#1b2a4a]" />
             </div>
-            <div className="w-2 h-2 rounded-full bg-emerald-500/80 animate-pulse" />
+            <div className="w-2 h-2 rounded-full bg-orange-500/80 animate-pulse shadow-[0_0_6px_rgba(249,115,22,0.8)]" />
           </div>
         )}
 
