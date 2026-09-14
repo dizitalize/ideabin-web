@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "add cinematic 3rd page", "fluid"]
+  "exclude": ["node_modules", "add cinematic 3rd page", "fluid", "testimonal"]
 }

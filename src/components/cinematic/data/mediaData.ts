@@ -8,6 +8,31 @@ export const CAROUSEL_VIDEOS: string[] = [
   '/carouselvideos/aXQodDrLD0MbhMwFXXXgLjN3I1I.mp4',
 ];
 
+// High-speed lightweight poster thumbnails for marquee video cards (loads in <20ms)
+export const VIDEO_POSTERS: Record<string, string> = {
+  '/carouselvideos/2WM4RJokyqhrXLqtjwJPtwr2aw.mp4': 'https://framerusercontent.com/images/FoyA9guBxpmhcqDLHhVuq1MKg.jpeg?width=640&height=850',
+  '/carouselvideos/3D%20Curved%20Media%20Carousel.mp4': 'https://images.unsplash.com/photo-1608248597359-25f0a8d46158?q=80&w=640&auto=format&fit=crop',
+  '/carouselvideos/3D%20Curved%20Media%20Carousel_4.mp4': 'https://framerusercontent.com/images/jFKA626JR3qumtUOVF1bcDhoKtU.jpeg?width=640&height=850',
+  '/carouselvideos/AEbOxEauH8zowZmJFG6aRrj7s.mp4': 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=640&auto=format&fit=crop',
+  '/carouselvideos/aXQodDrLD0MbhMwFXXXgLjN3I1I.mp4': 'https://framerusercontent.com/images/D6nJ6lPFbF30aB3djXQhFXXA.jpeg?width=640&height=850',
+};
+
+// Optimized 640px compressed media array for ultra-fast 3D marquee opening (<100ms)
+export const OPTIMIZED_MARQUEE_MEDIA: string[] = [
+  '/carouselvideos/2WM4RJokyqhrXLqtjwJPtwr2aw.mp4',
+  'https://images.unsplash.com/photo-1608248597359-25f0a8d46158?q=75&w=640&auto=format&fit=crop',
+  '/carouselvideos/3D%20Curved%20Media%20Carousel.mp4',
+  'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=75&w=640&auto=format&fit=crop',
+  '/carouselvideos/3D%20Curved%20Media%20Carousel_4.mp4',
+  'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=75&w=640&auto=format&fit=crop',
+  '/carouselvideos/AEbOxEauH8zowZmJFG6aRrj7s.mp4',
+  'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=75&w=640&auto=format&fit=crop',
+  '/carouselvideos/aXQodDrLD0MbhMwFXXXgLjN3I1I.mp4',
+  'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=75&w=640&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=75&w=640&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=75&w=640&auto=format&fit=crop',
+];
+
 export const FRAMER_MEDIA: MediaItem[] = [
   {
     id: 'm1',

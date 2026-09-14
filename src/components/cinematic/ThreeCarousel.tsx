@@ -417,29 +417,48 @@ export const ThreeCarousel: React.FC<ThreeCarouselProps> = ({
         }
       }
 
-      const tr = transitionRef.current;
-      const t = Math.max(0, Math.min(1, tr.progress));
-      const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const tr = transitionRef.current;
+       const t = Math.max(0, Math.min(1, tr.progress));
+       // Improved easing for more natural motion
+       const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 
-      const isMobile = width < 768;
-      const baseCameraZ = isMobile ? cfg.layout.cameraZ + 3.5 : cfg.layout.cameraZ;
-      const baseCameraX = isMobile ? cfg.layout.cameraX * 0.6 : cfg.layout.cameraX;
+       // Determine direction based on transitionType
+       const isZoomIn = tr.type === 'zoom-in';
 
-      if (t < 1) {
-        // Continuous cinematic arrival from depth:
-        // As the marquee tiles fly past the camera, the carousel blooms from deep 3D space into focus
-        const arrivalProgress = ease;
-        const zoomOffset = (1 - arrivalProgress) * 12.0;
-        camera.position.z = baseCameraZ + zoomOffset;
-        carouselGroup.scale.setScalar(0.60 + arrivalProgress * 0.40);
-        carouselGroup.position.y = (1 - arrivalProgress) * -0.8;
-        carouselGroup.rotation.y = p.currentRotation + (1 - arrivalProgress) * 0.45;
-      } else {
-        camera.position.z = baseCameraZ;
-        carouselGroup.scale.setScalar(1.0);
-        carouselGroup.position.y = 0;
-      }
-      camera.position.x = baseCameraX;
+       const isMobile = width < 768;
+       const baseCameraZ = isMobile ? cfg.layout.cameraZ + 3.5 : cfg.layout.cameraZ;
+       const baseCameraX = isMobile ? cfg.layout.cameraX * 0.6 : cfg.layout.cameraX;
+
+       if (t < 1) {
+         // Refined continuous cinematic transition based on type:
+         // zoom-in: camera moves from far to near (current behavior enhanced)
+         // zoom-out: camera moves from near to far (opposite direction)
+         const zoomOffset = isZoomIn 
+           ? (1 - ease) * 8.0    // Far to near for zoom-in
+           : ease * 8.0;         // Near to far for zoom-out
+         
+         const scaleFactor = isZoomIn
+           ? 0.70 + ease * 0.30  // Small to normal for zoom-in
+           : 1.0 - ease * 0.30;  // Normal to small for zoom-out
+           
+         const positionY = isZoomIn
+           ? (1 - ease) * -0.4   // Below to center for zoom-in
+           : ease * -0.4;        // Center to below for zoom-out
+           
+         const rotationOffset = isZoomIn
+           ? (1 - ease) * 0.2    // Extra rotation to normal for zoom-in
+           : ease * 0.2;         // Normal to extra rotation for zoom-out
+         
+         camera.position.z = baseCameraZ + zoomOffset;
+         carouselGroup.scale.setScalar(scaleFactor);
+         carouselGroup.position.y = positionY;
+         carouselGroup.rotation.y = p.currentRotation + rotationOffset;
+       } else {
+         camera.position.z = baseCameraZ;
+         carouselGroup.scale.setScalar(1.0);
+         carouselGroup.position.y = 0;
+       }
+       camera.position.x = baseCameraX;
 
       renderer.render(scene, camera);
     };

@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { MarqueeColumn } from './marquee-column';
 import { MarqueeGridLines } from './marquee-grid-line';
 import { X } from './icons';
-import { CAROUSEL_VIDEOS, FRAMER_MEDIA } from '../data/mediaData';
+import { CAROUSEL_VIDEOS, FRAMER_MEDIA, OPTIMIZED_MARQUEE_MEDIA } from '../data/mediaData';
 
 export interface ThreeDMarqueeProps {
   images?: string[];
@@ -34,20 +34,7 @@ export interface ThreeDMarqueeProps {
   isDark?: boolean;
 }
 
-export const DEFAULT_MARQUEE_MEDIA: string[] = [
-  ...CAROUSEL_VIDEOS,
-  'https://framerusercontent.com/images/FoyA9guBxpmhcqDLHhVuq1MKg.jpeg?width=1792&height=2400',
-  'https://images.unsplash.com/photo-1608248597359-25f0a8d46158?q=80&w=1792&auto=format&fit=crop',
-  'https://framerusercontent.com/images/jFKA626JR3qumtUOVF1bcDhoKtU.jpeg?width=1792&height=2400',
-  'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1792&auto=format&fit=crop',
-  'https://framerusercontent.com/images/D6nJ6lPFbF30aB3djXQhFXXA.jpeg?width=1792&height=2400',
-  'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=1792&auto=format&fit=crop',
-  'https://framerusercontent.com/images/zpSB8VO8tkc3tcRFU9zLGP3pNs.jpeg?width=1792&height=2400',
-  'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1792&auto=format&fit=crop',
-  'https://framerusercontent.com/images/qRdKj75WgpZO8ehkpmFb3y9R7XQ.jpeg?width=1792&height=2400',
-  'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1792&auto=format&fit=crop',
-];
-
+export const DEFAULT_MARQUEE_MEDIA: string[] = OPTIMIZED_MARQUEE_MEDIA;
 export const DEFAULT_MARQUEE_VIDEOS: string[] = DEFAULT_MARQUEE_MEDIA;
 
 export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
@@ -165,31 +152,45 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
     }
   };
 
-  const t = Math.max(0, Math.min(1, transitionProgress));
-  const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const t = Math.max(0, Math.min(1, transitionProgress));
+   // Improved easing for more natural motion
+   const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 
-  let activeRotX = rotX;
-  const activeRotY = rotY;
-  let activeRotZ = rotZ;
-  let activeScale = zoomScale;
-  let activeTranslateZ = 0;
-  let activeOpacity = 1;
-  let activeBlur = 0;
+   // Determine direction based on transitionType
+   const isZoomIn = transitionType === 'zoom-in';
+   const zoomDirection = isZoomIn ? 1 : -1;
+   const rotationDirection = isZoomIn ? 1 : -1;
 
-  if (t > 0) {
-    // Continuous cinematic forward dive-through motion:
-    // Camera dives through marquee cards as they level out, expand past the screen edges, and gently blur past
-    activeRotX = rotX + (10 - rotX) * ease;
-    activeRotZ = rotZ + (0 - rotZ) * ease;
-    activeScale = zoomScale * (1 + 0.95 * ease);
-    activeTranslateZ = 1250 * ease;
-    activeBlur = ease * 6;
+   let activeRotX = rotX;
+   const activeRotY = rotY;
+   let activeRotZ = rotZ;
+   let activeScale = zoomScale;
+   let activeTranslateZ = 0;
+   let activeOpacity = 1;
+   let activeBlur = 0;
 
-    // Smoothstep crossfade: stays full until t=0.15, dissolves smoothly to 0 by t=0.82
-    const fadeT = Math.max(0, Math.min(1, (t - 0.15) / 0.67));
-    const smoothFade = fadeT * fadeT * (3 - 2 * fadeT);
-    activeOpacity = Math.max(0, 1 - smoothFade);
-  }
+   if (t > 0) {
+     // Refined cinematic motion based on transition type:
+     // zoom-in: starts farther out, moves inward
+     // zoom-out: starts closer, moves outward
+     const baseRotX = isZoomIn ? 58 : 38;  // Different starting rotations
+     const baseRotZ = isZoomIn ? -18 : -38; // Different starting Z rotations
+     const baseScale = isZoomIn ? 0.7 : 1.2; // Different starting scales
+     const baseTranslateZ = isZoomIn ? 1500 : 300; // Different starting Z positions
+     
+     activeRotX = baseRotX + (rotX - baseRotX) * ease;
+     activeRotZ = baseRotZ + (rotZ - baseRotZ) * ease * 0.8;
+     activeScale = baseScale + (zoomScale - baseScale) * ease;
+     activeTranslateZ = baseTranslateZ + (0 - baseTranslateZ) * ease;
+     activeBlur = ease * 3 * (isZoomIn ? 1 : 0.5); // Less blur for zoom-out
+
+     // Improved crossfade: longer visibility period with smoother transition
+     const fadeStart = isZoomIn ? 0.05 : 0.1;
+     const fadeDuration = isZoomIn ? 0.8 : 0.7;
+     const fadeT = Math.max(0, Math.min(1, (t - fadeStart) / fadeDuration));
+     const smoothFade = fadeT * fadeT * (3 - 2 * fadeT);
+     activeOpacity = Math.max(0, 1 - smoothFade);
+   }
 
   return (
     <div
@@ -221,10 +222,12 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
 
       <div
         id="three-d-marquee-world"
-        className="relative w-[3000px] h-[3000px] xl:w-[3600px] xl:h-[3600px] 2xl:w-[4000px] 2xl:h-[4000px] flex shrink-0 items-center justify-center will-change-transform preserve-3d"
+        className="relative w-[2200px] h-[2200px] sm:w-[2500px] sm:h-[2500px] xl:w-[2800px] xl:h-[2800px] flex shrink-0 items-center justify-center will-change-transform preserve-3d"
         style={{
           transform: `rotateX(${activeRotX}deg) rotateY(${activeRotY}deg) rotateZ(${activeRotZ}deg) translateZ(${activeTranslateZ}px) scale(${activeScale})`,
           transformOrigin: 'center center',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
           opacity: activeOpacity,
           filter: activeBlur > 0.05 ? `blur(${activeBlur.toFixed(1)}px)` : undefined,
           pointerEvents: activeOpacity < 0.05 ? 'none' : undefined,

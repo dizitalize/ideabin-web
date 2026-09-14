@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { usePrefersReducedMotion } from "@/lib/performance";
+import { IdeaBinBrand } from "@/components/ui/IdeaBinBrand";
 
 interface FooterLink {
   label: string;
@@ -54,35 +55,21 @@ const FOOTER_COLUMNS: FooterColumn[] = [
   },
 ];
 
-// Logo mark matching design system
-function IdeaBinLogo({ isDark }: { isDark: boolean }) {
+// Logo mark matching design system with Sora font & fluid ribbon emblem
+function IdeaBinLogo() {
   return (
-    <div className="flex items-center gap-3">
-      <div
-        className={`w-8 h-8 rounded-lg flex items-center justify-center p-1.5 transition-colors duration-300 ${
-          isDark ? "bg-white text-black" : "bg-[#222222] text-white"
-        }`}
+    <div className="flex flex-col">
+      <Link
+        href="/"
+        onClick={(e) => {
+          e.preventDefault();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+        className="group inline-flex select-none focus-visible:outline-none cursor-pointer"
+        aria-label="IdeaBin Home"
       >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="w-full h-full"
-        >
-          <path d="M4 19L12 4L20 19" />
-          <path d="M7 14h10" />
-        </svg>
-      </div>
-      <span
-        className={`text-lg font-bold tracking-tight transition-colors duration-300 ${
-          isDark ? "text-white" : "text-[#111111]"
-        }`}
-      >
-        IdeaBin
-      </span>
+        <IdeaBinBrand size="lg" showTagline={true} taglineSize="sm" />
+      </Link>
     </div>
   );
 }
@@ -118,7 +105,7 @@ export default function SiteFooter() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Brand & Copyright Column */}
           <div className="lg:col-span-4 flex flex-col justify-start">
-            <IdeaBinLogo isDark={isDark} />
+            <IdeaBinLogo />
             <p
               className={`mt-4 text-xs sm:text-[13px] leading-relaxed max-w-xs transition-colors duration-300 ${
                 isDark ? "text-zinc-400" : "text-neutral-500"

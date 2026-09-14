@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import { motion, useInView } from "framer-motion";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -172,7 +173,10 @@ const getDistanceToNext = (idx: number) => {
 };
 
 // Single service list row matching abox.agency with bottom-up orange fill
-function ServiceListItem({ service, isDark }: { service: ServiceItem; isDark: boolean }) {
+function ServiceListItem({ service, isDark, index }: { service: ServiceItem; isDark: boolean; index: number }) {
+  const rowRef = useRef<HTMLLIElement>(null);
+  const isItemInView = useInView(rowRef, { once: true, amount: 0.4 });
+
   const rowClass = `relative flex items-center gap-4 overflow-clip border-0 border-b border-solid px-0 py-3 outline-none md:gap-6 md:py-4 xl:gap-8 xl:py-6 transition-colors duration-300 ${
     isDark ? "border-white/10" : "border-[#222]/10"
   }`;
@@ -197,21 +201,17 @@ function ServiceListItem({ service, isDark }: { service: ServiceItem; isDark: bo
       >
         {service.title}
       </span>
-      <span
-        className={`relative z-10 inline-flex h-6 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full md:size-[15px] md:w-[15px] md:rounded-none ${
-          service.clickable
-            ? "bg-orange-500 md:bg-transparent md:opacity-0 md:transition-opacity md:duration-500 md:ease-[cubic-bezier(0.16,1,0.3,1)] md:group-hover:opacity-100 md:group-focus-visible:opacity-100 motion-reduce:transition-none"
-            : "invisible pointer-events-none bg-orange-500 md:bg-transparent"
-        }`}
-        aria-hidden={!service.clickable}
-      >
-        <RightArrow className="block size-[10px] md:size-full" />
-      </span>
+      
     </>
   );
 
   return (
-    <li>
+    <motion.li
+      ref={rowRef}
+      initial={{ opacity: 0, x: -20, filter: "blur(4px)" }}
+      animate={isItemInView ? { opacity: 1, x: 0, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.48, delay: 0.05 + index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+    >
       {service.clickable ? (
         <a
           href={service.href ?? "#"}
@@ -227,7 +227,39 @@ function ServiceListItem({ service, isDark }: { service: ServiceItem; isDark: bo
           {inner}
         </div>
       )}
-    </li>
+    </motion.li>
+  );
+}
+
+// Animated section header — blurs up and fades in on scroll entrance
+function SectionHeaderAnimated({ isDark }: { isDark: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, amount: 0.25 });
+
+  return (
+    <div ref={ref} className="max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-16 xl:px-24 pt-4 pb-16">
+      <motion.h2
+        initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+        animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`text-3xl sm:text-5xl md:text-6xl font-medium tracking-tight leading-[1.05] max-w-4xl ${
+          isDark ? "text-white" : "text-neutral-900"
+        }`}
+      >
+        Engineering digital architecture with precision.
+      </motion.h2>
+      <motion.p
+        initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
+        animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+        transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+        className={`mt-4 text-base sm:text-lg max-w-2xl leading-relaxed ${
+          isDark ? "text-zinc-400" : "text-neutral-600"
+        }`}
+      >
+        Choreographing brand identities, enterprise commerce, high-performance web systems, and cloud
+        infrastructure.
+      </motion.p>
+    </div>
   );
 }
 
@@ -275,19 +307,19 @@ export default function ServicesSection() {
           const isLast = n === CATEGORIES.length - 1;
           const nextArticle = article.nextElementSibling as HTMLElement | null;
 
-          const tl = gsap.timeline({
-            defaults: { ease: "none", force3D: true },
-            scrollTrigger: {
-              trigger: isLast ? article : nextArticle,
-              start: () =>
-                isLast
-                  ? `top ${getStickyOffset(n) + getDistanceToNext(n - 1)}px`
-                  : `top ${getStickyOffset(n + 1) + getDistanceToNext(n)}px`,
-              end: () => (isLast ? `top ${getStickyOffset(n)}px` : `top ${getStickyOffset(n + 1)}px`),
-              scrub: 0.6,
-              invalidateOnRefresh: true,
-            },
-          });
+const tl = gsap.timeline({
+             defaults: { ease: "power2.out", force3D: true },
+             scrollTrigger: {
+               trigger: isLast ? article : nextArticle,
+               start: () =>
+                 isLast
+                   ? `top ${getStickyOffset(n) + getDistanceToNext(n - 1)}px`
+                   : `top ${getStickyOffset(n + 1) + getDistanceToNext(n)}px`,
+               end: () => (isLast ? `top ${getStickyOffset(n)}px` : `top ${getStickyOffset(n + 1)}px`),
+               scrub: 0.8,
+               invalidateOnRefresh: true,
+             },
+           });
 
           if (!isLast && nextArticle) {
             if (title) {
@@ -392,7 +424,7 @@ export default function ServicesSection() {
           if (!r) return;
           const isLast = e === CATEGORIES.length - 1;
           const nextArticle = r.nextElementSibling as HTMLElement | null;
-          const tl = gsap.timeline({ paused: true, defaults: { ease: "none", force3D: true } });
+          const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out", force3D: true } });
 
           if (!isLast && nextArticle) {
             f && tl.fromTo(f, { scale: 1 }, { scale: () => getTitleScale(), duration: 1 }, 0);
@@ -488,24 +520,8 @@ export default function ServicesSection() {
       }`}
       aria-label="IdeaBin Capabilities & Services"
     >
-      {/* Editorial Section Header */}
-      <div className="max-w-[1720px] mx-auto px-6 sm:px-12 lg:px-16 xl:px-24 pt-4 pb-16">
-        <h2
-          className={`text-3xl sm:text-5xl md:text-6xl font-medium tracking-tight leading-[1.05] max-w-4xl ${
-            isDark ? "text-white" : "text-neutral-900"
-          }`}
-        >
-          Engineering digital architecture with precision.
-        </h2>
-        <p
-          className={`mt-4 text-base sm:text-lg max-w-2xl leading-relaxed ${
-            isDark ? "text-zinc-400" : "text-neutral-600"
-          }`}
-        >
-          Choreographing brand identities, enterprise commerce, high-performance web systems, and cloud
-          infrastructure.
-        </p>
-      </div>
+      {/* Editorial Section Header — scroll-animated blur+slide entrance */}
+      <SectionHeaderAnimated isDark={isDark} />
 
       {/* Stacking Service Category Articles with exact abox.agency architecture */}
       <div ref={containerRef} className="relative z-10 flex flex-col w-full">
@@ -575,30 +591,7 @@ export default function ServicesSection() {
                     >
                       {category.title}
 
-                      {/* Studio CTA Pill with Diagonal Arrow */}
-                      <span
-                        ref={(el) => {
-                          pillsRef.current[idx] = el;
-                        }}
-                        className={`inline-flex h-6 shrink-0 items-center justify-center overflow-hidden rounded-full align-middle text-white transition-colors duration-500 md:h-7 ${
-                          isDark
-                            ? "bg-orange-600 group-hover:bg-[#222]"
-                            : "bg-orange-500 group-hover:bg-[#222]"
-                        }`}
-                        style={{
-                          width: 0,
-                          height: 24,
-                          paddingLeft: 0,
-                          paddingRight: 0,
-                          transform: "scale(0)",
-                          transformOrigin: "0% 50%",
-                        }}
-                        aria-hidden="true"
-                      >
-                        <span className="inline-block transition-transform duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] group-hover:rotate-45 group-focus-visible:rotate-45">
-                          <DiagonalArrow className="block size-[12px] md:size-[15px]" />
-                        </span>
-                      </span>
+                      
                     </a>
                   </div>
                 </h3>
@@ -620,10 +613,10 @@ export default function ServicesSection() {
                       {category.description}
                     </p>
 
-                    {/* Right Column: Numbered Service List */}
+                    {/* Right Column: Numbered Service List — stagger-animated on scroll */}
                     <ol className="m-0 flex min-w-0 w-full list-none flex-col p-0 md:max-w-[760px] md:text-nowrap">
-                      {category.services.map((service) => (
-                        <ServiceListItem key={service.title} service={service} isDark={isDark} />
+                      {category.services.map((service, sIdx) => (
+                        <ServiceListItem key={service.title} service={service} isDark={isDark} index={sIdx} />
                       ))}
                     </ol>
                   </div>

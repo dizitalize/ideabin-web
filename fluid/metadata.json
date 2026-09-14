@@ -1,6 +1,0 @@
-{
-  "name": "Fluid Cursor v2",
-  "description": "Interactive WebGL fluid simulation and dynamic liquid cursor inspired by the Fluid Cursor v2 Framer component.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

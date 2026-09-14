@@ -53,6 +53,16 @@ html.light {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-geist-sans);
+  --font-sora: var(--font-sora);
+  --font-comfortaa: var(--font-comfortaa);
+}
+
+.font-sora {
+  font-family: var(--font-sora), 'Sora', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-comfortaa {
+  font-family: var(--font-comfortaa), 'Comfortaa', cursive, system-ui, sans-serif;
 }
 
 html {
@@ -408,32 +418,36 @@ select {
 /* ─── Cinematic 3rd Page Keyframes & Utilities ──────────────── */
 @keyframes marquee-up {
   0% {
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 
   100% {
-    transform: translateY(-50%);
+    transform: translate3d(0, -50%, 0);
   }
 }
 
 @keyframes marquee-down {
   0% {
-    transform: translateY(-50%);
+    transform: translate3d(0, -50%, 0);
   }
 
   100% {
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 .animate-marquee-up {
   animation: marquee-up var(--marquee-duration, 26s) linear infinite;
   will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .animate-marquee-down {
   animation: marquee-down var(--marquee-duration, 26s) linear infinite;
   will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 @keyframes terminal-flicker-a {
@@ -580,3 +594,94 @@ select {
 .preserve-3d {
   transform-style: preserve-3d;
 }
+
+/* ─── Testimonials Moodboard Section ───────────────────────────────────── */
+
+/* Font utilities for moodboard sticky notes */
+.font-editorial {
+  font-family: var(--font-caveat), 'Caveat', cursive;
+}
+.font-handwriting {
+  font-family: var(--font-caveat), 'Caveat', cursive;
+}
+.font-kalam {
+  font-family: var(--font-kalam), 'Kalam', cursive;
+}
+.font-sans-clean {
+  font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Realistic tactile paper shadows */
+.paper-shadow-yellow {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 6px 12px -2px rgba(0, 0, 0, 0.45),
+    0 18px 36px -4px rgba(0, 0, 0, 0.65),
+    0 0 45px rgba(254, 240, 138, 0.04);
+}
+.paper-shadow-purple {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 6px 12px -2px rgba(0, 0, 0, 0.45),
+    0 18px 36px -4px rgba(0, 0, 0, 0.65),
+    0 0 45px rgba(216, 180, 254, 0.05);
+}
+.paper-shadow-pink {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 6px 12px -2px rgba(0, 0, 0, 0.45),
+    0 18px 36px -4px rgba(0, 0, 0, 0.65),
+    0 0 45px rgba(253, 164, 175, 0.05);
+}
+.paper-shadow-mint {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 6px 12px -2px rgba(0, 0, 0, 0.45),
+    0 18px 36px -4px rgba(0, 0, 0, 0.65),
+    0 0 45px rgba(167, 243, 208, 0.05);
+}
+.paper-shadow-cream {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 6px 12px -2px rgba(0, 0, 0, 0.45),
+    0 18px 36px -4px rgba(0, 0, 0, 0.65),
+    0 0 45px rgba(254, 215, 170, 0.05);
+}
+.paper-shadow-hover {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.4),
+    0 14px 28px -2px rgba(0, 0, 0, 0.55),
+    0 32px 55px -6px rgba(0, 0, 0, 0.8),
+    0 0 60px rgba(255, 255, 255, 0.06);
+}
+
+/* Subtle paper texture overlay */
+.paper-texture {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+  background-size: 4px 4px;
+}
+
+/* Tape strip styles */
+.scotch-tape {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(1.5px);
+  border-left: 1px dashed rgba(255, 255, 255, 0.3);
+  border-right: 1px dashed rgba(255, 255, 255, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.scotch-tape-dark {
+  background: rgba(20, 20, 20, 0.45);
+  backdrop-filter: blur(1.5px);
+  border-left: 1px dashed rgba(255, 255, 255, 0.15);
+  border-right: 1px dashed rgba(255, 255, 255, 0.15);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* Floating subtle animation for annotations */
+@keyframes subtle-float {
+  0%, 100% { transform: translateY(0px) rotate(var(--base-rotation, 0deg)); }
+  50% { transform: translateY(-6px) rotate(calc(var(--base-rotation, 0deg) + 0.5deg)); }
+}
+.animate-subtle-float {
+  animation: subtle-float 8s ease-in-out infinite;
+}

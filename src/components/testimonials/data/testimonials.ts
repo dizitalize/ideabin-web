@@ -1,0 +1,240 @@
+import { StickyTestimonial, AnnotationConfig } from '../types';
+
+export const TESTIMONIALS: StickyTestimonial[] = [
+  {
+    id: 'sarah',
+    quote: '“Absolutely loved working with this team. They turned our messy idea into something beautifully simple.”',
+    author: 'Sarah Jenkins',
+    role: 'Founder',
+    company: 'Bloomly',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=240&h=240&q=85',
+    color: {
+      bg: '#FEF08A', // Authentic Post-it Canary Yellow
+      text: '#1C1917',
+      subtext: '#57534E',
+      nameText: '#0C0A09',
+      shadowClass: 'paper-shadow-yellow',
+      accentGlow: 'rgba(254, 240, 138, 0.3)',
+    },
+    fastener: 'tape-light',
+    baseRotation: -2.4,
+    position: {
+      desktop: { top: '6%', left: '41%', width: '235px' },
+    },
+    coversNoteId: 'marcus',
+    tags: ['Thoughtful', 'Simple', 'Launch'],
+    crypticSecret: {
+      code: 'CONFIDENTIAL // ARCHIVE-07',
+      message: '“V3 was design perfection. V14 was what the committee approved.”',
+      doodle: 'coffee',
+      authorNote: 'Signed 3:14 AM with triple espresso',
+      badge: 'CLASSIFIED',
+    },
+  },
+  {
+    id: 'arjun',
+    quote: '“The attention to detail is incredible. Every interaction feels intentional.”',
+    author: 'Arjun Mehta',
+    role: 'Product Designer',
+    company: 'Studio Koto',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=240&h=240&q=85',
+    color: {
+      bg: '#DDD6FE', // Authentic Post-it Soft Lavender
+      text: '#1E1B4B',
+      subtext: '#4338CA',
+      nameText: '#0F172A',
+      shadowClass: 'paper-shadow-purple',
+      accentGlow: 'rgba(221, 214, 254, 0.3)',
+    },
+    fastener: 'pin-purple',
+    baseRotation: 3.8,
+    position: {
+      desktop: { top: '10%', left: '65%', width: '240px' },
+    },
+    coversNoteId: 'elena',
+    tags: ['Precise', 'Detail', 'UI/UX'],
+    crypticSecret: {
+      code: 'GIT COMMIT // 9F4B12',
+      message: '“We deleted 14,000 lines of code before launch and it ran 10x faster.”',
+      doodle: 'zap',
+      authorNote: 'Less code = Pure velocity',
+      badge: 'DEV LOG',
+    },
+  },
+  {
+    id: 'maya',
+    quote: '“Fast, creative, and genuinely enjoyable to work with.”',
+    author: 'Maya Lin',
+    role: 'Creative Director',
+    company: 'Forma Labs',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=240&h=240&q=85',
+    color: {
+      bg: '#FDA4AF', // Authentic Post-it Pastel Rose Pink
+      text: '#4C0519',
+      subtext: '#881337',
+      nameText: '#1C1917',
+      shadowClass: 'paper-shadow-pink',
+      accentGlow: 'rgba(253, 164, 175, 0.3)',
+    },
+    fastener: 'tape-dark',
+    baseRotation: -4.8,
+    hasFoldedCorner: true,
+    position: {
+      desktop: { top: '44%', left: '19%', width: '230px' },
+    },
+    tags: ['Creative', 'Friendly', 'Reliable'],
+    crypticSecret: {
+      code: 'LOCATION // 40.7128°N 74.0060°W',
+      message: '“The entire brand identity was sketched on a diner napkin at 2 AM.”',
+      doodle: 'illuminati',
+      authorNote: 'Never lose the original napkin',
+      badge: 'ORIGIN STORY',
+    },
+  },
+  {
+    id: 'rohit',
+    quote: '“They don’t just deliver designs, they deliver results.”',
+    author: 'Rohit Sharma',
+    role: 'CEO',
+    company: 'NexaWorks',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=240&h=240&q=85',
+    color: {
+      bg: '#A7F3D0', // Authentic Post-it Mint Green
+      text: '#064E3B',
+      subtext: '#047857',
+      nameText: '#022C22',
+      shadowClass: 'paper-shadow-mint',
+      accentGlow: 'rgba(167, 243, 208, 0.3)',
+    },
+    fastener: 'pin-green',
+    baseRotation: 1.6,
+    position: {
+      desktop: { top: '48%', left: '43%', width: '230px' },
+    },
+    tags: ['Results', 'Impact', 'Growth'],
+    crypticSecret: {
+      code: 'ANOMALY // SPRINT 04',
+      message: '“The physics overshoot was an accident, but the CEO insisted on keeping it.”',
+      doodle: 'rabbit',
+      authorNote: 'Bugs become features with charisma',
+      badge: 'TOP SECRET',
+    },
+  },
+  {
+    id: 'priya',
+    quote: '“A rare mix of creativity, clarity and commitment. Highly recommend!”',
+    author: 'Priya Patel',
+    role: 'Marketing Lead',
+    company: 'Aether Collective',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=240&h=240&q=85',
+    color: {
+      bg: '#FDE68A', // Authentic Post-it Warm Buttercream
+      text: '#451A03',
+      subtext: '#78350F',
+      nameText: '#1C1917',
+      shadowClass: 'paper-shadow-cream',
+      accentGlow: 'rgba(253, 230, 138, 0.3)',
+    },
+    fastener: 'tape-dark',
+    baseRotation: 4.4,
+    position: {
+      desktop: { top: '50%', left: '68%', width: '235px' },
+    },
+    tags: ['Commitment', 'Clarity', 'Brand'],
+    crypticSecret: {
+      code: 'CORE DIRECTIVE // ALPHA-8',
+      message: '“A clickable prototype is worth 50 stakeholder meetings.”',
+      doodle: 'star',
+      authorNote: 'Always ship the tactile feel',
+      badge: 'STUDIO RULE',
+    },
+  },
+  // Hidden Sticky Notes underneath
+  {
+    id: 'marcus',
+    quote: '“Working with them felt effortless. The launch exceeded our wildest projections in week one.”',
+    author: 'Marcus Vance',
+    role: 'VP Product',
+    company: 'FinScale',
+    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=240&h=240&q=85',
+    color: {
+      bg: '#FED7AA', // Authentic Post-it Apricot Orange
+      text: '#431407',
+      subtext: '#78350F',
+      nameText: '#292524',
+      shadowClass: 'paper-shadow-cream',
+      accentGlow: 'rgba(254, 215, 170, 0.35)',
+    },
+    fastener: 'pin-red',
+    baseRotation: 5.5,
+    hiddenUnderId: 'sarah',
+    position: {
+      desktop: { top: '10%', left: '46%', width: '225px' },
+    },
+    tags: ['Effortless', 'Scale', 'Product'],
+    crypticSecret: {
+      code: 'SECRET AUDIO // ST-909',
+      message: '“We recorded real 1980s Post-it notes in an anechoic chamber for the sound fx.”',
+      doodle: 'hourglass',
+      authorNote: 'Real acoustics beat synthetic noise',
+      badge: 'STUDIO CIPHER',
+    },
+  },
+  {
+    id: 'elena',
+    quote: '“They don’t cut corners. True craftsmanship and digital soul from concept to final code.”',
+    author: 'Elena Rostova',
+    role: 'Head of Brand',
+    company: 'Kestrel Studio',
+    avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=240&h=240&q=85',
+    color: {
+      bg: '#BAE6FD', // Authentic Post-it Sky Blue
+      text: '#0C4A6E',
+      subtext: '#0369A1',
+      nameText: '#082F49',
+      shadowClass: 'paper-shadow-purple',
+      accentGlow: 'rgba(186, 230, 253, 0.35)',
+    },
+    fastener: 'tape-light',
+    baseRotation: -5.8,
+    hiddenUnderId: 'arjun',
+    position: {
+      desktop: { top: '16%', left: '72%', width: '225px' },
+    },
+    tags: ['Craft', 'Soul', 'Design'],
+    crypticSecret: {
+      code: 'PROJECT OBSIDIAN // LVL 4',
+      message: '“User testing proved simple is best. We threw the 3D carousels in the trash.”',
+      doodle: 'diamond',
+      authorNote: 'Ruthless subtraction wins',
+      badge: 'FIELD REPORT',
+    },
+  },
+];
+
+export const ANNOTATIONS: AnnotationConfig[] = [
+  {
+    text: 'Creative\nFriendly\nReliable',
+    arrowDirection: 'down-right',
+    targetNoteId: 'maya',
+    position: { top: '49%', left: '7%' },
+    doodles: [{ type: 'star', x: 20, y: -10 }],
+  },
+  {
+    text: 'Big ideas\nHappier people',
+    arrowDirection: 'down-left',
+    targetNoteId: 'arjun',
+    position: { top: '3%', left: '81%' },
+    doodles: [{ type: 'smiley', x: 95, y: 75 }],
+  },
+  {
+    text: 'Ideas that stay',
+    arrowDirection: 'down-left',
+    targetNoteId: 'priya',
+    position: { top: '51%', left: '88%' },
+    doodles: [
+      { type: 'heart', x: 45, y: 78 },
+      { type: 'spark', x: 10, y: 15 },
+    ],
+  },
+];

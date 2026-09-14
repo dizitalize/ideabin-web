@@ -77,7 +77,11 @@ export default function FAQSection() {
   const isDark = theme === "dark";
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, { once: true, amount: 0.15 });
+  const isInView = useInView(containerRef, { once: true, amount: 0.1 });
+
+  // Ref for title to drive a separate, more dramatic animation
+  const titleRef = useRef<HTMLDivElement>(null);
+  const titleInView = useInView(titleRef, { once: true, amount: 0.5 });
 
   // Open state: starts null while items load one-by-one, then opens item 1 after all loads
   const [openId, setOpenId] = useState<string | null>(null);
@@ -118,11 +122,12 @@ export default function FAQSection() {
       aria-label="Frequently Asked Questions"
     >
       <div ref={containerRef} className="mx-auto w-full max-w-4xl overflow-hidden">
-        {/* Header Title & Subtitle */}
+        {/* Header Title & Subtitle — dramatic clip+blur reveal */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          ref={titleRef}
+          initial={{ opacity: 0, y: 36, filter: "blur(10px)", clipPath: "inset(0 0 40% 0)" }}
+          animate={titleInView ? { opacity: 1, y: 0, filter: "blur(0px)", clipPath: "inset(0 0 0% 0)" } : {}}
+          transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-16 sm:mb-20"
         >
           <h2
@@ -149,9 +154,9 @@ export default function FAQSection() {
             <div key={category.title} className="relative w-full">
               {/* Category Header Row */}
               <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-                transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ opacity: 0, x: -30, filter: "blur(6px)" }}
+                animate={isInView ? { opacity: 1, x: 0, filter: "blur(0px)" } : {}}
+                transition={{ duration: 0.6, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
                 className="relative w-full px-4 sm:px-6 mb-2"
               >
                 <h3
@@ -173,15 +178,15 @@ export default function FAQSection() {
                     return (
                       <motion.div
                         key={item.id}
-                        initial={{ opacity: 0, y: 24 }}
+                        initial={{ opacity: 0, y: 32, clipPath: "inset(0 0 100% 0)", filter: "blur(4px)" }}
                         animate={
                           isInView
-                            ? { opacity: 1, y: 0 }
-                            : { opacity: 0, y: 24 }
+                            ? { opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)", filter: "blur(0px)" }
+                            : {}
                         }
                         transition={{
-                          duration: 0.5,
-                          delay: 0.15 + index * 0.12,
+                          duration: 0.6,
+                          delay: 0.22 + index * 0.1,
                           ease: [0.16, 1, 0.3, 1],
                         }}
                         onMouseEnter={() => setHoveredId(item.id)}

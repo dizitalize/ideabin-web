@@ -21,16 +21,16 @@ export const MarqueeGridLines: React.FC<MarqueeGridLinesProps> = ({
       )}
     >
       <div
-        className="absolute inset-[-100%] w-[300%] h-[300%] opacity-45 pointer-events-none"
+        className="absolute inset-0 w-full h-full opacity-40 pointer-events-none"
         style={{
           backgroundImage: isDark
-            ? 'radial-gradient(circle, rgba(255, 255, 255, 0.16) 1.2px, transparent 1.2px)'
-            : 'radial-gradient(circle, rgba(0, 0, 0, 0.16) 1.2px, transparent 1.2px)',
-          backgroundSize: '36px 36px',
+            ? 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px)'
+            : 'radial-gradient(circle, rgba(0, 0, 0, 0.15) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
         }}
       />
       <div
-        className="absolute inset-[-100%] w-[300%] h-[300%] opacity-15 pointer-events-none"
+        className="absolute inset-0 w-full h-full opacity-15 pointer-events-none"
         style={{
           backgroundImage: isDark
             ? `
@@ -41,7 +41,7 @@ export const MarqueeGridLines: React.FC<MarqueeGridLinesProps> = ({
             linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
             linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px)
           `,
-          backgroundSize: '144px 144px',
+          backgroundSize: '160px 160px',
         }}
       />
       <div

@@ -1,6 +1,7 @@
 import Hero from "@/components/sections/Hero";
 import ServicesSection from "@/components/sections/ServicesSection";
 import FAQSection from "@/components/sections/FAQSection";
+import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import SiteFooter from "@/components/sections/SiteFooter";
 import FluidBackground from "@/components/fluid/FluidBackground";
 
@@ -19,8 +20,11 @@ export default function Home() {
       {/* 05 Frequently Asked Questions */}
       <FAQSection />
 
-      {/* 06 Studio Signature Footer */}
+      {/* 06 Studio Moodboard — Client Testimonials */}
+      <TestimonialsSection />
+
+      {/* 07 Studio Signature Footer */}
       <SiteFooter />
     </main>
   );
-}
+}

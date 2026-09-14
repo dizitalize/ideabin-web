@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCenterTransition } from "@/components/animation/CenterTransition";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import { IdeaBinBrand } from "@/components/ui/IdeaBinBrand";
 
 interface NavLinkItem {
   label: string;
@@ -15,6 +16,7 @@ const NAV_LINKS: NavLinkItem[] = [
   { label: "Projects", href: "#projects" },
   { label: "Services", href: "#services" },
   { label: "FAQ", href: "#faq" },
+  { label: "Testimonials", href: "#testimonials" },
 ];
 
 /**
@@ -98,12 +100,15 @@ export default function Navbar() {
           // 4. Active section scroll-spy
           const servicesEl = document.getElementById("services");
           const faqEl = document.getElementById("faq");
+          const testimonialsEl = document.getElementById("testimonials");
           const footerEl = document.getElementById("footer");
 
           const scrollMiddle = currentY + window.innerHeight * 0.4;
 
           if (footerEl && scrollMiddle >= footerEl.offsetTop) {
-            setActiveSection("FAQ");
+            setActiveSection("Testimonials");
+          } else if (testimonialsEl && scrollMiddle >= testimonialsEl.offsetTop) {
+            setActiveSection("Testimonials");
           } else if (faqEl && scrollMiddle >= faqEl.offsetTop) {
             setActiveSection("FAQ");
           } else if (servicesEl && scrollMiddle >= servicesEl.offsetTop) {
@@ -178,6 +183,14 @@ export default function Navbar() {
       }
       return;
     }
+
+    if (href === "#testimonials") {
+      const target = document.getElementById("testimonials");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+      return;
+    }
   };
 
   const handleOpenConsultation = () => {
@@ -208,31 +221,18 @@ export default function Navbar() {
               : "bg-white/95 text-neutral-900 border border-black/5 shadow-[0_10px_35px_-8px_rgba(0,0,0,0.12),0_1px_3px_rgba(0,0,0,0.06)]"
           } backdrop-blur-xl`}
         >
-          {/* 1. Left: Rosette Logo + Brand Name */}
-          <Link
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            className="group flex items-center gap-2.5 pl-1.5 sm:pl-2 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-full cursor-pointer"
-            aria-label="Verdea Home"
-          >
-            <span
-              className={`inline-flex items-center justify-center transition-transform duration-300 group-hover:rotate-45 ${
-                isDark ? "text-white" : "text-neutral-900"
-              }`}
+{/* 1. Left: Logo + Brand Name */}
+           <Link
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className="group flex items-center pl-1.5 sm:pl-2 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-full cursor-pointer"
+              aria-label="IdeaBin Home"
             >
-              <VerdeaLogo className="w-[19px] h-[19px] sm:w-[21px] sm:h-[21px]" />
-            </span>
-            <span
-              className={`text-[15px] sm:text-[16px] font-semibold tracking-[-0.015em] transition-colors duration-200 ${
-                isDark ? "text-white group-hover:text-zinc-200" : "text-neutral-900 group-hover:text-black"
-              }`}
-            >
-              Verdea
-            </span>
-          </Link>
+              <IdeaBinBrand size="sm" />
+            </Link>
 
           {/* 2. Center: Navigation Links (Desktop) */}
           <nav
