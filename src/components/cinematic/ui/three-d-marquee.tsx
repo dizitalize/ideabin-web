@@ -1,9 +1,10 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useEffect, RefObject } from 'react';
 import { cn } from '@/lib/utils';
 import { MarqueeColumn } from './marquee-column';
 import { MarqueeGridLines } from './marquee-grid-line';
 import { X } from './icons';
 import { CAROUSEL_VIDEOS, FRAMER_MEDIA, OPTIMIZED_MARQUEE_MEDIA } from '../data/mediaData';
+import { useFocusTrap } from '@/lib/performance';
 
 export interface ThreeDMarqueeProps {
   images?: string[];
@@ -61,13 +62,15 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [rotX, setRotX] = useState<number>(rotation.x ?? 48);
-  const [rotY, setRotY] = useState<number>(rotation.y ?? 0);
-  const [rotZ, setRotZ] = useState<number>(rotation.z ?? -28);
-  const [zoomScale, setZoomScale] = useState<number>(scale);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0, startRotX: 48, startRotZ: -28 });
-  const [activeModalImage, setActiveModalImage] = useState<string | null>(null);
+const [rotX, setRotX] = useState<number>(rotation.x ?? 48);
+   const [rotY, setRotY] = useState<number>(rotation.y ?? 0);
+   const [rotZ, setRotZ] = useState<number>(rotation.z ?? -28);
+   const [zoomScale, setZoomScale] = useState<number>(scale);
+   const [isDragging, setIsDragging] = useState(false);
+   const [dragStart, setDragStart] = useState({ x: 0, y: 0, startRotX: 48, startRotZ: -28 });
+   const [activeModalImage, setActiveModalImage] = useState<string | null>(null);
+   const { containerRef: focusTrapContainerRef, setEnabled: setModalEnabled } = useFocusTrap();
+    const modalRef = focusTrapContainerRef as RefObject<HTMLDivElement | null>;
 
   useEffect(() => {
     if (rotation.x !== undefined) setRotX(rotation.x);
@@ -75,9 +78,14 @@ export const ThreeDMarquee: React.FC<ThreeDMarqueeProps> = ({
     if (rotation.z !== undefined) setRotZ(rotation.z);
   }, [rotation.x, rotation.y, rotation.z]);
 
-  useEffect(() => {
-    if (scale !== undefined) setZoomScale(scale);
-  }, [scale]);
+useEffect(() => {
+     if (scale !== undefined) setZoomScale(scale);
+   }, [scale]);
+
+   // Enable focus trap when modal is open
+   useEffect(() => {
+     setModalEnabled(!!activeModalImage);
+   }, [activeModalImage, setModalEnabled]);
 
   const columnData = useMemo(() => {
     const list = images.length > 0 ? images : DEFAULT_MARQUEE_VIDEOS;
@@ -192,25 +200,26 @@ const t = Math.max(0, Math.min(1, transitionProgress));
      activeOpacity = Math.max(0, 1 - smoothFade);
    }
 
-  return (
-    <div
-      ref={containerRef}
-      id="three-d-marquee-viewport"
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      className={cn(
-        'relative w-full overflow-hidden flex items-center justify-center select-none',
-        isDark ? 'bg-transparent text-white' : 'bg-transparent text-neutral-900',
-        isDragging ? 'cursor-grabbing' : interactive ? 'cursor-grab' : 'cursor-default',
-        className
-      )}
-      style={{
-        height,
-        perspective: `${perspective}px`,
-      }}
-    >
+return (
+     <div
+       ref={containerRef}
+       id="three-d-marquee-viewport"
+       aria-label="Interactive 3D marquee. Click and drag to rotate."
+       onMouseDown={handleMouseDown}
+       onMouseMove={handleMouseMove}
+       onMouseUp={handleMouseUp}
+       onMouseLeave={handleMouseUp}
+       className={cn(
+         'relative w-full overflow-hidden flex items-center justify-center select-none',
+         isDark ? 'bg-transparent text-white' : 'bg-transparent text-neutral-900',
+         isDragging ? 'cursor-grabbing' : interactive ? 'cursor-grab' : 'cursor-default',
+         className
+       )}
+       style={{
+         height,
+         perspective: `${perspective}px`,
+       }}
+     >
       <div
         className="absolute inset-0 pointer-events-none z-10"
         style={{
@@ -260,17 +269,18 @@ const t = Math.max(0, Math.min(1, transitionProgress));
         </div>
       </div>
 
-      {activeModalImage && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
-          onClick={() => setActiveModalImage(null)}
-        >
-          <div
-            className="relative max-w-4xl w-full max-h-[85vh] bg-zinc-950 rounded-2xl overflow-hidden shadow-2xl border border-white/20 p-2"
-            onClick={(e) => e.stopPropagation()}
-          >
+{activeModalImage && (
+         <div
+           role="dialog"
+           aria-modal="true"
+           className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+           onClick={() => setActiveModalImage(null)}
+         >
+           <div
+             ref={modalRef}
+             className="relative max-w-4xl w-full max-h-[85vh] bg-zinc-950 rounded-2xl overflow-hidden shadow-2xl border border-white/20 p-2"
+             onClick={(e) => e.stopPropagation()}
+           >
             <div className="absolute top-4 right-4 z-10">
               <button
                 type="button"

@@ -4,6 +4,8 @@ import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTheme } from "@/components/providers/ThemeProvider";
+import { usePrefersReducedMotion } from "@/lib/performance";
+import { LAYOUT_CONSTANTS } from "@/lib/constants";
 import { motion, useInView } from "framer-motion";
 
 if (typeof window !== "undefined") {
@@ -138,18 +140,13 @@ const CATEGORIES: ServiceCategoryData[] = [
 ];
 
 // Exact dimensions and scale math inferred directly from abox.agency
-const STICKY_OFFSETS = [
-  { mobile: 0, tablet: 0, desktop: 0 },
-  { mobile: 67, tablet: 86, desktop: 86 },
-  { mobile: 134, tablet: 172, desktop: 172 },
-  { mobile: 201, tablet: 258, desktop: 258 },
-];
+  const STICKY_OFFSETS = LAYOUT_CONSTANTS.STICKY_OFFSETS;
 
-const PILL_WIDTH = 48;
-const PILL_HEIGHT_DESKTOP = 28;
-const PILL_HEIGHT_MOBILE = 24;
-const PILL_PAD_X = 16;
-const PILL_PAD_Y_MOBILE = 4;
+  const PILL_WIDTH = LAYOUT_CONSTANTS.PILL.WIDTH;
+  const PILL_HEIGHT_DESKTOP = LAYOUT_CONSTANTS.PILL.HEIGHT_DESKTOP;
+  const PILL_HEIGHT_MOBILE = LAYOUT_CONSTANTS.PILL.HEIGHT_MOBILE;
+  const PILL_PAD_X = LAYOUT_CONSTANTS.PILL.PAD_X;
+  const PILL_PAD_Y_MOBILE = LAYOUT_CONSTANTS.PILL.PAD_Y_MOBILE;
 
 const getTitleScale = () => (typeof window !== "undefined" && window.innerWidth < 768 ? 0.8 : 0.4);
 const getInverseScale = () => 1 / getTitleScale();
@@ -262,10 +259,129 @@ function SectionHeaderAnimated({ isDark }: { isDark: boolean }) {
   );
 }
 
+// Individual service category article component
+function ServiceCategory({ 
+  category, 
+  idx, 
+  isDark,
+  articlesRef,
+  titlesRef,
+  pillsRef,
+  contentsRef,
+  stickyOffsets
+}: { 
+  category: any; 
+  idx: number; 
+  isDark: boolean;
+  articlesRef: React.RefObject<(HTMLElement | null)[]>;
+  titlesRef: React.RefObject<(HTMLDivElement | null)[]>;
+  pillsRef: React.RefObject<(HTMLSpanElement | null)[]>;
+  contentsRef: React.RefObject<(HTMLDivElement | null)[]>;
+  stickyOffsets: Array<{ mobile: number; tablet: number; desktop: number }>;
+}) {
+  const cfg = stickyOffsets[idx] || { mobile: 0, tablet: 0, desktop: 0 };
+  const isSlightLight = idx % 2 === 0;
+  const cardStyleClasses = isDark
+    ? isSlightLight
+      ? "bg-[#0d0d12] border-white/12 text-white shadow-[0_-8px_30px_rgba(0,0,0,0.45)]"
+      : "bg-[#000000] border-white/10 text-white shadow-[0_-12px_36px_rgba(0,0,0,0.6)]"
+    : isSlightLight
+      ? "bg-[#fafafc] border-black/8 text-[#222] shadow-[0_-6px_20px_rgba(0,0,0,0.03)]"
+      : "bg-[#ffffff] border-black/10 text-[#222] shadow-[0_-8px_28px_rgba(0,0,0,0.05)]";
+
+  return (
+    <article
+      key={category.id}
+      ref={(el) => {
+        articlesRef.current[idx] = el;
+      }}
+      id={category.id}
+      className={`sticky flex flex-col border-0 border-t border-x border-solid rounded-t-[28px] sm:rounded-t-[36px] lg:rounded-t-[40px] pt-6 pb-[50px] px-6 sm:px-12 lg:px-16 xl:px-24 transition-colors duration-500 ${cardStyleClasses}`}
+style={{
+  zIndex: idx + 1,
+  top: "var(--top)",
+  "--top": `${cfg.mobile}px`,
+  "--top-md": `${cfg.tablet}px`,
+  "--top-xl": `${cfg.desktop}px`,
+} as React.CSSProperties}
+             >
+               {/* Responsive top style injector matching abox.agency */}
+               <style jsx>{`
+                 article#${category.id} {
+                   top: ${cfg.mobile}px;
+                 }
+                 @media (min-width: 768px) {
+                   article#${category.id} {
+                     top: ${cfg.tablet}px;
+                   }
+                 }
+                 @media (min-width: 1280px) {
+                   article#${category.id} {
+                     top: ${cfg.desktop}px;
+                   }
+                 }
+               `}</style>
+
+      <div className="max-w-[1720px] mx-auto w-full">
+        {/* Large Category Title + Inline CTA Pill */}
+        <h3 className="m-0">
+          <div
+            ref={(el) => {
+              titlesRef.current[idx] = el;
+            }}
+            className={`group w-fit origin-top-left ${
+              category.href ? "cursor-pointer" : "cursor-default"
+            }`}
+          >
+            <a
+              href={category.href ?? `#${category.id}`}
+              className={`inline-flex items-center gap-3 md:gap-4 leading-none text-[32px] md:text-[110px] font-medium max-lg:relative no-underline select-none transition-colors duration-300 ${
+                isDark ? "text-white" : "text-[#222]"
+              }`}
+              aria-label={`Explore ${category.title} services`}
+            >
+              {category.title}
+
+              
+            </a>
+          </div>
+        </h3>
+
+        {/* Category Content: 2-Column Desktop Grid */}
+        <div
+          ref={(el) => {
+            contentsRef.current[idx] = el;
+          }}
+          className="mt-8 overflow-hidden xl:mt-[30px] max-lg:mt-4 max-lg:min-w-0"
+        >
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 xl:gap-[200px] justify-between max-lg:min-w-0 max-lg:gap-5 sm:max-lg:gap-10">
+            {/* Left Column: Descriptive Paragraph */}
+            <p
+              className={`m-0 text-[clamp(1rem,1.8vw,1.5rem)] font-medium leading-[1.2] max-lg:min-w-0 max-lg:text-[clamp(0.875rem,1.8vw,1.5rem)] transition-colors duration-300 ${
+                isDark ? "text-zinc-300" : "text-[#222]"
+              }`}
+            >
+              {category.description}
+            </p>
+
+            {/* Right Column: Numbered Service List — stagger-animated on scroll */}
+            <ol className="m-0 flex min-w-0 w-full list-none flex-col p-0 md:max-w-[760px] md:text-nowrap">
+              {category.services.map((service: ServiceItem, sIdx: number) => (
+                <ServiceListItem key={service.title} service={service} isDark={isDark} index={sIdx} />
+              ))}
+            </ol>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 // Master full-width Services Section configured identically to abox.agency
 export default function ServicesSection() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const reducedMotion = usePrefersReducedMotion();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const articlesRef = useRef<(HTMLElement | null)[]>([]);
@@ -293,20 +409,20 @@ export default function ServicesSection() {
       });
     };
 
-    // Desktop GSAP ScrollTrigger Scrub setup (>= 1024px)
-    const initDesktop = () => {
-      ctx = gsap.context(() => {
-        CATEGORIES.forEach((_, n) => {
-          const article = articlesRef.current[n];
-          const title = titlesRef.current[n];
-          const pill = pillsRef.current[n];
-          const content = contentsRef.current[n];
-          if (!article) return;
+// Desktop GSAP ScrollTrigger Scrub setup (>= 1024px)
+     const initDesktop = () => {
+       ctx = gsap.context(() => {
+         CATEGORIES.forEach((_, n) => {
+           const article = articlesRef.current[n];
+           const title = titlesRef.current[n];
+           const pill = pillsRef.current[n];
+           const content = contentsRef.current[n];
+           if (!article) return;
 
-          const isLast = n === CATEGORIES.length - 1;
-          const nextArticle = article.nextElementSibling as HTMLElement | null;
+           const isLast = n === CATEGORIES.length - 1;
+           const nextArticle = article.nextElementSibling as HTMLElement | null;
 
-const tl = gsap.timeline({
+           const tl = gsap.timeline({
              defaults: { ease: "power2.out", force3D: true },
              scrollTrigger: {
                trigger: isLast ? article : nextArticle,
@@ -320,37 +436,51 @@ const tl = gsap.timeline({
              },
            });
 
-          if (!isLast && nextArticle) {
-            if (title) {
-              gsap.set(title, { transformOrigin: "0% 0%", force3D: true });
-              tl.fromTo(title, { scale: 1 }, { scale: () => getTitleScale(), duration: 1 }, 0);
-            }
-            if (pill) {
-              setPillBase(pill);
-              tl.fromTo(
-                pill,
-                { scale: 0, autoAlpha: 0 },
-                { scale: () => getInverseScale(), autoAlpha: 1, duration: 1 },
-                0
-              );
-            }
-            if (content) {
-              tl.fromTo(content, { opacity: 1, y: 0 }, { opacity: 0, y: -32, duration: 1 }, 0);
-            }
-          } else {
-            // SUPPORT COMPONENT (the final category):
-            // Smoothly reveals the orange arrow pill as Support locks into its sticky position.
-            // Notice: Title does NOT collapse and content does NOT fade out!
-            if (pill) {
-              setPillBase(pill);
-              tl.fromTo(pill, { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1 }, 0);
-            }
-          }
-        });
+           if (!isLast && nextArticle) {
+             if (title) {
+               gsap.set(title, { transformOrigin: "0% 0%", force3D: true });
+               tl.fromTo(title, { scale: 1 }, { scale: () => getTitleScale(), duration: reducedMotion ? 0 : 1 }, 0);
+             }
+             if (pill) {
+               setPillBase(pill);
+               tl.fromTo(
+                 pill,
+                 { scale: 0, autoAlpha: 0 },
+                 { scale: () => getInverseScale(), autoAlpha: 1, duration: reducedMotion ? 0 : 1 },
+                 0
+               );
+             }
+             if (content) {
+               tl.fromTo(content, { opacity: 1, y: 0 }, { opacity: 0, y: -32, duration: reducedMotion ? 0 : 1 }, 0);
+             }
+           } else {
+             // SUPPORT COMPONENT (the final category):
+             // Smoothly reveals the orange arrow pill as Support locks into its sticky position.
+             // Notice: Title does NOT collapse and content does NOT fade out!
+             if (pill) {
+               setPillBase(pill);
+               tl.fromTo(pill, { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: reducedMotion ? 0 : 1 }, 0);
+             }
+           }
+         });
 
-        ScrollTrigger.refresh();
-      }, containerRef);
-    };
+         // Debounced resize handler to prevent excessive ScrollTrigger recalculations
+         let resizeTimeout: number;
+         const handleResize = () => {
+           ScrollTrigger.refresh();
+         };
+         window.addEventListener(
+           "resize",
+           () => {
+             clearTimeout(resizeTimeout);
+             resizeTimeout = window.setTimeout(handleResize, 200);
+           },
+           { passive: true }
+         );
+
+         ScrollTrigger.refresh();
+       }, containerRef);
+     };
 
     // Mobile / Tablet smooth scroll listener (< 1024px)
     const initMobile = () => {
@@ -413,53 +543,53 @@ const tl = gsap.timeline({
           smoothTo: (value: number) => void;
         };
 
-        const items: MobileItem[] = [];
+const items: MobileItem[] = [];
 
-        CATEGORIES.forEach((_, e) => {
-          const r = articlesRef.current[e];
-          const f = titlesRef.current[e];
-          const w = pillsRef.current[e];
-          const m = contentsRef.current[e];
-          if (!r) return;
-          const isLast = e === CATEGORIES.length - 1;
-          const nextArticle = r.nextElementSibling as HTMLElement | null;
-          const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out", force3D: true } });
+         CATEGORIES.forEach((_, e) => {
+           const r = articlesRef.current[e];
+           const f = titlesRef.current[e];
+           const w = pillsRef.current[e];
+           const m = contentsRef.current[e];
+           if (!r) return;
+           const isLast = e === CATEGORIES.length - 1;
+           const nextArticle = r.nextElementSibling as HTMLElement | null;
+           const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.out", force3D: true } });
 
-          if (!isLast && nextArticle) {
-            f && tl.fromTo(f, { scale: 1 }, { scale: () => getTitleScale(), duration: 1 }, 0);
-            w &&
-              (setPillBaseMobile(w),
-              tl.fromTo(
-                w,
-                { autoAlpha: 0, scale: 1 },
-                { autoAlpha: 1, scale: () => getInverseScale(), duration: 1 },
-                0
-              ));
-            m && tl.fromTo(m, { opacity: 1, y: 0 }, { opacity: 0, y: 0, duration: 1 }, 0);
-            items.push({
-              tl,
-              article: r,
-              nextArticle,
-              index: e,
-              isLast: false,
-              playhead: { p: 0 },
-              smoothTo: () => {},
-            });
-          } else {
-            w &&
-              (setPillBaseMobile(w),
-              tl.fromTo(w, { autoAlpha: 0, scale: 1 }, { autoAlpha: 1, scale: 1, duration: 1 }, 0));
-            items.push({
-              tl,
-              article: r,
-              nextArticle: r,
-              index: e,
-              isLast: true,
-              playhead: { p: 0 },
-              smoothTo: () => {},
-            });
-          }
-        });
+           if (!isLast && nextArticle) {
+             f && tl.fromTo(f, { scale: 1 }, { scale: () => getTitleScale(), duration: reducedMotion ? 0 : 1 }, 0);
+             w &&
+               (setPillBaseMobile(w),
+               tl.fromTo(
+                 w,
+                 { autoAlpha: 0, scale: 1 },
+                 { autoAlpha: 1, scale: () => getInverseScale(), duration: reducedMotion ? 0 : 1 },
+                 0
+               ));
+             m && tl.fromTo(m, { opacity: 1, y: 0 }, { opacity: 0, y: 0, duration: reducedMotion ? 0 : 1 }, 0);
+             items.push({
+               tl,
+               article: r,
+               nextArticle,
+               index: e,
+               isLast: false,
+               playhead: { p: 0 },
+               smoothTo: () => {},
+             });
+           } else {
+             w &&
+               (setPillBaseMobile(w),
+               tl.fromTo(w, { autoAlpha: 0, scale: 1 }, { autoAlpha: 1, scale: 1, duration: reducedMotion ? 0 : 1 }, 0));
+             items.push({
+               tl,
+               article: r,
+               nextArticle: r,
+               index: e,
+               isLast: true,
+               playhead: { p: 0 },
+               smoothTo: () => {},
+             });
+           }
+         });
 
         items.forEach((item) => {
           const prog = getProgress(item.article, item.nextArticle, item.index, item.isLast);
@@ -543,15 +673,13 @@ const tl = gsap.timeline({
               }}
               id={category.id}
               className={`sticky flex flex-col border-0 border-t border-x border-solid rounded-t-[28px] sm:rounded-t-[36px] lg:rounded-t-[40px] pt-6 pb-[50px] px-6 sm:px-12 lg:px-16 xl:px-24 transition-colors duration-500 ${cardStyleClasses}`}
-              style={
-                {
-                  zIndex: idx + 1,
-                  top: "var(--top)",
-                  "--top": `${cfg.mobile}px`,
-                  "--top-md": `${cfg.tablet}px`,
-                  "--top-xl": `${cfg.desktop}px`,
-                } as React.CSSProperties
-              }
+style={{
+  zIndex: idx + 1,
+  top: "var(--top)",
+  "--top": `${cfg.mobile}px`,
+  "--top-md": `${cfg.tablet}px`,
+  "--top-xl": `${cfg.desktop}px`,
+} as React.CSSProperties}
             >
               {/* Responsive top style injector matching abox.agency */}
               <style jsx>{`

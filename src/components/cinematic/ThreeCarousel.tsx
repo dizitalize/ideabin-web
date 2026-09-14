@@ -499,11 +499,12 @@ const tr = transitionRef.current;
     };
   }, [layoutConfig.fov]);
 
-  return (
-    <div
-      ref={containerRef}
-      id="three-carousel-container"
-      className="w-full h-full relative overflow-hidden select-none bg-transparent"
-    />
-  );
-};
+return (
+     <div
+       ref={containerRef}
+       id="three-carousel-container"
+       aria-label="Interactive 3D carousel. Click and drag to rotate."
+       className="w-full h-full relative overflow-hidden select-none bg-transparent"
+     />
+   );
+ };

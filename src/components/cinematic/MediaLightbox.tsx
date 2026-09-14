@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, RefObject } from 'react';
 import { MediaItem } from './types';
 import { X, ChevronLeft, ChevronRight, Volume2, VolumeX } from './ui/icons';
+import { useFocusTrap } from '@/lib/performance';
 
 interface MediaLightboxProps {
   item: MediaItem | null;
@@ -13,27 +14,34 @@ interface MediaLightboxProps {
 }
 
 export const MediaLightbox: React.FC<MediaLightboxProps> = ({
-  item,
-  isOpen,
-  onClose,
-  onPrev,
-  onNext,
-  currentIndex,
-  totalItems,
-}) => {
-  const [isMuted, setIsMuted] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+   item,
+   isOpen,
+   onClose,
+   onPrev,
+   onNext,
+   currentIndex,
+   totalItems,
+ }) => {
+const [isMuted, setIsMuted] = useState(false);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const { containerRef, setEnabled: setModalEnabled } = useFocusTrap();
+    const modalRef = containerRef as RefObject<HTMLDivElement | null>;
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowLeft') onPrev();
-      if (e.key === 'ArrowRight') onNext();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose, onPrev, onNext]);
+useEffect(() => {
+     const handleKeyDown = (e: KeyboardEvent) => {
+       if (!isOpen) return;
+       if (e.key === 'Escape') onClose();
+       if (e.key === 'ArrowLeft') onPrev();
+       if (e.key === 'ArrowRight') onNext();
+     };
+     window.addEventListener('keydown', handleKeyDown);
+     return () => window.removeEventListener('keydown', handleKeyDown);
+   }, [isOpen, onClose, onPrev, onNext]);
+
+   // Enable focus trap when modal is open
+   useEffect(() => {
+     setModalEnabled(isOpen);
+   }, [isOpen, setModalEnabled]);
 
   if (!isOpen || !item) return null;
 
@@ -45,6 +53,7 @@ export const MediaLightbox: React.FC<MediaLightboxProps> = ({
     >
       <div
         id="media-lightbox-modal"
+        ref={modalRef}
         className="relative w-[92vw] max-w-4xl max-h-[90vh] bg-zinc-950/90 border border-zinc-800/80 rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row"
         onClick={(e) => e.stopPropagation()}
       >

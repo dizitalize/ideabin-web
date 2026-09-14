@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function prefersReducedMotion(): boolean {
   if (typeof window === "undefined") return false;
@@ -50,4 +50,89 @@ export function shouldUseSmoothScroll(): boolean {
 
 export function shouldUseHeavyEffects(): boolean {
   return isFinePointer() && !prefersReducedMotion();
+}
+
+/**
+ * Focus trap utility for modals
+ * Returns an object with refs and handlers to trap focus within an element
+ */
+export function useFocusTrap() {
+  const [enabled, setEnabled] = useState(false);
+  const containerRef = useRef<HTMLElement | null>(null);
+  const focusableElementsRef = useRef<HTMLElement[]>([]);
+  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!enabled || !containerRef.current) return;
+
+// Save previously focused element
+        previouslyFocusedElementRef.current = document.activeElement as HTMLElement | null;
+
+    // Get all focusable elements within the container
+    const focusableSelectors = [
+      'a[href]',
+      'area[href]',
+      'input:not([disabled]):not([type="hidden"])',
+      'select:not([disabled])',
+      'textarea:not([disabled])',
+      'button:not([disabled])',
+      'iframe',
+      'object',
+      'embed',
+      '[tabindex]:not([tabindex="-1"])',
+      '[contenteditable]'
+    ].join(',');
+    
+    const focusableElements = containerRef.current.querySelectorAll<HTMLElement>(focusableSelectors);
+    focusableElementsRef.current = Array.from(focusableElements).filter(
+      el => el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0
+    );
+
+    // Focus the first element if any exist
+    if (focusableElementsRef.current.length > 0) {
+      focusableElementsRef.current[0].focus();
+    }
+
+    // Handle keydown events to trap focus
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      if (focusableElementsRef.current.length === 0) {
+        e.preventDefault();
+        return;
+      }
+
+      const isShiftPressed = e.shiftKey;
+      const focusedIndex = focusableElementsRef.current.indexOf(
+        document.activeElement as HTMLElement
+      );
+
+      if (focusedIndex === -1) {
+        focusableElementsRef.current[0].focus();
+        e.preventDefault();
+        return;
+      }
+
+      if (isShiftPressed && focusedIndex === 0) {
+        focusableElementsRef.current[
+          focusableElementsRef.current.length - 1
+        ].focus();
+        e.preventDefault();
+      } else if (!isShiftPressed && focusedIndex === focusableElementsRef.current.length - 1) {
+        focusableElementsRef.current[0].focus();
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      // Restore focus to previously focused element
+      if (previouslyFocusedElementRef.current) {
+        previouslyFocusedElementRef.current.focus();
+      }
+    };
+  }, [enabled, containerRef]);
+
+  return { containerRef, setEnabled: setEnabled };
 }

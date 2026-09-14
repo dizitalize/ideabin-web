@@ -411,7 +411,20 @@ select {
     [role="button"],
     [data-cursor] {
       cursor: auto;
-    }
+}
+
+/* ─── Touch Action Improvements for 3D Elements ──────────────────────────────── */
+/* Prevent 3D elements from interfering with native scrolling on touch devices */
+#three-d-marquee-viewport,
+#three-carousel-container {
+  touch-action: pan-y pinch-zoom;
+}
+
+/* Also apply to any other 3D containers that might be added */
+[class*="three-d-marquee"],
+[class*="three-carousel"] {
+  touch-action: pan-y pinch-zoom;
+}
   }
 }
 

@@ -5,6 +5,7 @@ import ThemeProvider from "@/components/providers/ThemeProvider";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { CenterTransitionProvider } from "@/components/animation/CenterTransition";
 import Navbar from "@/components/ui/Navbar";
+import JsonLd from "@/components/seo/JsonLd";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,44 +48,53 @@ const comfortaa = Comfortaa({
 });
 
 export const metadata: Metadata = {
-  title: "Studio — Spatial Digital Experience",
-  description:
-    "A cinematic 3D scroll experience. Scroll-controlled 97-frame sequences, editorial typography, and center-origin spatial page transitions.",
-  keywords: [
-    "3D scroll website",
-    "cinematic web experience",
-    "spatial computing",
-    "digital experience studio",
-    "frame sequence animation",
-    "creative technology",
-  ],
-  openGraph: {
-    title: "Studio — Spatial Digital Experience",
-    description:
-      "A cinematic 3D scroll experience. Scroll-controlled 97-frame sequences, editorial typography, and center-origin spatial page transitions.",
-    type: "website",
-  },
-};
+   title: "Studio — Spatial Digital Experience",
+   description:
+     "A cinematic 3D scroll experience. Scroll-controlled 97-frame sequences, editorial typography, and center-origin spatial page transitions.",
+   keywords: [
+     "3D scroll website",
+     "cinematic web experience",
+     "spatial computing",
+     "digital experience studio",
+     "frame sequence animation",
+     "creative technology",
+   ],
+   openGraph: {
+     title: "Studio — Spatial Digital Experience",
+     description:
+       "A cinematic 3D scroll experience. Scroll-controlled 97-frame sequences, editorial typography, and center-origin spatial page transitions.",
+     type: "website",
+     images: [
+       {
+         url: "/og-image.png",
+         width: 1200,
+         height: 630,
+         alt: "IdeaBin - Spatial Digital Experience Studio"
+       }
+     ]
+   },
+ };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} ${kalam.variable} ${plusJakartaSans.variable} ${sora.variable} ${comfortaa.variable} antialiased`}
-      >
-        <ThemeProvider>
-          <SmoothScrollProvider>
-            <CenterTransitionProvider>
-              <Navbar />
-              {children}
-            </CenterTransitionProvider>
-          </SmoothScrollProvider>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
-}
+   children,
+ }: Readonly<{
+   children: React.ReactNode;
+ }>) {
+   return (
+     <html lang="en" className="dark">
+       <body
+         className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} ${kalam.variable} ${plusJakartaSans.variable} ${sora.variable} ${comfortaa.variable} antialiased`}
+       >
+         <ThemeProvider>
+           <SmoothScrollProvider>
+             <CenterTransitionProvider>
+               <Navbar />
+               {children}
+             </CenterTransitionProvider>
+           </SmoothScrollProvider>
+           <JsonLd />
+         </ThemeProvider>
+       </body>
+     </html>
+   );
+ }
