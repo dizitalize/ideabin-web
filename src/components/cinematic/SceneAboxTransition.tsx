@@ -179,15 +179,16 @@ export const SceneAboxTransition: React.FC<SceneAboxTransitionProps> = ({
               : `rgba(255, 255, 255, ${whiteLightOpacity * 0.7})`,
           }}
         >
-          <div
-            className="absolute inset-0 pointer-events-none opacity-10"
-            style={{
-              backgroundImage: isDark
-                ? 'linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)'
-                : 'linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)',
-              backgroundSize: '40px 40px',
-            }}
-          />
+<div
+             className="absolute inset-0 pointer-events-none opacity-10"
+             aria-hidden="true"
+             style={{
+               backgroundImage: isDark
+                 ? 'linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)'
+                 : 'linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)',
+               backgroundSize: '40px 40px',
+             }}
+           />
 
           {isOpening && (
             <div
@@ -217,30 +218,33 @@ export const SceneAboxTransition: React.FC<SceneAboxTransitionProps> = ({
             </div>
           )}
 
-          <div
-            id="white-window-scanlines-overlay"
-            className="absolute inset-0 pointer-events-none select-none z-20 overflow-hidden"
-            style={{
-              opacity: Math.min(1, whiteLightOpacity * (isDark ? 0.45 : 0.75)) * (1 - clamp((activeTransitionProgress - 0.05) / 0.50, 0, 1)),
-            }}
-          >
-            <div
-              className="terminal-scanlines-pattern absolute inset-0 opacity-30 will-change-transform"
-              style={{
-                animation: 'scanline-texture-drift 8s linear infinite',
-              }}
-            />
+<div
+             id="white-window-scanlines-overlay"
+             className="absolute inset-0 pointer-events-none select-none z-20 overflow-hidden"
+             aria-hidden="true"
+             style={{
+               opacity: Math.min(1, whiteLightOpacity * (isDark ? 0.45 : 0.75)) * (1 - clamp((activeTransitionProgress - 0.05) / 0.50, 0, 1)),
+             }}
+           >
+<div
+               className="terminal-scanlines-pattern absolute inset-0 opacity-30 will-change-transform"
+               aria-hidden="true"
+               style={{
+                 animation: 'scanline-texture-drift 8s linear infinite',
+               }}
+             />
 
-            <div
-              className="absolute inset-x-0 h-28 pointer-events-none will-change-transform opacity-40"
-              style={{
-                top: 0,
-                background: isDark
-                  ? 'linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.02) 60%, transparent)'
-                  : 'linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.03) 40%, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.03) 60%, transparent)',
-                animation: 'scanline-sweep 7.5s linear infinite',
-              }}
-            />
+<div
+               className="absolute inset-x-0 h-28 pointer-events-none will-change-transform opacity-40"
+               aria-hidden="true"
+               style={{
+                 top: 0,
+                 background: isDark
+                   ? 'linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.02) 40%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.02) 60%, transparent)'
+                   : 'linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.03) 40%, rgba(0, 0, 0, 0.08) 50%, rgba(0, 0, 0, 0.03) 60%, transparent)',
+                 animation: 'scanline-sweep 7.5s linear infinite',
+               }}
+             />
           </div>
         </div>
       )}

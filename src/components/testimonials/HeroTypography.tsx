@@ -35,7 +35,7 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ isInView = true 
         className="relative"
       >
         <h2
-          className={`font-sans text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-medium tracking-tight leading-[1.08] transition-colors duration-300 ${
+          className={`font-editorial text-4xl sm:text-5xl md:text-6xl lg:text-[68px] font-bold tracking-normal leading-[1.06] transition-colors duration-300 ${
             isDark ? 'text-white' : 'text-neutral-900'
           }`}
         >
@@ -43,20 +43,21 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ isInView = true 
           <br />
           <span className="relative inline-block mt-1">
             Real Impact.
-            {/* Sleek brand accent marker underline */}
+            {/* Hand-drawn double-loop pink marker underline with animated stroke */}
             <svg
-              viewBox="0 0 240 18"
-              className="absolute -bottom-2.5 left-0 w-[102%] h-3.5 overflow-visible pointer-events-none"
+              viewBox="0 0 280 24"
+              className="absolute -bottom-3 left-0 w-[105%] h-5 overflow-visible pointer-events-none"
               fill="none"
             >
               <motion.path
-                d="M 2 10 Q 70 2, 238 8"
-                stroke="#f97316"
-                strokeWidth="3.2"
+                d="M 5 14 Q 90 2, 270 12 Q 220 18, 90 19"
+                stroke="#ec4899"
+                strokeWidth="4"
                 strokeLinecap="round"
+                strokeLinejoin="round"
                 initial={{ pathLength: 0, opacity: 0 }}
-                animate={isInView ? { pathLength: 1, opacity: 1 } : {}}
-                transition={{ duration: 1.1, delay: 0.45, ease: 'easeOut' }}
+                animate={isInView ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
+                transition={{ duration: 1.2, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
               />
             </svg>
           </span>

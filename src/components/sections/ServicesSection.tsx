@@ -184,24 +184,23 @@ function ServiceListItem({ service, isDark, index }: { service: ServiceItem; isD
   const inner = (
     <>
       <span
-        className={`relative z-10 w-7 shrink-0 text-[0.8rem] font-medium leading-[1.3] md:w-8 md:text-[clamp(1rem,1.6vw,1.5625rem)] md:leading-normal xl:w-[35px] transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`relative z-10 w-7 shrink-0 text-[0.8rem] font-medium leading-[1.3] md:w-8 md:text-[clamp(1rem,1.6vw,1.5625rem)] md:leading-normal xl:w-[35px] transition-colors duration-300 ${
           isDark
-            ? "text-zinc-500 md:group-hover:text-white/60 md:group-focus-visible:text-white/60"
-            : "text-[#222]/40 md:group-hover:text-white/60 md:group-focus-visible:text-white/60"
+            ? "text-zinc-500 group-hover:text-zinc-300"
+            : "text-[#222]/40 group-hover:text-[#222]/70"
         }`}
       >
         {service.number}
       </span>
       <span
-        className={`relative z-10 min-w-0 flex-1 text-[0.8rem] font-medium leading-[1.3] md:text-[clamp(1rem,1.6vw,1.5625rem)] md:leading-normal transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`relative z-10 min-w-0 flex-1 text-[0.8rem] font-medium leading-[1.3] md:text-[clamp(1rem,1.6vw,1.5625rem)] md:leading-normal transition-colors duration-300 ${
           isDark
-            ? "text-white md:group-hover:text-white md:group-focus-visible:text-white"
-            : "text-[#222] md:group-hover:text-white md:group-focus-visible:text-white"
+            ? "text-white group-hover:text-zinc-200"
+            : "text-[#222] group-hover:text-black"
         }`}
       >
         {service.title}
       </span>
-      
     </>
   );
 
@@ -215,8 +214,8 @@ function ServiceListItem({ service, isDark, index }: { service: ServiceItem; isD
       {service.clickable ? (
         <a
           href={service.href ?? "#"}
-          className={`group no-underline transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:hover:px-6 md:hover:!text-white md:focus-visible:px-6 md:focus-visible:!text-white xl:hover:px-8 xl:focus-visible:px-8 after:absolute after:inset-x-0 after:bottom-0 after:z-0 after:h-0 after:bg-orange-500 after:transition-[height] after:duration-500 after:ease-[cubic-bezier(0.16,1,0.3,1)] md:hover:after:h-full md:focus-visible:after:h-full motion-reduce:transition-none motion-reduce:after:transition-none ${rowClass} ${
-            isDark ? "!text-white" : "!text-[#222]"
+          className={`group no-underline transition-colors duration-300 ${rowClass} ${
+            isDark ? "!text-white hover:bg-white/[0.03]" : "!text-[#222] hover:bg-black/[0.03]"
           }`}
           aria-label={service.title}
         >

@@ -99,12 +99,7 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
           transition={{ duration: 0.6, delay: 0.05, ease: "easeOut" }}
           className="mb-4 sm:mb-6 flex items-center justify-start gap-2.5"
         >
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-orange-500/30 bg-orange-950/40 backdrop-blur-md shadow-[0_0_16px_rgba(249,115,22,0.25)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.9)]" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.25em] font-semibold text-orange-400">
-              03 · Core Methodology
-            </span>
-          </span>
+
         </motion.div>
 
         {/* Row 1: WE DON’T START */}
@@ -116,11 +111,10 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
             variants={lineVariants}
           >
             <h2
-              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold uppercase italic tracking-[-0.035em] leading-[0.96] transition-colors duration-300 ${
-                isDark
-                  ? "text-zinc-300 drop-shadow-[0_2px_16px_rgba(0,0,0,0.8)] hover:text-white"
-                  : "text-zinc-600 drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:text-zinc-900"
-              }`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold uppercase italic tracking-[-0.035em] leading-[0.96] transition-colors duration-300 ${isDark
+                ? "text-zinc-300 drop-shadow-[0_2px_16px_rgba(0,0,0,0.8)] hover:text-white"
+                : "text-zinc-600 drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:text-zinc-900"
+                }`}
             >
               WE DON’T START
             </h2>
@@ -134,11 +128,10 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
           animate="visible"
           variants={dividerVariants}
           style={{ originX: 0 }}
-          className={`w-full h-[1px] my-1 sm:my-2 ${
-            isDark
-              ? "bg-gradient-to-r from-zinc-500/40 via-white/30 to-transparent"
-              : "bg-gradient-to-r from-zinc-300/80 via-zinc-400/50 to-transparent"
-          }`}
+          className={`w-full h-[1px] my-1 sm:my-2 ${isDark
+            ? "bg-gradient-to-r from-zinc-500/40 via-white/30 to-transparent"
+            : "bg-gradient-to-r from-zinc-300/80 via-zinc-400/50 to-transparent"
+            }`}
         />
 
         {/* Row 2: WITH ANSWERS */}
@@ -150,11 +143,10 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
             variants={lineVariants}
           >
             <h2
-              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold uppercase italic tracking-[-0.035em] leading-[0.96] transition-colors duration-300 ${
-                isDark
-                  ? "text-zinc-300 drop-shadow-[0_2px_16px_rgba(0,0,0,0.8)] hover:text-white"
-                  : "text-zinc-600 drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:text-zinc-900"
-              }`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold uppercase italic tracking-[-0.035em] leading-[0.96] transition-colors duration-300 ${isDark
+                ? "text-zinc-300 drop-shadow-[0_2px_16px_rgba(0,0,0,0.8)] hover:text-white"
+                : "text-zinc-600 drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:text-zinc-900"
+                }`}
             >
               WITH ANSWERS
             </h2>
@@ -168,11 +160,10 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
           animate="visible"
           variants={dividerVariants}
           style={{ originX: 0 }}
-          className={`w-full h-[1px] my-1 sm:my-2 ${
-            isDark
-              ? "bg-gradient-to-r from-transparent via-white/30 to-zinc-500/40"
-              : "bg-gradient-to-r from-transparent via-zinc-400/50 to-zinc-300/80"
-          }`}
+          className={`w-full h-[1px] my-1 sm:my-2 ${isDark
+            ? "bg-gradient-to-r from-transparent via-white/30 to-zinc-500/40"
+            : "bg-gradient-to-r from-transparent via-zinc-400/50 to-zinc-300/80"
+            }`}
         />
 
         {/* Row 3: WE START WITH THE */}
@@ -184,11 +175,10 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
             variants={lineVariants}
           >
             <h2
-              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold uppercase not-italic tracking-[-0.04em] leading-[0.96] ${
-                isDark
-                  ? "text-white drop-shadow-[0_4px_32px_rgba(255,255,255,0.22)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
-                  : "text-zinc-950 drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)]"
-              }`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold uppercase not-italic tracking-[-0.04em] leading-[0.96] ${isDark
+                ? "text-white drop-shadow-[0_4px_32px_rgba(255,255,255,0.22)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]"
+                : "text-zinc-950 drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)]"
+                }`}
             >
               WE START WITH THE
             </h2>
@@ -202,11 +192,10 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
           animate="visible"
           variants={dividerVariants}
           style={{ originX: 0 }}
-          className={`w-full h-[1px] my-1 sm:my-2 ${
-            isDark
-              ? "bg-gradient-to-r from-orange-500/50 via-white/40 to-transparent"
-              : "bg-gradient-to-r from-orange-500/40 via-zinc-500/50 to-transparent"
-          }`}
+          className={`w-full h-[1px] my-1 sm:my-2 ${isDark
+            ? "bg-gradient-to-r from-orange-500/50 via-white/40 to-transparent"
+            : "bg-gradient-to-r from-orange-500/40 via-zinc-500/50 to-transparent"
+            }`}
         />
 
         {/* Row 4: RIGHT QUESTIONS */}
@@ -218,11 +207,10 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
             variants={lineVariants}
           >
             <h2
-              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold uppercase not-italic tracking-[-0.04em] leading-[0.96] ${
-                isDark
-                  ? "bg-gradient-to-r from-white via-orange-100 to-orange-400 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(249,115,22,0.5)]"
-                  : "bg-gradient-to-r from-zinc-950 via-zinc-800 to-orange-600 bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.1)]"
-              }`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold uppercase not-italic tracking-[-0.04em] leading-[0.96] ${isDark
+                ? "bg-gradient-to-r from-white via-orange-100 to-orange-400 bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(249,115,22,0.5)]"
+                : "bg-gradient-to-r from-zinc-950 via-zinc-800 to-orange-600 bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(0,0,0,0.1)]"
+                }`}
             >
               RIGHT QUESTIONS
             </h2>
@@ -245,28 +233,25 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.96 }}
           aria-label="Scroll to see more content"
-          className={`group relative inline-flex items-center gap-4 px-7 py-3.5 rounded-full cursor-pointer transition-all duration-300 shadow-2xl backdrop-blur-2xl border ${
-            isDark
-              ? "bg-zinc-950/85 hover:bg-zinc-900 text-white border-white/20 hover:border-orange-400/50 shadow-[0_12px_36px_rgba(0,0,0,0.8)] hover:shadow-[0_0_30px_rgba(249,115,22,0.4)]"
-              : "bg-white/95 hover:bg-white text-zinc-900 border-zinc-200 hover:border-orange-500/40 shadow-[0_12px_36px_rgba(0,0,0,0.12)] hover:shadow-[0_0_25px_rgba(249,115,22,0.25)]"
-          }`}
+          className={`group relative inline-flex items-center gap-4 px-7 py-3.5 rounded-full cursor-pointer transition-all duration-300 shadow-2xl backdrop-blur-2xl border ${isDark
+            ? "bg-zinc-950/85 hover:bg-zinc-900 text-white border-white/20 hover:border-orange-400/50 shadow-[0_12px_36px_rgba(0,0,0,0.8)] hover:shadow-[0_0_30px_rgba(249,115,22,0.4)]"
+            : "bg-white/95 hover:bg-white text-zinc-900 border-zinc-200 hover:border-orange-500/40 shadow-[0_12px_36px_rgba(0,0,0,0.12)] hover:shadow-[0_0_25px_rgba(249,115,22,0.25)]"
+            }`}
         >
           {/* Subtle button ambient back-glow on hover */}
           <div
-            className={`absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm pointer-events-none ${
-              isDark
-                ? "bg-gradient-to-r from-orange-500/30 via-white/20 to-orange-500/30"
-                : "bg-gradient-to-r from-orange-500/20 via-zinc-400/20 to-orange-500/20"
-            }`}
+            className={`absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm pointer-events-none ${isDark
+              ? "bg-gradient-to-r from-orange-500/30 via-white/20 to-orange-500/30"
+              : "bg-gradient-to-r from-orange-500/20 via-zinc-400/20 to-orange-500/20"
+              }`}
           />
 
           {/* Animated Mouse Track Icon */}
           <div
-            className={`relative w-4 h-6 rounded-full border flex items-start justify-center p-0.5 transition-colors duration-300 ${
-              isDark
-                ? "border-white/40 group-hover:border-orange-400"
-                : "border-zinc-400 group-hover:border-orange-500"
-            }`}
+            className={`relative w-4 h-6 rounded-full border flex items-start justify-center p-0.5 transition-colors duration-300 ${isDark
+              ? "border-white/40 group-hover:border-orange-400"
+              : "border-zinc-400 group-hover:border-orange-500"
+              }`}
           >
             <motion.div
               animate={{

@@ -17,20 +17,20 @@ const PHONES_DATA: RadialPhoneData[] = [
     image: '/mobile%20frames/park%201.png',
   },
   {
-    id: 'well-1',
-    image: '/mobile%20frames/well%201.png',
-  },
-  {
     id: 'park-2',
     image: '/mobile%20frames/park%202.png',
   },
   {
-    id: 'well-2',
-    image: '/mobile%20frames/well%202.png',
-  },
-  {
     id: 'park-3',
     image: '/mobile%20frames/park%203.png',
+  },
+  {
+    id: 'well-1',
+    image: '/mobile%20frames/well%201.png',
+  },
+  {
+    id: 'well-2',
+    image: '/mobile%20frames/well%202.png',
   },
   {
     id: 'well-3',
@@ -254,7 +254,7 @@ export const RadialPhoneExperience: React.FC<RadialPhoneExperienceProps> = ({
           : 'radial-gradient(ellipse 85% 70% at 50% 50%, rgba(250, 249, 245, 0.35) 0%, rgba(237, 234, 227, 0.50) 100%)',
       }}
     >
-      <div className="fixed inset-0 pointer-events-none film-grain z-40 opacity-20" />
+      <div className="fixed inset-0 pointer-events-none film-grain z-40 opacity-20" aria-hidden="true" />
       <div
         className="fixed inset-0 pointer-events-none z-30"
         style={{
@@ -449,12 +449,13 @@ export const RadialPhoneExperience: React.FC<RadialPhoneExperienceProps> = ({
                   <div className="relative shadow-[0_25px_60px_rgba(0,0,0,0.95)]">
                     <PhoneMockup>
                       <div className="relative w-full h-full bg-black overflow-hidden">
-                        <img
-                          src={phone.image}
-                          alt=""
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover select-none pointer-events-none"
-                        />
+<img
+                           src={phone.image}
+                           alt=""
+                           referrerPolicy="no-referrer"
+                           loading="lazy"
+                           className="w-full h-full object-cover select-none pointer-events-none"
+                         />
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.04] to-white/[0.08] pointer-events-none" />
                       </div>
                     </PhoneMockup>

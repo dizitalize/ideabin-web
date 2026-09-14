@@ -331,7 +331,7 @@ export default function CinematicPage({
               : 'radial-gradient(ellipse 85% 70% at 50% 50%, rgba(250, 249, 245, 0.35) 0%, rgba(237, 234, 227, 0.60) 100%)',
           }}
         >
-          <div className="fixed inset-0 pointer-events-none film-grain z-40 opacity-20" />
+          <div className="fixed inset-0 pointer-events-none film-grain z-40 opacity-20" aria-hidden="true" />
           <div
             className="fixed inset-0 pointer-events-none z-30"
             style={{

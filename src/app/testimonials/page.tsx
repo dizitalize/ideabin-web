@@ -21,18 +21,17 @@ export default function TestimonialsPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/"
-            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider border transition-all duration-200 cursor-pointer ${
-              isDark
-                ? "border-white/12 bg-white/5 hover:border-white/30 text-zinc-300 hover:text-white"
-                : "border-black/10 bg-black/5 hover:border-black/25 text-neutral-700 hover:text-black"
-            }`}
+            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider border transition-all duration-200 cursor-pointer ${isDark
+              ? "border-white/12 bg-white/5 hover:border-white/30 text-zinc-300 hover:text-white"
+              : "border-black/10 bg-black/5 hover:border-black/25 text-neutral-700 hover:text-black"
+              }`}
           >
             <span>←</span>
             <span>Back to Home</span>
           </Link>
-          <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest hidden sm:inline-block">
+          {/* <span className="text-xs font-mono text-zinc-500 uppercase tracking-widest hidden sm:inline-block">
             / 06 // Client Feedback
-          </span>
+          </span> */}
         </div>
       </div>
 

@@ -22,14 +22,13 @@ export const TornScrap: React.FC<TornScrapProps> = React.memo(({
   const x = useMotionValue(initialPos.x);
   const y = useMotionValue(initialPos.y);
 
-  return (
-    <motion.div
-      drag
-      dragConstraints={boardRef}
-      dragMomentum={false}
-      dragElastic={0}
-      data-lenis-prevent
-      onDragStart={() => {
+return (
+     <motion.div
+       drag
+       dragConstraints={boardRef}
+       dragMomentum={false}
+       dragElastic={0}
+       onDragStart={() => {
         playPaperRustle(1.0);
       }}
       onDragEnd={() => {

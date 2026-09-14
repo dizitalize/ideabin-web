@@ -40,11 +40,12 @@ export const IdeaBinBrand: React.FC<IdeaBinBrandProps> = ({
       {/* Tight gap between logo emblem and ideabin text */}
       <div className="flex items-center gap-1 sm:gap-1.5">
         {/* Fluid folded-ribbon 3D emblem */}
-        <img
-          src="/ideabin_logo_black.png"
-          alt="IdeaBin Logo Emblem"
-          className={`${emblemSizes[size]} object-contain flex-shrink-0 drop-shadow-[0_2px_10px_rgba(249,115,22,0.25)] transition-transform duration-300 group-hover:scale-105`}
-        />
+<img
+           src="/ideabin_logo_black.png"
+           alt="IdeaBin Logo Emblem"
+           loading="lazy"
+           className={`${emblemSizes[size]} object-contain flex-shrink-0 drop-shadow-[0_2px_10px_rgba(249,115,22,0.25)] transition-transform duration-300 group-hover:scale-105`}
+         />
 
         {/* Wordmark: Comfortaa font with white idea + orange-gold gradient bin */}
         <div className="flex items-baseline leading-none font-comfortaa font-bold tracking-[-0.035em]">

@@ -69,13 +69,14 @@ export const MediaLightbox: React.FC<MediaLightboxProps> = ({
                 {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
               </button>
             </div>
-          ) : (
-            <img
-              src={item.image}
-              alt={item.title}
-              className="max-h-[82vh] w-full object-contain select-none"
-            />
-          )}
+) : (
+             <img
+               src={item.image}
+               alt={item.title}
+               loading="lazy"
+               className="max-h-[82vh] w-full object-contain select-none"
+             />
+           )}
 
           <button
             id="lightbox-prev-btn"

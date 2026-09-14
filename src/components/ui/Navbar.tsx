@@ -55,6 +55,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [consultationOpen, setConsultationOpen] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const consultationButtonRef = useRef<HTMLButtonElement>(null);
 
   const lastScrollYRef = useRef(0);
   const isVisibleRef = useRef(true);
@@ -138,17 +139,23 @@ export default function Navbar() {
     }
   }, [mobileOpen, consultationOpen]);
 
-  // Handle escape key
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setMobileOpen(false);
-        setConsultationOpen(false);
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+// Handle escape key
+   useEffect(() => {
+     const onKeyDown = (e: KeyboardEvent) => {
+       if (e.key === "Escape") {
+         const wasConsultationOpen = consultationOpen;
+         setMobileOpen(false);
+         setConsultationOpen(false);
+         
+         // Return focus to consultation button if it was open
+         if (wasConsultationOpen && consultationButtonRef.current) {
+           consultationButtonRef.current.focus();
+         }
+       }
+     };
+     window.addEventListener("keydown", onKeyDown);
+     return () => window.removeEventListener("keydown", onKeyDown);
+   }, [consultationOpen]);
 
   const handleNavClick = (e: React.MouseEvent, href: string, label: string) => {
     e.preventDefault();
@@ -329,21 +336,22 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* Book a Consultation Button */}
-            <motion.button
-              type="button"
-              id="nav-book-consultation"
-              onClick={handleOpenConsultation}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className={`relative inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-[13px] font-medium tracking-tight cursor-pointer transition-all duration-200 shadow-sm ${
-                isDark
-                  ? "bg-white hover:bg-zinc-100 text-neutral-950 font-semibold shadow-black/40"
-                  : "bg-[#18181b] hover:bg-black text-white font-medium shadow-black/20"
-              }`}
-            >
-              <span>Book a Consultation</span>
-            </motion.button>
+{/* Book a Consultation Button */}
+             <motion.button
+               ref={consultationButtonRef}
+               type="button"
+               id="nav-book-consultation"
+               onClick={handleOpenConsultation}
+               whileHover={{ scale: 1.03 }}
+               whileTap={{ scale: 0.97 }}
+               className={`relative inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-[13px] font-medium tracking-tight cursor-pointer transition-all duration-200 shadow-sm ${
+                 isDark
+                   ? "bg-white hover:bg-zinc-100 text-neutral-950 font-semibold shadow-black/40"
+                   : "bg-[#18181b] hover:bg-black text-white font-medium shadow-black/20"
+               }`}
+             >
+               <span>Book a Consultation</span>
+             </motion.button>
 
             {/* Mobile Hamburger Toggle */}
             <button

@@ -1,6 +1,0 @@
-{
-  "name": "Studio Moodboard Testimonials",
-  "description": "A premium physical moodboard testimonial wall with realistic tactile sticky notes, hand-drawn SVG annotations, and cinematic interactive motion.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

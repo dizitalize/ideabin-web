@@ -289,13 +289,14 @@ const t = Math.max(0, Math.min(1, transitionProgress));
                 playsInline
                 className="w-full h-auto max-h-[75vh] object-contain rounded-xl bg-black"
               />
-            ) : (
-              <img
-                src={activeModalImage}
-                alt="Inspected visual"
-                className="w-full h-auto max-h-[75vh] object-contain rounded-xl bg-neutral-900"
-              />
-            )}
+) : (
+               <img
+                 src={activeModalImage}
+                 alt="Inspected visual"
+                 loading="lazy"
+                 className="w-full h-auto max-h-[75vh] object-contain rounded-xl bg-neutral-900"
+               />
+             )}
           </div>
         </div>
       )}

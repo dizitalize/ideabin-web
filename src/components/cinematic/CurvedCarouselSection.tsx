@@ -100,7 +100,7 @@ export const CurvedCarouselSection: React.FC<CurvedCarouselSectionProps> = ({
           : 'radial-gradient(ellipse 85% 70% at 50% 50%, rgba(250, 249, 245, 0.4) 0%, rgba(237, 234, 227, 0.70) 100%)',
       }}
     >
-      <div className="fixed inset-0 pointer-events-none film-grain z-40 opacity-25" />
+      <div className="fixed inset-0 pointer-events-none film-grain z-40 opacity-25" aria-hidden="true" />
       <div
         className="fixed inset-0 pointer-events-none z-30 transition-all duration-500"
         style={{

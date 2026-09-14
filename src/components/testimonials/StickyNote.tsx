@@ -162,16 +162,15 @@ export const StickyNote: React.FC<StickyNoteProps> = ({
 
   return (
     // Outer Draggable Container: handles free movement across the board and scroll parallax
-    <motion.div
-      ref={cardRef}
-      id={`sticky-note-${testimonial.id}`}
-      data-testid={`sticky-note-${testimonial.id}`}
-      data-lenis-prevent
-      drag
-      dragConstraints={boardRef}
-      dragMomentum={false}
-      dragElastic={0}
-      onDragStart={() => {
+<motion.div
+       ref={cardRef}
+       id={`sticky-note-${testimonial.id}`}
+       data-testid={`sticky-note-${testimonial.id}`}
+       drag
+       dragConstraints={boardRef}
+       dragMomentum={false}
+       dragElastic={0}
+       onDragStart={() => {
         setIsDragging(true);
         clearHold();
         bringToFront?.(testimonial.id);

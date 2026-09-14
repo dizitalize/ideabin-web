@@ -27,9 +27,9 @@ export const CinematicViewport: React.FC<CinematicViewportProps> = ({
         }}
       />
 
-      <div
-        className="film-grain pointer-events-none absolute inset-0 opacity-25"
-      />
+<div
+         className="film-grain pointer-events-none absolute inset-0 opacity-25" aria-hidden="true"
+       />
 
       <div
         id="cinema-canvas"
