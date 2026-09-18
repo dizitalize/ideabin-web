@@ -95,7 +95,7 @@ export const HeroShowreel: React.FC<HeroShowreelProps> = ({
         setStepIndex((prev) => (prev + 1) % SEQUENCE_DATA.length);
       }}
       className={`relative w-full h-full overflow-hidden select-none cursor-pointer flex items-center justify-center ${
-        transparentBg ? 'bg-transparent text-white' : activeTheme.bgClass
+        transparentBg ? `bg-transparent ${isDark ? 'text-white' : 'text-neutral-900'}` : activeTheme.bgClass
       } ${className}`}
       style={transparentBg ? undefined : activeTheme.bgStyle}
     >

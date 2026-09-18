@@ -3,10 +3,11 @@ import { easeCinematic, clamp, lerp } from './utils/interpolation';
 
 interface SecondaryMetadataProps {
   time: number;
+  isDark?: boolean;
   className?: string;
 }
 
-export const SecondaryMetadata: React.FC<SecondaryMetadataProps> = ({ time, className = '' }) => {
+export const SecondaryMetadata: React.FC<SecondaryMetadataProps> = ({ time, isDark = true, className = '' }) => {
   const [terminalHex, setTerminalHex] = useState('0x4F1A');
   const [terminalByte, setTerminalByte] = useState('8B');
   const [randomFlickerMod, setRandomFlickerMod] = useState(1);
@@ -58,10 +59,10 @@ export const SecondaryMetadata: React.FC<SecondaryMetadataProps> = ({ time, clas
               transform: `translateY(${lerp(8, 0, s1Progress)}px)`,
             }}
           >
-            <div className="flex items-center gap-2 text-white/90">
-              <span className="inline-block w-1.5 h-1.5 bg-white animate-pulse" />
+            <div className={`flex items-center gap-2 ${isDark ? 'text-white/90' : 'text-neutral-700'}`}>
+              <span className={`inline-block w-1.5 h-1.5 animate-pulse ${isDark ? 'bg-white' : 'bg-neutral-700'}`} />
               <span
-                className="font-medium text-white tracking-widest uppercase"
+                className={`font-medium tracking-widest uppercase ${isDark ? 'text-white' : 'text-neutral-800'}`}
                 style={{ animation: 'terminal-flicker-a 2.1s infinite' }}
               >
                 BRANDING DESIGN
@@ -90,7 +91,7 @@ export const SecondaryMetadata: React.FC<SecondaryMetadataProps> = ({ time, clas
             }}
           >
             <div
-              className="text-white/90 font-medium tracking-widest uppercase"
+              className={`font-medium tracking-widest uppercase ${isDark ? 'text-white/90' : 'text-neutral-700'}`}
               style={{ animation: 'terminal-flicker-b 2.4s infinite' }}
             >
               USER EXPERIENCE
@@ -114,7 +115,7 @@ export const SecondaryMetadata: React.FC<SecondaryMetadataProps> = ({ time, clas
             }}
           >
             <div
-              className="text-white/90 font-medium tracking-widest uppercase"
+              className={`font-medium tracking-widest uppercase ${isDark ? 'text-white/90' : 'text-neutral-700'}`}
               style={{ animation: 'terminal-flicker-c 2.3s infinite' }}
             >
               3D VISUALIZATION
@@ -135,7 +136,7 @@ export const SecondaryMetadata: React.FC<SecondaryMetadataProps> = ({ time, clas
             }}
           >
             <div
-              className="text-white/90 font-medium tracking-widest uppercase"
+              className={`font-medium tracking-widest uppercase ${isDark ? 'text-white/90' : 'text-neutral-700'}`}
               style={{ animation: 'terminal-flicker-b 2.2s infinite' }}
             >
               DIGITAL SYSTEMS

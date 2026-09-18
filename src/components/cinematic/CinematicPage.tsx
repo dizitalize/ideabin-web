@@ -12,6 +12,8 @@ import { RadialPhoneExperience } from './RadialPhoneExperience';
 import { QuestionsStatementStage } from './QuestionsStatementStage';
 import { clamp } from './utils/interpolation';
 import { useTheme } from '@/components/providers/ThemeProvider';
+import { OPTIMIZED_MARQUEE_MEDIA, FRAMER_MEDIA, CAROUSEL_VIDEOS } from './data/mediaData';
+import { preloadAllSequences } from '../../lib/frame-sequence';
 
 const APERTURE_START = 7.90;
 const APERTURE_SETTLED = 8.60;
@@ -45,6 +47,8 @@ export default function CinematicPage({
   const [showQuestionsStage, setShowQuestionsStage] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [transitionType] = useState<'zoom-in' | 'zoom-out'>('zoom-in');
+  const [isReady, setIsReady] = useState<boolean>(false); // Preloading state
+  const frameSequenceCleanupRef = useRef<() => void>(null);
 
   const statement1 = ['DESIGN', 'THAT', 'DEMAND', 'ATTENTION'];
   const statement2Line1 = 'UNCOMMON IDEAS.';
@@ -64,6 +68,83 @@ export default function CinematicPage({
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Preload all media before starting animation
+  useEffect(() => {
+    const preloadMedia = async () => {
+      try {
+        // 1. Preload OPTIMIZED_MARQUEE_MEDIA (images for 3D marquee in SceneAboxTransition)
+        await Promise.allSettled(
+          OPTIMIZED_MARQUEE_MEDIA.map((src) => {
+            return new Promise((resolve) => {
+              const img = new Image();
+              img.onload = () => resolve(img);
+              img.onerror = () => resolve(null); // Treat error as resolved to not block
+              img.src = src;
+            });
+          })
+        );
+
+        // 2. Preload FRAMER_MEDIA (images and videos for MediaLightbox, HeroShowreel, etc.)
+        await Promise.allSettled(
+          FRAMER_MEDIA.map((media) => {
+            return Promise.allSettled([
+              // Preload image
+              new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = () => resolve(null);
+                img.src = media.image!;
+              }),
+              // Preload video if present
+              media.video ? new Promise((resolve) => {
+                const video = document.createElement('video');
+                video.onloadeddata = () => resolve(video);
+                video.onerror = () => resolve(null);
+                video.src = media.video!;
+              }) : Promise.resolve(null)
+            ]);
+          })
+        );
+
+        // 3. Preload CAROUSEL_VIDEOS (videos for ThreeCarousel)
+        await Promise.allSettled(
+          CAROUSEL_VIDEOS.map((videoSrc) => {
+            return new Promise((resolve) => {
+              const video = document.createElement('video');
+              video.onloadeddata = () => resolve(video);
+              video.onerror = () => resolve(null);
+              video.src = videoSrc;
+            });
+          })
+        );
+
+        // 4. Preload the frame sequences (page1 and page2) using the existing module
+        //    This returns a cleanup function to cancel the preloading
+        const cleanup = preloadAllSequences((page, id) => {
+          // Optional: log progress
+          // console.log(`Preloaded frame sequence page ${page} frame ${id}`);
+        });
+        frameSequenceCleanupRef.current = cleanup;
+
+        // Mark as ready
+        setIsReady(true);
+      } catch (error) {
+        console.error('Error during media preloading:', error);
+        // Still proceed to avoid blocking the UI
+        setIsReady(true);
+      }
+    };
+
+    preloadMedia();
+
+    // Cleanup on unmount
+    return () => {
+      if (frameSequenceCleanupRef.current) {
+        frameSequenceCleanupRef.current();
+      }
+    };
+  }, []); // Run once on mount
 
   // Restarts from Scene 01 Intro (time 0.0)
   const handleRestartSequence = useCallback(() => {
@@ -85,16 +166,15 @@ export default function CinematicPage({
     }, 450);
   }, []);
 
-  // When Radial Phones & Design/Dev text sequence completes
+  // When Radial Phones sequence completes
   const handleRadialComplete = useCallback(() => {
-    if (onComplete) onComplete();
-    else {
-      handleRestartSequence();
-    }
-  }, [onComplete, handleRestartSequence]);
+    setShowRadialPhones(false);
+    setShowDesignDevText(true);
+  }, []);
 
   // When Design & Development Showreel completes
   const handleShowreelComplete = useCallback(() => {
+    setShowDesignDevText(false);
     setShowQuestionsStage(true);
   }, []);
 
@@ -110,6 +190,7 @@ export default function CinematicPage({
       lastTimestampRef.current = null;
       setShowRadialPhones(false);
       setShowDesignDevText(false);
+      setShowQuestionsStage(false);
       hasTransitionedToRadialRef.current = false;
       setIsPlaying(true);
       setIsFadingOut(false);
@@ -118,7 +199,7 @@ export default function CinematicPage({
 
   // Master cinematic animation loop
   useEffect(() => {
-    if (!isActive || !isPlaying || showRadialPhones || showDesignDevText) {
+    if (!isActive || !isPlaying || showRadialPhones || showDesignDevText || !isReady) {
       lastTimestampRef.current = null;
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -137,14 +218,14 @@ export default function CinematicPage({
       const prevTime = timeRef.current;
       let nextTime = prevTime + delta;
 
-      // When carousel display ends, transition into Radial Phone Experience (ORDER: Mobile Radial BEFORE Design & Dev text)
+      // When carousel display ends, transition into Design & Dev text directly
       if (nextTime >= TEXT_TRANSITION_START && !hasTransitionedToRadialRef.current) {
         hasTransitionedToRadialRef.current = true;
         setTime(TEXT_TRANSITION_START);
         timeRef.current = TEXT_TRANSITION_START;
         setIsFadingOut(true);
         window.setTimeout(() => {
-          setShowRadialPhones(true);
+          setShowDesignDevText(true);
           setIsFadingOut(false);
         }, 400);
         return;
@@ -170,11 +251,13 @@ export default function CinematicPage({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isActive, isPlaying, showRadialPhones, showDesignDevText]);
+  }, [isActive, isPlaying, showRadialPhones, showDesignDevText, isReady]);
 
   // Scroll / Wheel-linked scrub: advances timeline until reaching Carousel stage
   const handleWheel = (e: React.WheelEvent) => {
-    if (time >= CAROUSEL_START || showRadialPhones || showDesignDevText) return;
+    if (time >= CAROUSEL_START || showRadialPhones || showDesignDevText) {
+      return;
+    }
     const delta = e.deltaY * 0.0025;
     setTime((prev) => {
       const next = Math.max(0, Math.min(SEQUENCE_END, prev + delta));
@@ -183,7 +266,7 @@ export default function CinematicPage({
         hasTransitionedToRadialRef.current = true;
         setIsFadingOut(true);
         window.setTimeout(() => {
-          setShowRadialPhones(true);
+          setShowDesignDevText(true);
           setIsFadingOut(false);
         }, 400);
       }
@@ -196,8 +279,12 @@ export default function CinematicPage({
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (time >= CAROUSEL_START || showRadialPhones || showDesignDevText) return;
-    if (touchStartYRef.current === null) return;
+    if (time >= CAROUSEL_START || showRadialPhones || showDesignDevText) {
+      return;
+    }
+    if (touchStartYRef.current === null) {
+      return;
+    }
     const currentY = e.touches[0].clientY;
     const deltaY = (touchStartYRef.current - currentY) * 0.004;
     touchStartYRef.current = currentY;
@@ -208,7 +295,7 @@ export default function CinematicPage({
         hasTransitionedToRadialRef.current = true;
         setIsFadingOut(true);
         window.setTimeout(() => {
-          setShowRadialPhones(true);
+          setShowDesignDevText(true);
           setIsFadingOut(false);
         }, 400);
       }
@@ -294,7 +381,7 @@ export default function CinematicPage({
       onTouchStart={!showRadialPhones && !showDesignDevText ? handleTouchStart : undefined}
       onTouchMove={!showRadialPhones && !showDesignDevText ? handleTouchMove : undefined}
       onTouchEnd={!showRadialPhones && !showDesignDevText ? handleTouchEnd : undefined}
-      className={`relative w-full h-full min-h-screen overflow-hidden bg-transparent ${isDark ? 'text-white' : 'text-neutral-900'
+      className={`relative w-full h-full overflow-hidden bg-transparent ${isDark ? 'text-white' : 'text-neutral-900'
         } select-none cursor-default transition-colors duration-500 ${className}`}
       style={{
         backgroundColor: 'transparent',
@@ -376,24 +463,27 @@ export default function CinematicPage({
             </div>
           )}
 
-          {time >= 4.40 && time < CAROUSEL_SETTLED + 0.35 && (
-            <SceneAboxTransition
-              key="scene-abox-transition"
-              time={time}
-              transitionType={transitionType}
-              transitionProgress={transitionProgress}
-              isDark={isDark}
-            />
+          {/* REMOVED SCREEN TRANSITION EFFECT: Instant switch from 3D marquee to carousel */}
+          {time >= 4.40 && time < 10.00 && (
+            <>
+              {/* Direct transition from Scene Abox to Carousel without screen transition effect */}
+              <SceneAboxTransition
+                key="scene-abox-transition-direct"
+                time={time}
+                transitionType={transitionType}
+                isDark={isDark}
+              />
+            </>
           )}
 
-          {time >= 8.60 && (
+          {time >= 10.00 && (
             <div
               key="curved-carousel-stage"
               id="curved-carousel-stage"
               className="absolute inset-0 w-full h-full z-10 will-change-opacity"
               style={{
-                opacity: carouselStageOpacity,
-                pointerEvents: carouselStageOpacity > 0.5 ? 'auto' : 'none',
+                opacity: 1, // Fully visible when active - no fade effect
+                pointerEvents: 'auto',
               }}
             >
               <CurvedCarouselSection

@@ -291,17 +291,6 @@ export default function Navbar() {
                     />
                   )}
 
-                  {/* Active Sliding Glowing Orange Dot */}
-                  {isActive && (
-                    <motion.span
-                      layoutId="navbar-active-dot"
-                      className="relative flex items-center justify-center pointer-events-none"
-                      transition={{ type: "spring", stiffness: 450, damping: 28 }}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,1),0_0_4px_rgba(249,115,22,0.8)]" />
-                      <span className="absolute w-3 h-3 rounded-full bg-orange-500/40 animate-ping" />
-                    </motion.span>
-                  )}
 
                   <span>{label}</span>
                 </a>

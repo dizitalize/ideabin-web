@@ -290,12 +290,12 @@ export default function StorySection() {
         const transitionProgress = Math.min(1, progress / 0.1);
         transitionProgressRef.current = transitionProgress;
 
-        if (targetFrameIndex_02 !== currentFrameIndexRef_02.current) {
-          currentFrameIndexRef_02.current = targetFrameIndex_02;
-          renderFrameToCanvas(targetFrameIndex_02, 1 - transitionProgress);
-          // Preload surrounding frames dynamically around target
-          preloadSurroundingFrames_02(targetFrameIndex_02, 4);
-        }
+if (targetFrameIndex_02 !== currentFrameIndexRef_02.current) {
+           currentFrameIndexRef_02.current = targetFrameIndex_02;
+           renderFrameToCanvas(targetFrameIndex_02, transitionProgress);
+           // Preload surrounding frames dynamically around target
+           preloadSurroundingFrames_02(targetFrameIndex_02, 4);
+         }
 
         // Direct DOM choreography for text fade-in during Scene 02
         // Text begins to appear after transition completes (after 10% progress)

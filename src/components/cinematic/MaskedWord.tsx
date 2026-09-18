@@ -48,7 +48,7 @@ export const MaskedWord: React.FC<MaskedWordProps> = ({
     >
       <div
         id={id ? `text-${id}` : undefined}
-        className={`whitespace-nowrap font-display uppercase tracking-tighter text-white will-change-transform ${textClassName}`}
+        className={`whitespace-nowrap font-display uppercase tracking-tighter will-change-transform ${textClassName}`}
         style={{
           transform: `translate3d(calc(${xPercent}% + ${xPx}px), calc(${yPercent}% + ${yPx}px), 0) scale(${scale})`,
           transformOrigin: 'left center',

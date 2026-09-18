@@ -113,7 +113,7 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
             <h2
               className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold uppercase italic tracking-[-0.035em] leading-[0.96] transition-colors duration-300 ${isDark
                 ? "text-zinc-300 drop-shadow-[0_2px_16px_rgba(0,0,0,0.8)] hover:text-white"
-                : "text-zinc-600 drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:text-zinc-900"
+                : "text-zinc-800 drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:text-zinc-900"
                 }`}
             >
               WE DON’T START
@@ -135,7 +135,7 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
         />
 
         {/* Row 2: WITH ANSWERS */}
-        <div className="relative w-full overflow-visible py-1 sm:py-2 pl-[10%] sm:pl-[15%] md:pl-[18%]">
+        <div className="relative w-full overflow-visible py-1 sm:pt-2 pl-[10%] sm:pl-[15%] md:pl-[18%]">
           <motion.div
             custom={1}
             initial="hidden"
@@ -145,7 +145,7 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
             <h2
               className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold uppercase italic tracking-[-0.035em] leading-[0.96] transition-colors duration-300 ${isDark
                 ? "text-zinc-300 drop-shadow-[0_2px_16px_rgba(0,0,0,0.8)] hover:text-white"
-                : "text-zinc-600 drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:text-zinc-900"
+                : "text-zinc-800 drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:text-zinc-900"
                 }`}
             >
               WITH ANSWERS
@@ -225,7 +225,7 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
         transition={{ delay: 0.85, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="mt-12 sm:mt-16 md:mt-20 flex flex-col items-center gap-3 z-40"
       >
-        <motion.button
+        {/* <motion.button
           type="button"
           onClick={handleScroll}
           onMouseEnter={() => setIsHovered(true)}
@@ -236,62 +236,62 @@ export const QuestionsStatementStage: React.FC<QuestionsStatementStageProps> = (
           className={`group relative inline-flex items-center gap-4 px-7 py-3.5 rounded-full cursor-pointer transition-all duration-300 shadow-2xl backdrop-blur-2xl border ${isDark
             ? "bg-zinc-950/85 hover:bg-zinc-900 text-white border-white/20 hover:border-orange-400/50 shadow-[0_12px_36px_rgba(0,0,0,0.8)] hover:shadow-[0_0_30px_rgba(249,115,22,0.4)]"
             : "bg-white/95 hover:bg-white text-zinc-900 border-zinc-200 hover:border-orange-500/40 shadow-[0_12px_36px_rgba(0,0,0,0.12)] hover:shadow-[0_0_25px_rgba(249,115,22,0.25)]"
+          }`} */}
+        {/* > */}
+        {/* Subtle button ambient back-glow on hover */}
+        {/* <div
+          className={`absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm pointer-events-none ${isDark
+            ? "bg-gradient-to-r from-orange-500/30 via-white/20 to-orange-500/30"
+            : "bg-gradient-to-r from-orange-500/20 via-zinc-400/20 to-orange-500/20"
+          }`}
+        /> */}
+
+        {/* Animated Mouse Track Icon */}
+        <div
+          className={`relative w-4 h-6 rounded-full border flex items-start justify-center p-0.5 transition-colors duration-300 ${isDark
+            ? "border-white/40 group-hover:border-orange-400"
+            : "border-zinc-400 group-hover:border-orange-500"
             }`}
         >
-          {/* Subtle button ambient back-glow on hover */}
-          <div
-            className={`absolute -inset-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm pointer-events-none ${isDark
-              ? "bg-gradient-to-r from-orange-500/30 via-white/20 to-orange-500/30"
-              : "bg-gradient-to-r from-orange-500/20 via-zinc-400/20 to-orange-500/20"
-              }`}
-          />
-
-          {/* Animated Mouse Track Icon */}
-          <div
-            className={`relative w-4 h-6 rounded-full border flex items-start justify-center p-0.5 transition-colors duration-300 ${isDark
-              ? "border-white/40 group-hover:border-orange-400"
-              : "border-zinc-400 group-hover:border-orange-500"
-              }`}
-          >
-            <motion.div
-              animate={{
-                y: [0, 7, 0],
-                opacity: [1, 0.4, 1],
-              }}
-              transition={{
-                duration: 1.6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="w-1 h-2 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.9)]"
-            />
-          </div>
-
-          {/* Action Label */}
-          <span className="relative font-mono text-xs uppercase tracking-[0.24em] font-semibold text-zinc-200 group-hover:text-white transition-colors duration-300">
-            Scroll to see more
-          </span>
-
-          {/* Animated Arrow indicator */}
-          <motion.span
+          <motion.div
             animate={{
-              y: [0, 3, 0],
+              y: [0, 7, 0],
+              opacity: [1, 0.4, 1],
             }}
             transition={{
-              duration: 1.4,
+              duration: 1.6,
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="relative text-sm font-bold text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]"
-          >
-            ↓
-          </motion.span>
-        </motion.button>
+            className="w-1 h-2 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.9)]"
+          />
+        </div>
+
+        {/* Action Label */}
+        {/* <span className="relative font-mono text-xs uppercase tracking-[0.24em] font-semibold text-zinc-200 group-hover:text-white transition-colors duration-300">
+          Scroll to see more
+        </span> */}
+
+        {/* Animated Arrow indicator */}
+        <motion.span
+          animate={{
+            y: [0, 3, 0],
+          }}
+          transition={{
+            duration: 1.4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="relative text-sm font-bold text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]"
+        >
+          
+        </motion.span>
+        {/* </motion.button> */}
 
         {/* Micro-hint */}
-        <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-zinc-500/80">
+        {/* <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-zinc-500/80">
           Scrub or click to advance
-        </span>
+        </span> */}
       </motion.div>
     </motion.div>
   );

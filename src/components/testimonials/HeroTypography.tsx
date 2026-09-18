@@ -21,10 +21,10 @@ export const HeroTypography: React.FC<HeroTypographyProps> = ({ isInView = true 
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="flex items-center gap-2 mb-3.5"
       >
-        <span className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.9)] animate-pulse" />
+        {/* <span className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.9)] animate-pulse" />
         <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-orange-500 font-semibold">
           06 // Client Feedback
-        </span>
+        </span> */}
       </motion.div>
 
       {/* Main Headline matching website typography (Geist Sans font-sans, tracking-tight, medium weight) */}

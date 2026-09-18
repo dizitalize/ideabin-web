@@ -1,8 +1,8 @@
 export type FrameSequence = "hero" | "page2";
 
 export const FILM_PART1_COUNT = 97;
-export const FILM_PART2_COUNT = 97;
-/** Single continuous film: part 1 (frames 1–97) + part 2 (continues from frame 97). */
+export const FILM_PART2_COUNT = 27;
+/** Single continuous film: part 1 (frames 1–97) + part 2 (27 frames). */
 export const FRAME_COUNT = FILM_PART1_COUNT + FILM_PART2_COUNT;
 
 export const FRAME_SEQUENCES = {
@@ -26,8 +26,8 @@ function frameUrl(index: number, sequence: FrameSequence): string {
   const num = String(index + 1).padStart(4, "0");
   const base = meta.basePath;
   return sequence === "page2"
-    ? `${base}/frame_${num}.jpg`
-    : `${base}/webp/frame_${num}.webp`;
+    ? `${base}/frame_${num}.webp`
+    : `${base}/frame_${num}.webp`;
 }
 
 export function filmFrameUrl(globalIndex: number): string {

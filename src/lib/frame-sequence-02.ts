@@ -1,11 +1,11 @@
 /**
  * 3D Cinematic Scroll Frame Sequence Engine for Scene 02
  * Manages caching, priority-tiered preloading, and nearest-loaded fallback
- * for the 97-frame sequence in /page2/frame_0001.webp - frame_0097.webp.
+ * for the 27-frame sequence in /page2/frame_0001.webp - frame_0027.webp.
  */
 
-export const FRAME_COUNT = 97;
-export const FRAME_PATH = "/page2/frame_";
+export const FRAME_COUNT = 27;
+export const FRAME_PATH = "/frames/page2/frame_";
 export const EXTENSION = ".webp";
 
 export function formatFrameNumber(index: number): string {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { clamp } from './utils/interpolation';
+import { useTheme } from '@/components/providers/ThemeProvider';
 
 interface SceneGlitchTransitionProps {
   time: number;
@@ -12,6 +13,8 @@ export const SceneGlitchTransition: React.FC<SceneGlitchTransitionProps> = ({
   time,
   statement1 = ['DESIGN', 'THAT', 'DEMAND', 'ATTENTION'],
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   if (time < 2.02 || time > 2.85) return null;
 
   const progress = clamp((time - 2.05) / 0.70, 0, 1);
@@ -56,19 +59,19 @@ export const SceneGlitchTransition: React.FC<SceneGlitchTransitionProps> = ({
                 style={{ opacity: outOpacity }}
               >
                 <div className="w-full max-w-[1700px] mx-auto flex flex-col items-start leading-[0.85]">
-                  <span className="text-[6.5vw] sm:text-[7vw] md:text-[6.5vw] lg:text-[6vw] font-black font-display tracking-[-0.04em] text-white">
+                  <span className={`text-[6.5vw] sm:text-[7vw] md:text-[6.5vw] lg:text-[6vw] font-black font-display tracking-[-0.04em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`}>
                     {statement1[0]}
                   </span>
                   <div className="w-full flex justify-between gap-4 -mt-1 sm:-mt-2 md:-mt-3">
-                    <span className="text-[5.5vw] sm:text-[6vw] md:text-[5.5vw] lg:text-[5vw] font-black font-display tracking-[-0.035em] text-neutral-300">
+                    <span className={`text-[5.5vw] sm:text-[6vw] md:text-[5.5vw] lg:text-[5vw] font-black font-display tracking-[-0.035em] ${isDark ? "text-zinc-200" : "text-[#333]"}`}>
                       {statement1[1]}
                     </span>
-                    <span className="text-[6vw] sm:text-[6.5vw] md:text-[6vw] lg:text-[5.5vw] font-black font-display tracking-[-0.04em] text-white">
+                    <span className={`text-[6vw] sm:text-[6.5vw] md:text-[6vw] lg:text-[5.5vw] font-black font-display tracking-[-0.04em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`}>
                       {statement1[2]}
                     </span>
                   </div>
                   <div className="w-full flex justify-end -mt-1 sm:-mt-2 md:-mt-3">
-                    <span className="text-[7vw] sm:text-[7.5vw] md:text-[7vw] lg:text-[6.5vw] font-black font-display tracking-[-0.05em] text-white">
+                    <span className={`text-[7vw] sm:text-[7.5vw] md:text-[7vw] lg:text-[6.5vw] font-black font-display tracking-[-0.05em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`}>
                       {statement1[3]}
                     </span>
                   </div>
@@ -83,18 +86,18 @@ export const SceneGlitchTransition: React.FC<SceneGlitchTransitionProps> = ({
               >
                 <div className="w-full max-w-[1700px] mx-auto flex flex-col items-start leading-[0.85] overflow-visible">
                   <div className="w-full flex items-baseline gap-x-3 sm:gap-x-5 md:gap-x-7 overflow-visible">
-                    <span className="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-white">
+                    <span className={`text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`}>
                       UNCOMMON
                     </span>
-                    <span className="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-neutral-300">
+                    <span className={`text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] ${isDark ? "text-zinc-200" : "text-[#333]"}`}>
                       IDEAS.
                     </span>
                   </div>
                   <div className="w-full flex justify-end items-baseline gap-x-3 sm:gap-x-5 md:gap-x-7 -mt-1 sm:-mt-2 md:-mt-3 overflow-visible">
-                    <span className="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-neutral-300">
+                    <span className={`text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] ${isDark ? "text-zinc-300" : "text-[#444]"}`}>
                       UNMATCHED
                     </span>
-                    <span className="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.05em] text-white">
+                    <span className={`text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.05em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`}>
                       RESULTS.
                     </span>
                   </div>
@@ -103,7 +106,7 @@ export const SceneGlitchTransition: React.FC<SceneGlitchTransitionProps> = ({
             )}
 
             <div
-              className="absolute w-full h-[1px] bg-white/20 pointer-events-none"
+              className={`absolute w-full h-[1px] pointer-events-none ${isDark ? 'bg-white/20' : 'bg-black/15'}`}
               style={{
                 top: `${(idx + 1) * 20}%`,
                 opacity: envelope * 0.4,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MaskedWord } from './MaskedWord';
 import { easeCinematic, lerp, clamp } from './utils/interpolation';
+import { useTheme } from '@/components/providers/ThemeProvider';
 
 interface SceneRecompositionProps {
   time: number;
@@ -15,6 +16,8 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
   line2 = 'UNMATCHED RESULTS.',
   className = '',
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   if (time < 2.70 || time > 4.40) return null;
 
   const wordsLine1 = line1.split(' ');
@@ -99,7 +102,7 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
             opacity={w1Opacity}
             overflowVisible={true}
             className="py-1 overflow-visible"
-            textClassName="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-white pr-2"
+            textClassName={`text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`} pr-2
           />
 
           <MaskedWord
@@ -111,7 +114,7 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
             opacity={w2Opacity}
             overflowVisible={true}
             className="py-1 overflow-visible"
-            textClassName="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-neutral-300 pr-2"
+            textClassName={`text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] ${isDark ? "text-zinc-300" : "text-[#444]"}`} pr-2
           />
         </div>
 
@@ -130,7 +133,7 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
             opacity={w3Opacity}
             overflowVisible={true}
             className="py-1 overflow-visible"
-            textClassName="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] text-neutral-300 pr-2"
+            textClassName={`text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.04em] ${isDark ? "text-zinc-300" : "text-[#444]"}`} pr-2
           />
 
           <MaskedWord
@@ -142,7 +145,7 @@ export const SceneRecomposition: React.FC<SceneRecompositionProps> = ({
             opacity={w4Opacity}
             overflowVisible={true}
             className="py-1 overflow-visible"
-            textClassName="text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.05em] text-white pr-2"
+            textClassName={`text-[5vw] sm:text-[5.2vw] md:text-[4.8vw] lg:text-[4.4vw] font-black font-display tracking-[-0.05em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`} pr-2
           />
         </div>
       </div>

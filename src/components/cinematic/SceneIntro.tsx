@@ -1,6 +1,7 @@
 import React from 'react';
 import { MaskedWord } from './MaskedWord';
 import { easeCinematic, lerp, clamp } from './utils/interpolation';
+import { useTheme } from '@/components/providers/ThemeProvider';
 
 interface SceneIntroProps {
   time: number;
@@ -13,6 +14,8 @@ export const SceneIntro: React.FC<SceneIntroProps> = ({
   words = ['DESIGN', 'THAT', 'DEMAND', 'ATTENTION'],
   className = '',
 }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   if (time > 2.25) return null;
 
   const isIntroFragment = time < 0.25;
@@ -55,20 +58,23 @@ export const SceneIntro: React.FC<SceneIntroProps> = ({
       {isIntroFragment && fragmentVisible && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div
-            className="w-48 h-1.5 bg-white/90 overflow-hidden relative"
+            className="w-48 h-1.5 overflow-hidden relative"
             style={{
+              background: isDark ? 'rgba(255,255,255,0.9)' : 'rgba(10,10,10,0.9)',
               opacity: fragmentProgress < 0.5 ? fragmentProgress * 2 : 2 - fragmentProgress * 2,
               transform: `scaleX(${lerp(0.2, 1.4, fragmentProgress)})`,
+              transformOrigin: 'center center',
             }}
           >
-            <span className="absolute -top-12 -left-6 font-display text-9xl font-black text-white tracking-tighter">
+            <span className={`absolute -top-12 -left-6 font-display text-9xl font-black tracking-tighter ${isDark ? 'text-white' : 'text-neutral-900'}`}>
               D
             </span>
           </div>
 
           <div
-            className="absolute top-1/3 right-1/4 w-1 h-12 bg-white/70"
+            className="absolute top-1/3 right-1/4 w-1 h-12"
             style={{
+              background: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(10,10,10,0.7)',
               opacity: clamp((time - 0.12) / 0.08, 0, 1) * (time > 0.22 ? 0 : 1),
             }}
           />
@@ -84,7 +90,7 @@ export const SceneIntro: React.FC<SceneIntroProps> = ({
               yPercent={w1Y}
               scale={w1Scale}
               className="py-1"
-              textClassName="text-[6.5vw] sm:text-[7vw] md:text-[6.5vw] lg:text-[6vw] font-black leading-[0.85] tracking-[-0.04em] text-white"
+              textClassName={`text-[6.5vw] sm:text-[7vw] md:text-[6.5vw] lg:text-[6vw] font-black leading-[0.85] tracking-[-0.04em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`}
             />
           </div>
 
@@ -95,7 +101,7 @@ export const SceneIntro: React.FC<SceneIntroProps> = ({
               xPercent={w2X}
               scale={w2Scale}
               className="py-1"
-              textClassName="text-[5.5vw] sm:text-[6vw] md:text-[5.5vw] lg:text-[5vw] font-black leading-[0.85] tracking-[-0.035em] text-neutral-200"
+              textClassName={`text-[5.5vw] sm:text-[6vw] md:text-[5.5vw] lg:text-[5vw] font-black leading-[0.85] tracking-[-0.035em] ${isDark ? "text-zinc-200" : "text-[#333]"}`}
             />
 
             <MaskedWord
@@ -104,7 +110,7 @@ export const SceneIntro: React.FC<SceneIntroProps> = ({
               yPercent={w3Y}
               scale={w3Scale}
               className="py-1"
-              textClassName="text-[6vw] sm:text-[6.5vw] md:text-[6vw] lg:text-[5.5vw] font-black leading-[0.85] tracking-[-0.04em] text-white"
+              textClassName={`text-[6vw] sm:text-[6.5vw] md:text-[6vw] lg:text-[5.5vw] font-black leading-[0.85] tracking-[-0.04em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`}
             />
           </div>
 
@@ -115,7 +121,7 @@ export const SceneIntro: React.FC<SceneIntroProps> = ({
               xPercent={w4X}
               scale={w4Scale}
               className="py-1 overflow-visible"
-              textClassName="text-[7vw] sm:text-[7.5vw] md:text-[7vw] lg:text-[6.5vw] font-black leading-[0.85] tracking-[-0.05em] text-white pr-2"
+              textClassName={`text-[7vw] sm:text-[7.5vw] md:text-[7vw] lg:text-[6.5vw] font-black leading-[0.85] tracking-[-0.05em] ${isDark ? "text-white" : "text-[#1a1a1a]"}`} pr-2
             />
           </div>
         </div>

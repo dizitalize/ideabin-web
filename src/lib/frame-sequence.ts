@@ -2,16 +2,16 @@
  * 3D Cinematic Scroll Frame Sequence Engine
  * Manages dual-sequence caching, priority preloading, and nearest-loaded fallback
  * for Page 1 (/page1/frame_0001.webp - frame_0097.webp) and
- * Page 2 (/page2/frame_0002.webp - frame_0097.webp).
+ * Page 2 (/page2/frame_0001.webp - frame_0027.webp).
  */
 
 export const PAGE1_FRAME_COUNT = 97;
-export const PAGE1_PATH = "/page1/frame_";
+export const PAGE1_PATH = "/frames/page1/frame_";
 
-export const PAGE2_START_FRAME = 2; // Page 2 starts at frame_0002.webp
-export const PAGE2_END_FRAME = 97;
-export const PAGE2_FRAME_COUNT = 96; // 96 frames from 0002 to 0097
-export const PAGE2_PATH = "/page2/frame_";
+export const PAGE2_START_FRAME = 1; // Page 2 starts at frame_0001.webp
+export const PAGE2_END_FRAME = 27;
+export const PAGE2_FRAME_COUNT = 27; // 27 frames from 0001 to 0027
+export const PAGE2_PATH = "/frames/page2/frame_";
 
 export const EXTENSION = ".webp";
 
@@ -36,7 +36,7 @@ export function getPage1Url(index: number): string {
 export const getFrameUrl = getPage1Url;
 
 export function getPage2Url(frameNumber: number): string {
-  // frameNumber is 2-based: 2 -> frame_0002.webp, 97 -> frame_0097.webp
+  // frameNumber is 1-based: 1 -> frame_0001.webp, 27 -> frame_0027.webp
   const frameNum = Math.max(PAGE2_START_FRAME, Math.min(PAGE2_END_FRAME, frameNumber));
   return `${PAGE2_PATH}${formatNumber(frameNum)}${EXTENSION}`;
 }

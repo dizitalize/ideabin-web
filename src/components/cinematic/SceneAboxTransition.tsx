@@ -155,7 +155,7 @@ export const SceneAboxTransition: React.FC<SceneAboxTransitionProps> = ({
             >
               <h1
                 ref={textRef}
-                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-display text-white tracking-[0.22em] uppercase select-none leading-none px-2"
+                className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-display tracking-[0.22em] uppercase select-none leading-none px-2 ${isDark ? 'text-white' : 'text-neutral-900'}`}
               >
                 Ideabin
               </h1>
@@ -256,8 +256,9 @@ export const SceneAboxTransition: React.FC<SceneAboxTransitionProps> = ({
         >
           <div
             id="left-boundary-line"
-            className="absolute w-[3px] bg-white will-change-transform z-20"
+            className="absolute w-[3px] will-change-transform z-20"
             style={{
+              background: isDark ? '#ffffff' : '#1a1a1a',
               left: isExpanding ? `${apertureInsetPercent}%` : `calc(50% - ${currentLineOffsetPx}px)`,
               opacity: currentLinesOpacity,
               top: '50%',
@@ -268,8 +269,9 @@ export const SceneAboxTransition: React.FC<SceneAboxTransitionProps> = ({
 
           <div
             id="right-boundary-line"
-            className="absolute w-[3px] bg-white will-change-transform z-20"
+            className="absolute w-[3px] will-change-transform z-20"
             style={{
+              background: isDark ? '#ffffff' : '#1a1a1a',
               left: isExpanding ? undefined : `calc(50% + ${currentLineOffsetPx}px)`,
               right: isExpanding ? `${apertureInsetPercent}%` : undefined,
               opacity: currentLinesOpacity,
