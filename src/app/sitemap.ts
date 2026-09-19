@@ -1,28 +1,29 @@
 import { MetadataRoute } from 'next'
 import { seoServices } from '@/lib/seo-data'
+import { site } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ideabin.tech'
-
   const serviceUrls = seoServices.map((service) => ({
-    url: `${baseUrl}/services/${service.slug}`,
-    lastModified: new Date(),
+    url: `${site.url}/services/${service.slug}`,
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
 
   return [
     {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
+      url: site.url,
+      changeFrequency: 'monthly',
       priority: 1,
     },
     {
-      url: `${baseUrl}/services`,
-      lastModified: new Date(),
+      url: `${site.url}/services`,
       changeFrequency: 'monthly',
       priority: 0.9,
+    },
+    {
+      url: `${site.url}/testimonials`,
+      changeFrequency: 'monthly',
+      priority: 0.6,
     },
     ...serviceUrls,
   ]

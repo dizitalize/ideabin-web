@@ -177,10 +177,10 @@ export const DEFAULT_INTERACTION_CONFIG: InteractionConfig = {
 };
 
 export const DEFAULT_LAYOUT_CONFIG: LayoutConfig = {
-  cameraX: 5,
+  cameraX: 0,
   cameraY: 0.5,
   cameraZ: 11,
-  cameraPanY: 24,
+  cameraPanY: 0,
   fov: 58,
 };
 

@@ -2,10 +2,13 @@
 
 import React, { useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { usePrefersReducedMotion } from "@/lib/performance";
 import { IdeaBinBrand } from "@/components/ui/IdeaBinBrand";
+import { seoServices } from "@/lib/seo-data";
+import { site } from "@/lib/site";
 
 interface FooterLink {
   label: string;
@@ -19,49 +22,36 @@ interface FooterColumn {
 
 const FOOTER_COLUMNS: FooterColumn[] = [
   {
-    title: "Pages",
+    title: "Services",
     links: [
-      { label: "All Products", href: "#services" },
-      { label: "Studio", href: "#" },
-      { label: "Clients", href: "#" },
-      { label: "Pricing", href: "#faq" },
-      { label: "Blog", href: "#" },
+      { label: "All Services", href: "/services" },
+      ...seoServices.map((service) => ({
+        label: service.shortTitle,
+        href: `/services/${service.slug}`,
+      })),
     ],
   },
   {
-    title: "Socials",
+    title: "Explore",
     links: [
-      { label: "Facebook", href: "https://facebook.com" },
-      { label: "Instagram", href: "https://instagram.com" },
-      { label: "Twitter", href: "https://twitter.com" },
-      { label: "LinkedIn", href: "https://linkedin.com" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms of Service", href: "#" },
-      { label: "Cookie Policy", href: "#" },
-    ],
-  },
-  {
-    title: "Register",
-    links: [
-      { label: "Sign Up", href: "#" },
-      { label: "Login", href: "#" },
-      { label: "Forgot Password", href: "#" },
+      { label: "Capabilities", href: "/#services" },
+      { label: "FAQ", href: "/#faq" },
+      { label: "Testimonials", href: "/testimonials" },
+      { label: "Contact", href: "/#contact" },
     ],
   },
 ];
 
 // Logo mark matching design system with Sora font & fluid ribbon emblem
 function IdeaBinLogo() {
+  const pathname = usePathname();
+
   return (
     <div className="flex flex-col">
       <Link
         href="/"
         onClick={(e) => {
+          if (pathname !== "/") return;
           e.preventDefault();
           window.scrollTo({ top: 0, behavior: "smooth" });
         }}
@@ -101,13 +91,24 @@ export default function SiteFooter() {
       aria-label="Site Footer"
     >
       {/* Top Content Grid */}
-      <div className="mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 pt-14 pb-3 sm:pt-16 sm:pb-5 relative z-10">
+      <div
+        id="contact"
+        className="mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16 pt-14 pb-3 sm:pt-16 sm:pb-5 relative z-10 scroll-mt-24"
+      >
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Brand & Copyright Column */}
           <div className="lg:col-span-4 flex flex-col justify-start">
             <IdeaBinLogo />
+            <a
+              href={`mailto:${site.email}`}
+              className={`mt-4 text-xs sm:text-[13px] font-medium transition-colors duration-300 ${
+                isDark ? "text-zinc-300 hover:text-white" : "text-neutral-600 hover:text-[#111111]"
+              }`}
+            >
+              {site.email}
+            </a>
             <p
-              className={`mt-4 text-xs sm:text-[13px] leading-relaxed max-w-xs transition-colors duration-300 ${
+              className={`mt-2 text-xs sm:text-[13px] leading-relaxed max-w-xs transition-colors duration-300 ${
                 isDark ? "text-zinc-400" : "text-neutral-500"
               }`}
             >
@@ -115,8 +116,8 @@ export default function SiteFooter() {
             </p>
           </div>
 
-          {/* 4 Navigation Columns */}
-          <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-6">
+          {/* 2 Navigation Columns */}
+          <div className="lg:col-span-8 grid grid-cols-2 gap-8 sm:gap-6">
             {FOOTER_COLUMNS.map((column) => (
               <div key={column.title} className="flex flex-col">
                 <h3

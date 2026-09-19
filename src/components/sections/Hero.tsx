@@ -405,6 +405,71 @@ export default function Hero() {
       }
     };
 
+    // -----------------------------------------------------------------------
+    // Snap state for automatic Page 1 ↔ Page 2 transitions
+    // -----------------------------------------------------------------------
+    // Page 1 animation lives at P = 0.00 → 0.40
+    // Page 2 editorial text lives at P = 0.44 → 0.64
+    // Snap thresholds: scrolling DOWN past P > 0.38 → snap to P = 0.44
+    //                  scrolling UP   past P < 0.46 → snap to P = 0.00
+    const SNAP_DOWN_THRESHOLD = 0.38;   // When scrolling down past this P, snap forward
+    const SNAP_DOWN_TARGET = 0.44;      // Snap destination (start of Page 2 / story text)
+    const SNAP_UP_THRESHOLD = 0.46;     // When scrolling up below this P, snap back
+    const SNAP_UP_TARGET = 0.0;         // Snap destination (top of Page 1)
+
+    let isSnapping = false;
+    let snapAnimationId: number | null = null;
+    let lastScrollP = 0;
+    let snapCooldownTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const scrollToP = (targetP: number, duration: number = 800) => {
+      const section = sectionRef.current;
+      if (!section || isSnapping) return;
+
+      isSnapping = true;
+
+      const scrollableDist = Math.max(1, section.offsetHeight - window.innerHeight);
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      const targetScroll = sectionTop + targetP * scrollableDist;
+      const startScroll = window.scrollY;
+      const distance = targetScroll - startScroll;
+
+      if (Math.abs(distance) < 2) {
+        isSnapping = false;
+        return;
+      }
+
+      const startTime = performance.now();
+
+      // Cubic bezier easing for cinematic feel
+      const easeInOutCubic = (t: number): number => {
+        return t < 0.5
+          ? 4 * t * t * t
+          : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      };
+
+      const animate = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const eased = easeInOutCubic(progress);
+
+        window.scrollTo(0, startScroll + distance * eased);
+
+        if (progress < 1) {
+          snapAnimationId = requestAnimationFrame(animate);
+        } else {
+          // Snap complete — hold the lock briefly to absorb trackpad momentum
+          snapAnimationId = null;
+          snapCooldownTimer = setTimeout(() => {
+            isSnapping = false;
+            snapCooldownTimer = null;
+          }, 300);
+        }
+      };
+
+      snapAnimationId = requestAnimationFrame(animate);
+    };
+
     const handleScroll = () => {
       if (tickingRef.current) return;
       tickingRef.current = true;
@@ -449,6 +514,25 @@ export default function Hero() {
         const P = scrollP;
 
         updateVisuals(P);
+
+        // -----------------------------------------------------------------
+        // Auto-snap logic: detect transition threshold crossings
+        // -----------------------------------------------------------------
+        if (!isSnapping) {
+          const scrollingDown = P > lastScrollP;
+          const scrollingUp = P < lastScrollP;
+
+          // Scrolling DOWN: crossed the end-of-Page-1 threshold → snap to Page 2 start
+          if (scrollingDown && P > SNAP_DOWN_THRESHOLD && lastScrollP <= SNAP_DOWN_THRESHOLD) {
+            scrollToP(SNAP_DOWN_TARGET, 700);
+          }
+          // Scrolling UP: dropped below Page 2 start threshold → snap back to Page 1 top
+          else if (scrollingUp && P < SNAP_UP_THRESHOLD && lastScrollP >= SNAP_UP_THRESHOLD) {
+            scrollToP(SNAP_UP_TARGET, 700);
+          }
+        }
+
+        lastScrollP = P;
         tickingRef.current = false;
       });
     };
@@ -462,6 +546,8 @@ export default function Hero() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", updateCanvasDimensions);
+      if (snapAnimationId !== null) cancelAnimationFrame(snapAnimationId);
+      if (snapCooldownTimer !== null) clearTimeout(snapCooldownTimer);
     };
   }, [renderCanvas, updateCanvasDimensions]);
 

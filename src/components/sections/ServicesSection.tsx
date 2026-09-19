@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTheme } from "@/components/providers/ThemeProvider";
@@ -255,6 +256,24 @@ function SectionHeaderAnimated({ isDark }: { isDark: boolean }) {
         Choreographing brand identities, enterprise commerce, high-performance web systems, and cloud
         infrastructure.
       </motion.p>
+      <motion.div
+        initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
+        animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+        transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        className="mt-8"
+      >
+        <Link
+          href="/services"
+          className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border transition-all duration-300 ${
+            isDark
+              ? "border-orange-500/40 text-orange-400 hover:bg-orange-500 hover:border-orange-500 hover:text-white"
+              : "border-orange-500/50 text-orange-600 hover:bg-orange-500 hover:border-orange-500 hover:text-white"
+          }`}
+        >
+          View All Services
+          <RightArrow className="w-4 h-4" />
+        </Link>
+      </motion.div>
     </div>
   );
 }
@@ -649,6 +668,8 @@ const items: MobileItem[] = [];
       }`}
       aria-label="IdeaBin Capabilities & Services"
     >
+      <h2 className="sr-only">Our Capabilities & Services</h2>
+
       {/* Editorial Section Header — scroll-animated blur+slide entrance */}
       <SectionHeaderAnimated isDark={isDark} />
 

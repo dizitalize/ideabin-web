@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useCallback, useRef } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useTransform, useInView, MotionValue } from "framer-motion";
 import { TESTIMONIALS } from "@/components/testimonials/data/testimonials";
 import { StickyTestimonial } from "@/components/testimonials/types";
@@ -20,6 +22,7 @@ interface TornScrapItem {
 export default function TestimonialsSection() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
+  const pathname = usePathname();
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const boardRef = useRef<HTMLDivElement | null>(null);
@@ -183,6 +186,7 @@ export default function TestimonialsSection() {
           : "bg-[#fafafc]/95 backdrop-blur-xl text-[#222222] border-black/8"
       }`}
     >
+      <h2 className="sr-only">Client Testimonials &amp; Reviews</h2>
       <div
         onPointerMove={handlePointerMove}
         className="relative z-10 w-full max-w-7xl mx-auto flex flex-col"
@@ -319,6 +323,25 @@ export default function TestimonialsSection() {
           </div>
         </div>
       </div>
+
+      {/* Home → Testimonials page link (hidden on the testimonials page itself) */}
+      {pathname !== "/testimonials" && (
+        <div className="relative z-10 mt-12 sm:mt-16 flex justify-center">
+          <Link
+            href="/testimonials"
+            className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium border transition-all duration-300 ${
+              isDark
+                ? "border-white/15 text-zinc-200 hover:border-orange-500 hover:text-white hover:bg-orange-500/10"
+                : "border-black/10 text-neutral-700 hover:border-orange-500 hover:text-orange-600 hover:bg-orange-500/5"
+            }`}
+          >
+            Read All Client Stories
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M1 7h11M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
+        </div>
+      )}
     </section>
   );
 }

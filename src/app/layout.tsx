@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Caveat, Kalam, Plus_Jakarta_Sans, Sora, Comfortaa } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/providers/ThemeProvider";
@@ -6,6 +6,7 @@ import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvide
 import { CenterTransitionProvider } from "@/components/animation/CenterTransition";
 import Navbar from "@/components/ui/Navbar";
 import JsonLd from "@/components/seo/JsonLd";
+import { site } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,32 +49,56 @@ const comfortaa = Comfortaa({
 });
 
 export const metadata: Metadata = {
-   title: "Studio — Spatial Digital Experience",
-   description:
-     "A cinematic 3D scroll experience. Scroll-controlled 97-frame sequences, editorial typography, and center-origin spatial page transitions.",
-   keywords: [
-     "3D scroll website",
-     "cinematic web experience",
-     "spatial computing",
-     "digital experience studio",
-     "frame sequence animation",
-     "creative technology",
-   ],
-   openGraph: {
-     title: "Studio — Spatial Digital Experience",
-     description:
-       "A cinematic 3D scroll experience. Scroll-controlled 97-frame sequences, editorial typography, and center-origin spatial page transitions.",
-     type: "website",
-     images: [
-       {
-         url: "/og-image.png",
-         width: 1200,
-         height: 630,
-         alt: "IdeaBin - Spatial Digital Experience Studio"
-       }
-     ]
-   },
- };
+  metadataBase: new URL(site.url),
+  title: site.title,
+  description: site.description,
+  applicationName: site.name,
+  keywords: [...site.keywords],
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
+  publisher: site.name,
+  category: "technology",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    url: site.url,
+    siteName: site.name,
+    title: site.title,
+    description: site.description,
+    locale: site.locale,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "IdeaBin — Spatial 3D Web Experiences & IT Solutions",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: site.title,
+    description: site.description,
+    images: ["/og-image.png"],
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#050505",
+  colorScheme: "dark light",
+  width: "device-width",
+  initialScale: 1,
+};
 
 export default function RootLayout({
    children,

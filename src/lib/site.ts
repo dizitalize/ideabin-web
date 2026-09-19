@@ -1,18 +1,23 @@
 export const site = {
   name: "IdeaBin",
+  title: "IdeaBin — Spatial 3D Web Experiences & IT Solutions",
   tagline: "Spatial 3D Experiences · Architectural Web Engineering · Digital Systems",
   description:
-    "IdeaBin crafts spatial 3D web experiences, bespoke e-commerce platforms, high-performance web systems, and creative digital engineering.",
-  url: "https://prismmedia.co",
-  email: "hello@prismmedia.co",
+    "IdeaBin is an IT solutions studio engineering spatial 3D web experiences, custom software, SaaS & AI products, cybersecurity, and scalable cloud infrastructure for visionary brands.",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://ideabin.tech",
+  email: "hello@ideabin.tech",
   locale: "en_US",
   keywords: [
     "IT solutions company",
     "interactive website development",
+    "3D web experiences",
+    "custom software development",
+    "SaaS development",
+    "AI development services",
     "data security & cybersecurity",
     "cloud infrastructure & devops",
-    "custom software development",
-    "enterprise IT services",
+    "SEO services",
+    "web development agency",
   ],
 } as const;
 
@@ -114,21 +119,3 @@ export const showcaseImages = {
   ],
 } as const;
 
-export const faqs = [
-  {
-    q: "What IT services does Ideabin Copmany. provide?",
-    a: "We specialize in interactive website development, enterprise data security & cybersecurity, cloud infrastructure setup, and custom software engineering.",
-  },
-  {
-    q: "How do you ensure data security and compliance?",
-    a: "We implement end-to-end encryption, multi-layered firewall defense, automated vulnerability scans, and strict compliance standards tailored to your industry.",
-  },
-  {
-    q: "Can you build custom interactive websites and web portals?",
-    a: "Yes. We design and build ultra-fast, interactive web applications featuring custom micro-animations, real-time data handling, and robust backend integrations.",
-  },
-  {
-    q: "How fast can you deploy our IT solution or web platform?",
-    a: "Most custom web platforms and IT infrastructure projects ship within 4 to 8 weeks, including thorough security testing and cloud deployment.",
-  },
-];

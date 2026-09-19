@@ -18,7 +18,7 @@ export const SceneAboxTransition: React.FC<SceneAboxTransitionProps> = ({
   transitionProgress,
   isDark = true,
 }) => {
-  const textRef = React.useRef<HTMLHeadingElement>(null);
+  const textRef = React.useRef<HTMLDivElement>(null);
   const [textHalfWidth, setTextHalfWidth] = React.useState<number>(140);
 
   React.useEffect(() => {
@@ -153,12 +153,13 @@ export const SceneAboxTransition: React.FC<SceneAboxTransitionProps> = ({
                 transform: `translate3d(0, ${appearTranslateY}px, 0)`,
               }}
             >
-              <h1
+              <div
                 ref={textRef}
+                aria-hidden="true"
                 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-display tracking-[0.22em] uppercase select-none leading-none px-2 ${isDark ? 'text-white' : 'text-neutral-900'}`}
               >
                 Ideabin
-              </h1>
+              </div>
             </div>
           </div>
         </div>

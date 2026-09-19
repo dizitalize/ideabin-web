@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, MotionValue } from 'framer-motion';
 import { StickyTestimonial } from './types';
 import { PushPin } from './PushPin';
@@ -310,11 +311,13 @@ export const StickyNote: React.FC<StickyNoteProps> = ({
                 {/* Author Avatar & Meta */}
                 <div className="relative z-10 mt-5 pt-3 flex items-center gap-3 border-t border-black/15">
                   <div className="relative flex-shrink-0">
-                    <img
+                    <Image
                       src={testimonial.avatar}
-                      alt={testimonial.author}
+                      alt={`Portrait of ${testimonial.author}`}
+                      width={40}
+                      height={40}
+                      sizes="40px"
                       className="w-10 h-10 rounded-full object-cover shadow-xs ring-1 ring-black/20 transition-transform duration-300 group-hover:scale-105"
-                      loading="lazy"
                     />
                   </div>
 

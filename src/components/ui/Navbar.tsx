@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCenterTransition } from "@/components/animation/CenterTransition";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { IdeaBinBrand } from "@/components/ui/IdeaBinBrand";
+import { arriveAt, resolveSectionScrollY, setPendingSection } from "@/lib/hero-scroll";
 
 interface NavLinkItem {
   label: string;
@@ -13,11 +15,14 @@ interface NavLinkItem {
 }
 
 const NAV_LINKS: NavLinkItem[] = [
+  { label: "Home", href: "/" },
   { label: "Projects", href: "#projects" },
   { label: "Services", href: "#services" },
   { label: "FAQ", href: "#faq" },
   { label: "Testimonials", href: "#testimonials" },
 ];
+
+const MotionLink = motion.create(Link);
 
 /**
  * Geometric 7-circle rosette logo icon matching the Verdea branding in screenshot
@@ -48,6 +53,12 @@ export default function Navbar() {
   const { trigger } = useCenterTransition();
   const { theme, toggle } = useTheme();
   const isDark = theme === "dark";
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHome = pathname === "/";
+
+  // Section anchors only exist on the home page; elsewhere they resolve to /#hash
+  const resolveHref = (href: string) => (href.startsWith("#") && !isHome ? `/${href}` : href);
 
   const [isVisible, setIsVisible] = useState(true);
   const [activeSection, setActiveSection] = useState<string>("Projects");
@@ -64,7 +75,20 @@ export default function Navbar() {
   // Professional Hide / Show on Scroll & Active Section Tracking
   // ---------------------------------------------------------------------------
   useEffect(() => {
+    if (pathname !== "/") {
+      // Off the home page: highlight the nav item matching the current route
+      if (pathname.startsWith("/services")) setActiveSection("Services");
+      else if (pathname.startsWith("/testimonials")) setActiveSection("Testimonials");
+      else setActiveSection("Home");
+      return;
+    }
+
     lastScrollYRef.current = typeof window !== "undefined" ? window.scrollY : 0;
+
+    // Sync immediately when landing on the home page at the top (no scroll event fires)
+    if (typeof window !== "undefined" && window.scrollY <= 120) {
+      setActiveSection("Home");
+    }
 
     const SCROLL_THRESHOLD = 8;
     let ticking = false;
@@ -106,7 +130,9 @@ export default function Navbar() {
 
           const scrollMiddle = currentY + window.innerHeight * 0.4;
 
-          if (footerEl && scrollMiddle >= footerEl.offsetTop) {
+          if (currentY <= 120) {
+            setActiveSection("Home");
+          } else if (footerEl && scrollMiddle >= footerEl.offsetTop) {
             setActiveSection("Testimonials");
           } else if (testimonialsEl && scrollMiddle >= testimonialsEl.offsetTop) {
             setActiveSection("Testimonials");
@@ -126,7 +152,7 @@ export default function Navbar() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [pathname]);
 
   // Lock body scroll when mobile menu or consultation modal is open
   useEffect(() => {
@@ -158,45 +184,34 @@ export default function Navbar() {
    }, [consultationOpen]);
 
   const handleNavClick = (e: React.MouseEvent, href: string, label: string) => {
-    e.preventDefault();
     setMobileOpen(false);
+
+    // Modified clicks (new tab / window / download) keep the native Link behaviour
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
     setActiveSection(label);
 
-    if (href === "#projects") {
-      const target =
-        document.getElementById("curved-carousel-section") ||
-        document.getElementById("cinematic-3rd-page") ||
-        document.getElementById("hero-cinematic");
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-      } else {
-        window.scrollTo({ top: window.innerHeight * 1.5, behavior: "smooth" });
+    if (!isHome) {
+      // Section anchors live on the home page. Hand the target to HomeArrival and
+      // push "/" without a hash so Next's own hash scroll cannot race our restore.
+      if (href.startsWith("#")) {
+        e.preventDefault();
+        setPendingSection(href);
+        router.push("/");
       }
       return;
     }
 
-    if (href === "#services") {
-      const target = document.getElementById("services");
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-      }
+    e.preventDefault();
+
+    if (href === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
-    if (href === "#faq") {
-      const target = document.getElementById("faq");
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-      }
-      return;
-    }
-
-    if (href === "#testimonials") {
-      const target = document.getElementById("testimonials");
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-      }
-      return;
+    const targetY = resolveSectionScrollY(href);
+    if (targetY !== null) {
+      arriveAt(targetY, { smooth: true, mode: "interactive" });
     }
   };
 
@@ -222,7 +237,7 @@ export default function Navbar() {
         className="fixed top-4 sm:top-5 inset-x-0 z-50 flex justify-center px-4 sm:px-6 pointer-events-none will-change-transform"
       >
         <div
-          className={`pointer-events-auto flex items-center justify-between w-full max-w-[820px] h-[52px] sm:h-[58px] px-3 sm:px-4 rounded-full transition-all duration-300 ${
+          className={`pointer-events-auto flex items-center justify-between w-full max-w-[880px] h-[52px] sm:h-[58px] px-3 sm:px-4 rounded-full transition-all duration-300 ${
             isDark
               ? "bg-neutral-900/90 text-white border border-white/15 shadow-[0_12px_40px_rgba(0,0,0,0.85)]"
               : "bg-white/95 text-neutral-900 border border-black/5 shadow-[0_10px_35px_-8px_rgba(0,0,0,0.12),0_1px_3px_rgba(0,0,0,0.06)]"
@@ -232,6 +247,7 @@ export default function Navbar() {
            <Link
               href="/"
               onClick={(e) => {
+                if (!isHome) return;
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
@@ -243,7 +259,7 @@ export default function Navbar() {
 
           {/* 2. Center: Navigation Links (Desktop) */}
           <nav
-            className="hidden md:flex items-center gap-1.5 lg:gap-2 relative px-2"
+            className="hidden md:flex items-center gap-1 lg:gap-2 relative px-2"
             onMouseLeave={() => setHoveredLink(null)}
             aria-label="Main navigation"
           >
@@ -252,12 +268,12 @@ export default function Navbar() {
               const isHovered = hoveredLink === label;
 
               return (
-                <a
+                <Link
                   key={label}
-                  href={href}
+                  href={resolveHref(href)}
                   onClick={(e) => handleNavClick(e, href, label)}
                   onMouseEnter={() => setHoveredLink(label)}
-                  className={`relative flex items-center gap-2 px-3.5 py-1.5 text-[13px] font-medium tracking-tight rounded-full transition-all duration-200 cursor-pointer ${
+                  className={`relative flex items-center gap-2 px-3 lg:px-3.5 py-1.5 text-[13px] font-medium tracking-tight rounded-full transition-all duration-200 cursor-pointer ${
                     isActive
                       ? isDark
                         ? "text-white font-semibold"
@@ -293,7 +309,7 @@ export default function Navbar() {
 
 
                   <span>{label}</span>
-                </a>
+                </Link>
               );
             })}
           </nav>
@@ -333,7 +349,7 @@ export default function Navbar() {
                onClick={handleOpenConsultation}
                whileHover={{ scale: 1.03 }}
                whileTap={{ scale: 0.97 }}
-               className={`relative inline-flex items-center justify-center px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-[13px] font-medium tracking-tight cursor-pointer transition-all duration-200 shadow-sm ${
+               className={`relative inline-flex items-center justify-center px-4 lg:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-[13px] font-medium tracking-tight cursor-pointer transition-all duration-200 shadow-sm ${
                  isDark
                    ? "bg-white hover:bg-zinc-100 text-neutral-950 font-semibold shadow-black/40"
                    : "bg-[#18181b] hover:bg-black text-white font-medium shadow-black/20"
@@ -410,9 +426,9 @@ export default function Navbar() {
                   {NAV_LINKS.map(({ label, href }, index) => {
                     const isActive = activeSection === label;
                     return (
-                      <motion.a
+                      <MotionLink
                         key={label}
-                        href={href}
+                        href={resolveHref(href)}
                         initial={{ opacity: 0, x: -12 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.06 + 0.05 }}
@@ -431,7 +447,7 @@ export default function Navbar() {
                         {isActive && (
                           <span className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,1)]" />
                         )}
-                      </motion.a>
+                      </MotionLink>
                     );
                   })}
 

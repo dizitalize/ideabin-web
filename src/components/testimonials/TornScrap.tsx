@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Image from 'next/image';
 import { motion, useMotionValue } from 'framer-motion';
 import { StickyTestimonial } from './types';
 import { playPaperRustle } from './utils/audio';
@@ -88,11 +89,13 @@ return (
         {/* Content on the torn scrap with small image & author */}
         <div className="p-2.5 pt-3.5 flex flex-col justify-between h-full">
           <div className="flex items-center gap-2">
-            <img
+            <Image
               src={testimonial.avatar}
-              alt={testimonial.author}
+              alt={`Portrait of ${testimonial.author}`}
+              width={28}
+              height={28}
+              sizes="28px"
               className="w-7 h-7 rounded-full object-cover ring-1 ring-black/20 shadow-xs flex-shrink-0"
-              loading="lazy"
             />
             <div className="min-w-0">
               <span

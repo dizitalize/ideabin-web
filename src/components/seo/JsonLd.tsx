@@ -1,4 +1,15 @@
-import { faqs, services, site } from "@/lib/site";
+import { services, site } from "@/lib/site";
+import { faqItems } from "@/lib/faq-data";
+
+function JsonLdScript({ id, payload }: { id: string; payload: object }) {
+  return (
+    <script
+      id={id}
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }}
+    />
+  );
+}
 
 export default function JsonLd() {
   const organization = {
@@ -6,13 +17,20 @@ export default function JsonLd() {
     "@type": "Organization",
     name: site.name,
     url: site.url,
+    logo: {
+      "@type": "ImageObject",
+      url: `${site.url}/ideabin_logo_black.png`,
+      width: 1254,
+      height: 1254,
+    },
     email: site.email,
     description: site.description,
-    sameAs: [
-      "https://www.instagram.com/",
-      "https://www.behance.net/",
-      "https://www.linkedin.com/",
-    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      email: site.email,
+      availableLanguage: ["English"],
+    },
   };
 
   const website = {
@@ -25,20 +43,21 @@ export default function JsonLd() {
     publisher: {
       "@type": "Organization",
       name: site.name,
+      url: site.url,
     },
   };
 
-  const serviceSchema = {
+  const professionalService = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: site.name,
     url: site.url,
     description: site.description,
-    serviceType: services.map((s) => s.title),
+    serviceType: "IT Solutions & Digital Product Engineering",
     areaServed: "Worldwide",
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Creative Marketing Services",
+      name: "IdeaBin Capabilities",
       itemListElement: services.map((service, index) => ({
         "@type": "Offer",
         position: index + 1,
@@ -51,17 +70,56 @@ export default function JsonLd() {
     },
   };
 
+  return (
+    <>
+      <JsonLdScript id="ld-organization" payload={organization} />
+      <JsonLdScript id="ld-website" payload={website} />
+      <JsonLdScript id="ld-professional-service" payload={professionalService} />
+    </>
+  );
+}
+
+export function FaqJsonLd() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((item) => ({
+    mainEntity: faqItems.map((item) => ({
       "@type": "Question",
-      name: item.q,
+      name: item.question,
       acceptedAnswer: {
         "@type": "Answer",
-        text: item.a,
+        text: item.answer,
       },
     })),
+  };
+
+  return <JsonLdScript id="ld-faq" payload={faqSchema} />;
+}
+
+export function ServiceJsonLd({
+  slug,
+  name,
+  description,
+}: {
+  slug: string;
+  name: string;
+  description: string;
+}) {
+  const url = `${site.url}/services/${slug}`;
+
+  const service = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name,
+    serviceType: name,
+    description,
+    url,
+    provider: {
+      "@type": "Organization",
+      name: site.name,
+      url: site.url,
+    },
+    areaServed: "Worldwide",
   };
 
   const breadcrumb = {
@@ -69,38 +127,15 @@ export default function JsonLd() {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: site.url },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Services",
-        item: `${site.url}/#services`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "Work",
-        item: `${site.url}/#work`,
-      },
-      {
-        "@type": "ListItem",
-        position: 4,
-        name: "Contact",
-        item: `${site.url}/#contact`,
-      },
+      { "@type": "ListItem", position: 2, name: "Services", item: `${site.url}/services` },
+      { "@type": "ListItem", position: 3, name, item: url },
     ],
   };
 
-  const payloads = [organization, website, serviceSchema, faqSchema, breadcrumb];
-
   return (
     <>
-      {payloads.map((payload) => (
-        <script
-          key={payload["@type"] as string}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }}
-        />
-      ))}
+      <JsonLdScript id="ld-service" payload={service} />
+      <JsonLdScript id="ld-breadcrumb" payload={breadcrumb} />
     </>
   );
 }
