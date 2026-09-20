@@ -19,7 +19,7 @@ const NAV_LINKS: NavLinkItem[] = [
   { label: "Projects", href: "#projects" },
   { label: "Services", href: "#services" },
   { label: "Blog", href: "/blog" },
-  { label: "FAQ", href: "#faq" },
+  { label: "FAQ", href: "/faq" },
   { label: "Testimonials", href: "#testimonials" },
 ];
 
@@ -81,6 +81,7 @@ export default function Navbar() {
       if (pathname.startsWith("/services")) setActiveSection("Services");
       else if (pathname.startsWith("/testimonials")) setActiveSection("Testimonials");
       else if (pathname.startsWith("/blog")) setActiveSection("Blog");
+      else if (pathname.startsWith("/faq")) setActiveSection("FAQ");
       else setActiveSection("Home");
       return;
     }
@@ -576,7 +577,8 @@ export default function Navbar() {
                         required
                         type="text"
                         placeholder="e.g. Maya Lin"
-                        className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-all ${
+                        style={{ outline: "none", boxShadow: "none" }}
+                        className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 transition-all ${
                           isDark
                             ? "bg-white/5 border-white/10 text-white placeholder-zinc-500 focus:border-orange-500"
                             : "bg-neutral-50 border-black/10 text-neutral-900 placeholder-zinc-400 focus:border-orange-500"
@@ -592,7 +594,8 @@ export default function Navbar() {
                         required
                         type="email"
                         placeholder="name@company.com"
-                        className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-all ${
+                        style={{ outline: "none", boxShadow: "none" }}
+                        className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 transition-all ${
                           isDark
                             ? "bg-white/5 border-white/10 text-white placeholder-zinc-500 focus:border-orange-500"
                             : "bg-neutral-50 border-black/10 text-neutral-900 placeholder-zinc-400 focus:border-orange-500"
@@ -605,7 +608,8 @@ export default function Navbar() {
                         Project Focus
                       </label>
                       <select
-                        className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none transition-all ${
+                        style={{ outline: "none", boxShadow: "none" }}
+                        className={`w-full px-4 py-2.5 rounded-xl text-sm border outline-none focus:outline-none focus-visible:outline-none focus:ring-0 transition-all ${
                           isDark
                             ? "bg-neutral-900 border-white/10 text-white focus:border-orange-500"
                             : "bg-neutral-50 border-black/10 text-neutral-900 focus:border-orange-500"

@@ -310,7 +310,8 @@ export default function AIBotAssistant() {
                 onChange={(e) => setInputVal(e.target.value)}
                 placeholder="Ask about web, security, pricing…"
                 aria-label="Ask the assistant"
-                className={`flex-1 rounded-full border px-3 py-1.5 text-[12px] outline-none transition-colors ${
+                style={{ outline: "none", boxShadow: "none" }}
+                className={`flex-1 rounded-full border px-3 py-1.5 text-[12px] outline-none focus:outline-none focus-visible:outline-none focus:ring-0 transition-colors ${
                   isDark
                     ? "border-white/12 bg-zinc-900 text-white placeholder:text-zinc-500 focus:border-orange-500/60"
                     : "border-zinc-200 bg-zinc-50 text-zinc-900 placeholder:text-zinc-400 focus:border-orange-500/60"

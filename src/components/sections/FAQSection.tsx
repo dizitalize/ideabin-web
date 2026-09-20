@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { faqCategories as FAQ_DATA } from "@/lib/faq-data";
@@ -273,6 +274,32 @@ export default function FAQSection() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* View All FAQs Link matching user request: "if user clicks all faq" */}
+        <div className="mt-12 sm:mt-16 flex justify-center">
+          <Link
+            href="/faq"
+            className={`group inline-flex items-center gap-2.5 rounded-full px-6 py-3 text-sm font-medium border border-dashed transition-all duration-300 cursor-pointer ${
+              isDark
+                ? "border-white/20 bg-white/5 text-zinc-200 hover:border-white/40 hover:bg-white/10 hover:text-white"
+                : "border-black/20 bg-black/5 text-neutral-800 hover:border-black/40 hover:bg-black/10 hover:text-black"
+            }`}
+          >
+            <span>View All FAQs</span>
+            <svg
+              className="size-4 transition-transform duration-200 group-hover:translate-x-1"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

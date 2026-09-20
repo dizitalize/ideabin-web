@@ -166,11 +166,13 @@ export default function CinematicPage({
     }, 450);
   }, []);
 
-  // When Radial Phones sequence completes
+  // When Radial Phones sequence completes (including its integrated showreel and questions stage)
   const handleRadialComplete = useCallback(() => {
     setShowRadialPhones(false);
-    setShowDesignDevText(true);
-  }, []);
+    if (onComplete) {
+      onComplete();
+    }
+  }, [onComplete]);
 
   // When Design & Development Showreel completes
   const handleShowreelComplete = useCallback(() => {
@@ -218,14 +220,14 @@ export default function CinematicPage({
       const prevTime = timeRef.current;
       let nextTime = prevTime + delta;
 
-      // When carousel display ends, transition into Design & Dev text directly
+      // When carousel display ends, transition into Radial Phones experience
       if (nextTime >= TEXT_TRANSITION_START && !hasTransitionedToRadialRef.current) {
         hasTransitionedToRadialRef.current = true;
         setTime(TEXT_TRANSITION_START);
         timeRef.current = TEXT_TRANSITION_START;
         setIsFadingOut(true);
         window.setTimeout(() => {
-          setShowDesignDevText(true);
+          setShowRadialPhones(true);
           setIsFadingOut(false);
         }, 400);
         return;
@@ -266,7 +268,7 @@ export default function CinematicPage({
         hasTransitionedToRadialRef.current = true;
         setIsFadingOut(true);
         window.setTimeout(() => {
-          setShowDesignDevText(true);
+          setShowRadialPhones(true);
           setIsFadingOut(false);
         }, 400);
       }
@@ -295,7 +297,7 @@ export default function CinematicPage({
         hasTransitionedToRadialRef.current = true;
         setIsFadingOut(true);
         window.setTimeout(() => {
-          setShowDesignDevText(true);
+          setShowRadialPhones(true);
           setIsFadingOut(false);
         }, 400);
       }
