@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import styles from "./BlogSection.module.css";
@@ -284,9 +285,9 @@ export default function BlogSection() {
 
           <h1 className={styles.blogTitle}>BLOG</h1>
 
-          <button className={styles.read}>
+          <Link href="/blog" className={styles.read}>
             Read Our Blog <span>⟶</span>
-          </button>
+          </Link>
 
           {/* 01 FEATURE CARD */}
           <div className={styles.featureCardContainer}>
@@ -493,7 +494,7 @@ export default function BlogSection() {
               ))}
             </div>
 
-            <div className={styles.catBottom}>
+            <Link href="/blog" className={styles.catBottom} style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}>
               <h3>View All Categories</h3>
               <div className={styles.catArrow} aria-hidden="true">
                 <svg viewBox="0 0 84 84">
@@ -512,7 +513,7 @@ export default function BlogSection() {
                   />
                 </svg>
               </div>
-            </div>
+            </Link>
           </article>
         </div>
       </div>
