@@ -25,6 +25,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: `${site.url}/blog`,
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
     ...serviceUrls,
   ]
 }

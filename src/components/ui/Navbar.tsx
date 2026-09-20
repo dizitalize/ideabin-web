@@ -18,6 +18,7 @@ const NAV_LINKS: NavLinkItem[] = [
   { label: "Home", href: "/" },
   { label: "Projects", href: "#projects" },
   { label: "Services", href: "#services" },
+  { label: "Blog", href: "/blog" },
   { label: "FAQ", href: "#faq" },
   { label: "Testimonials", href: "#testimonials" },
 ];
@@ -79,6 +80,7 @@ export default function Navbar() {
       // Off the home page: highlight the nav item matching the current route
       if (pathname.startsWith("/services")) setActiveSection("Services");
       else if (pathname.startsWith("/testimonials")) setActiveSection("Testimonials");
+      else if (pathname.startsWith("/blog")) setActiveSection("Blog");
       else setActiveSection("Home");
       return;
     }
@@ -201,6 +203,9 @@ export default function Navbar() {
       }
       return;
     }
+
+    // Route links (e.g. /blog) use the native Link navigation.
+    if (!href.startsWith("#")) return;
 
     e.preventDefault();
 
